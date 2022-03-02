@@ -11,7 +11,7 @@
  */
 
 // Exit if accessed directly.
-if ( !defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+if (!defined('WP_UNINSTALL_PLUGIN')) {
     exit;
 }
 
@@ -19,7 +19,7 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 $lkn_array_mc_options = give_get_settings();
 // Procura pelo array pelas chaves correspondentes as configurações do plugin
 // E salva o nome delas
-$lkn_array_mc_options = array_filter($lkn_array_mc_options, function($key) {
+$lkn_array_mc_options = array_filter($lkn_array_mc_options, function ($key) {
     return strpos($key, 'multi_currency_') === 0;
 }, ARRAY_FILTER_USE_KEY);
 $lkn_array_mc_options = array_keys($lkn_array_mc_options);
@@ -32,5 +32,3 @@ if (count($lkn_array_mc_options) > 0) {
         give_delete_option($lkn_array_mc_options[$c]);
     }
 }
-
-?>
