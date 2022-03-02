@@ -14,7 +14,7 @@ include_once __DIR__ . '/exchange-rates.php';
 
 // Exit, if accessed directly.
 if (!defined('ABSPATH')) {
-	exit;
+    exit;
 }
 
 /////// HELPERS
@@ -25,14 +25,14 @@ if (!defined('ABSPATH')) {
  * @return array
  */
 function give_multi_currency_get_configs() {
-	$configs = [];
+    $configs = [];
 
-	$configs['mcEnabled'] = give_multi_currency_get_enabled();
-	$configs['mainCurrency'] = give_multi_currency_get_default_currency();
-	$configs['activeCurrency'] = give_multi_currency_get_active_currency();
-	$configs['defaultCoin'] = give_multi_currency_get_default_coin();
+    $configs['mcEnabled'] = give_multi_currency_get_enabled();
+    $configs['mainCurrency'] = give_multi_currency_get_default_currency();
+    $configs['activeCurrency'] = give_multi_currency_get_active_currency();
+    $configs['defaultCoin'] = give_multi_currency_get_default_coin();
 
-	return $configs;
+    return $configs;
 }
 
 /**
@@ -42,9 +42,9 @@ function give_multi_currency_get_configs() {
  *
  */
 function give_multi_currency_get_enabled() {
-	$enabled = give_get_option('multi_currency_enabled_setting_field');
+    $enabled = give_get_option('multi_currency_enabled_setting_field');
 
-	return $enabled;
+    return $enabled;
 }
 
 /**
@@ -54,16 +54,16 @@ function give_multi_currency_get_enabled() {
  *
  */
 function give_multi_currency_get_default_currency() {
-	$mainCurrency = give_get_option('currency');
+    $mainCurrency = give_get_option('currency');
 
-	return $mainCurrency;
+    return $mainCurrency;
 }
 
 //função para obter moeda padrão definida no admin
 function give_multi_currency_get_default_coin() {
-	$defaultCoin = give_get_option('multi_currency_default_currency');
+    $defaultCoin = give_get_option('multi_currency_default_currency');
 
-	return $defaultCoin;
+    return $defaultCoin;
 }
 
 /**
@@ -72,19 +72,19 @@ function give_multi_currency_get_default_coin() {
  * @return string|array
  */
 function give_multi_currency_get_active_currency() {
-	$currency = give_get_option('multi_currency_active_currency');
+    $currency = give_get_option('multi_currency_active_currency');
 
-	// verifica se existe
-	if (!empty($currency)) {
-		// deixar tudo maíusculo
-		for ($c = 0; $c < count($currency); $c++) {
-			$currency[$c] = strtoupper($currency[$c]);
-		}
-	} else {
-		return false;
-	}
+    // verifica se existe
+    if (!empty($currency)) {
+        // deixar tudo maíusculo
+        for ($c = 0; $c < count($currency); $c++) {
+            $currency[$c] = strtoupper($currency[$c]);
+        }
+    } else {
+        return false;
+    }
 
-	return $currency;
+    return $currency;
 }
 
 /**
@@ -95,12 +95,12 @@ function give_multi_currency_get_active_currency() {
  * @return string
  */
 function give_change_multi_currency($currency) {
-	// verifica se uma moeda estrangeira foi selecionada e se o gateway não é o paypal donations
-	if (!empty($_POST['give-mc-selected-currency']) && $_POST['payment-mode'] !== 'paypal-commerce') {
-		$currency = $_POST['give-mc-selected-currency'];
-	}
+    // verifica se uma moeda estrangeira foi selecionada e se o gateway não é o paypal donations
+    if (!empty($_POST['give-mc-selected-currency']) && $_POST['payment-mode'] !== 'paypal-commerce') {
+        $currency = $_POST['give-mc-selected-currency'];
+    }
 
-	return $currency;
+    return $currency;
 }
 add_filter('give_currency', 'give_change_multi_currency');
 
@@ -113,9 +113,9 @@ add_filter('give_currency', 'give_change_multi_currency');
  *
  */
 function give_multi_currency_thousand_separator($separator) {
-	$separator = '.';
+    $separator = '.';
 
-	return $separator;
+    return $separator;
 }
 
 add_filter('give_get_price_thousand_separator', 'give_multi_currency_thousand_separator');
@@ -129,9 +129,9 @@ add_filter('give_get_price_thousand_separator', 'give_multi_currency_thousand_se
  *
  */
 function give_multi_currency_decimal_separator($separator) {
-	$separator = ',';
+    $separator = ',';
 
-	return $separator;
+    return $separator;
 }
 
 add_filter('give_get_price_decimal_separator', 'give_multi_currency_decimal_separator');
@@ -145,9 +145,9 @@ add_filter('give_get_price_decimal_separator', 'give_multi_currency_decimal_sepa
  *
  */
 function give_multi_currency_decimal_count($count) {
-	$count = 0;
+    $count = 0;
 
-	return $count;
+    return $count;
 }
 
 add_filter('give_sanitize_amount_decimals', 'give_multi_currency_decimal_count');
@@ -163,88 +163,88 @@ add_filter('give_sanitize_amount_decimals', 'give_multi_currency_decimal_count')
  *
  */
 function give_multi_currency_selector($form_id, $args) {
-	$id_prefix = !empty($args['id_prefix']) ? $args['id_prefix'] : '';
-	$configs = give_multi_currency_get_configs();
-	$pluginEnabled = $configs['mcEnabled'];
-	$mainCurrency = $configs['mainCurrency'];
-	$mainCurrencyName = give_get_currency_name($mainCurrency);
-	$activeCurrencyNames = [];
-	$activeCurrency = $configs['activeCurrency'];
-	$hasValidGateway = 'false';
-	$activeSymbolArr = give_multi_currency_get_symbols($activeCurrency);
-	$defaultCoin = $configs['defaultCoin'];
-	$html = null;
+    $id_prefix = !empty($args['id_prefix']) ? $args['id_prefix'] : '';
+    $configs = give_multi_currency_get_configs();
+    $pluginEnabled = $configs['mcEnabled'];
+    $mainCurrency = $configs['mainCurrency'];
+    $mainCurrencyName = give_get_currency_name($mainCurrency);
+    $activeCurrencyNames = [];
+    $activeCurrency = $configs['activeCurrency'];
+    $hasValidGateway = 'false';
+    $activeSymbolArr = give_multi_currency_get_symbols($activeCurrency);
+    $defaultCoin = $configs['defaultCoin'];
+    $html = null;
 
-	$statusGlobal = get_post_meta($form_id, 'lkn_multi_currency_fields_status', true);
-	if ($statusGlobal === 'disabled') {
-		$defaultCoin = get_post_meta($form_id, 'lkn_multi_currency_fields_default_currency', true);
-		$activeCurrency = get_post_meta($form_id, 'lkn_multi_currency_fields_active_currency', true);
-		$activeSymbolArr = give_multi_currency_get_symbols($activeCurrency);
-	}
+    $statusGlobal = get_post_meta($form_id, 'lkn_multi_currency_fields_status', true);
+    if ($statusGlobal === 'disabled') {
+        $defaultCoin = get_post_meta($form_id, 'lkn_multi_currency_fields_default_currency', true);
+        $activeCurrency = get_post_meta($form_id, 'lkn_multi_currency_fields_active_currency', true);
+        $activeSymbolArr = give_multi_currency_get_symbols($activeCurrency);
+    }
 
-	// pega todos os gateways de pagamento
-	$gateways = give_get_payment_gateways();
-	// Procura pelo array pelas chaves correspondentes as configurações do plugin
-	// E salva o nome delas
-	$gateways = array_keys($gateways);
-	for ($c = 0; $c < count($gateways); $c++) {
-		// caso exista uma licença retira o link de divulgação do plugin
-		$optionName = give_get_option($gateways[$c] . '_setting_field');
-		if ($optionName) {
-			$hasValidGateway = 'true';
+    // pega todos os gateways de pagamento
+    $gateways = give_get_payment_gateways();
+    // Procura pelo array pelas chaves correspondentes as configurações do plugin
+    // E salva o nome delas
+    $gateways = array_keys($gateways);
+    for ($c = 0; $c < count($gateways); $c++) {
+        // caso exista uma licença retira o link de divulgação do plugin
+        $optionName = give_get_option($gateways[$c] . '_setting_field');
+        if ($optionName) {
+            $hasValidGateway = 'true';
 
-			break;
-		}
-	}
+            break;
+        }
+    }
 
-	// Adiciona o nome de cada moeda ativa de acordo com o GiveWP
-	for ($c = 0; $c < count($activeCurrency); $c++) {
-		$activeCurrencyNames[] = give_get_currency_name($activeCurrency[$c]);
-	}
+    // Adiciona o nome de cada moeda ativa de acordo com o GiveWP
+    for ($c = 0; $c < count($activeCurrency); $c++) {
+        $activeCurrencyNames[] = give_get_currency_name($activeCurrency[$c]);
+    }
 
-	if ($pluginEnabled !== 'enabled' || $activeCurrency == false) {
-		// caso não haja moedas selecionadas ou não esteja ativado
-		// não cria nada no front-end
-		return false;
-	} elseif ($mainCurrency !== 'BRL') {
-		Give()->notices->print_frontend_notice(
-			sprintf(
-				'<strong>%1$s</strong> %2$s',
-				esc_html__('Erro:', 'give'),
-				esc_html__('Plugin Multi Moedas só funciona com a moeda base reais (R$).', 'give')
-			)
-		);
-	} elseif (give_get_option('number_decimals') > 0) {
-		Give()->notices->print_frontend_notice(
-			sprintf(
-				'<strong>%1$s</strong> %2$s',
-				esc_html__('Erro:', 'give'),
-				esc_html__('Remova as casas decimais do valor da doação', 'give')
-			)
-		);
-	} elseif (!in_array($configs['defaultCoin'], $activeCurrency) && $configs['defaultCoin'] !== 'BRL') {
-		Give()->notices->print_frontend_notice(
-			sprintf(
-				'<strong>%1$s</strong> %2$s',
-				esc_html__('Erro:', 'give'),
-				esc_html__('Moeda padrão não está ativa no Multi Moedas', 'give')
-			)
-		);
-	} else {
-		// se prepara para fazer a conversão caso o paypal ecommerce esteja ativo
-		if (give_is_gateway_active('paypal-commerce')) {
-			$exchangeRate = give_multi_currency_get_exchange_rates($activeCurrency);
-		} else {
-			$exchangeRate = json_encode('disabled');
-		}
+    if ($pluginEnabled !== 'enabled' || $activeCurrency == false) {
+        // caso não haja moedas selecionadas ou não esteja ativado
+        // não cria nada no front-end
+        return false;
+    } elseif ($mainCurrency !== 'BRL') {
+        Give()->notices->print_frontend_notice(
+            sprintf(
+                '<strong>%1$s</strong> %2$s',
+                esc_html__('Erro:', 'give'),
+                esc_html__('Plugin Multi Moedas só funciona com a moeda base reais (R$).', 'give')
+            )
+        );
+    } elseif (give_get_option('number_decimals') > 0) {
+        Give()->notices->print_frontend_notice(
+            sprintf(
+                '<strong>%1$s</strong> %2$s',
+                esc_html__('Erro:', 'give'),
+                esc_html__('Remova as casas decimais do valor da doação', 'give')
+            )
+        );
+    } elseif (!in_array($configs['defaultCoin'], $activeCurrency) && $configs['defaultCoin'] !== 'BRL') {
+        Give()->notices->print_frontend_notice(
+            sprintf(
+                '<strong>%1$s</strong> %2$s',
+                esc_html__('Erro:', 'give'),
+                esc_html__('Moeda padrão não está ativa no Multi Moedas', 'give')
+            )
+        );
+    } else {
+        // se prepara para fazer a conversão caso o paypal ecommerce esteja ativo
+        if (give_is_gateway_active('paypal-commerce')) {
+            $exchangeRate = give_multi_currency_get_exchange_rates($activeCurrency);
+        } else {
+            $exchangeRate = json_encode('disabled');
+        }
 
-		// Implementação front-end em EOT
+        // Implementação front-end em EOT
 
-		// Para passar os atributos para o javascript corretamente é necessário converter para JSON
-		$activeCurrency = json_encode($activeCurrency);
-		$activeCurrencyNames = json_encode($activeCurrencyNames);
+        // Para passar os atributos para o javascript corretamente é necessário converter para JSON
+        $activeCurrency = json_encode($activeCurrency);
+        $activeCurrencyNames = json_encode($activeCurrencyNames);
 
-		$html = <<<HTML
+        $html = <<<HTML
 
         <script>
 
@@ -458,24 +458,61 @@ function give_multi_currency_selector($form_id, $args) {
                 form.setAttribute('data-currency_symbol', currencySymbolArray[currencyCode.value]);
                 form.setAttribute('data-currency_code', currencyCode.value);
                 changeLabelLegacy();
-            }
+                var giveInputCurrencySelected = document.getElementById('give-mc-currency-selected');
+                var currencySymbolLabel = document.getElementsByClassName('give-currency-symbol')[0];
+                // altera o label para o código de moeda selecionado
+                currencySymbolLabel.textContent = currencySymbolArray[currencyCode.value];
+                giveInputCurrencySelected.value = currencyCode.value;
+            }else{
+                // todos os atributos dependentes de elementos html
+                var giveInputCurrencySelected = document.getElementById('give-mc-currency-selected');
+                var currencySymbolLabel = document.getElementsByClassName('give-currency-symbol')[0];
+                var currencyCodeButtons = document.getElementsByClassName('currency');
+                var classicCurrencyButonsBefore = document.getElementsByClassName('give-currency-symbol-before');
+                var classicCurrencyButonsAfter = document.getElementsByClassName('give-currency-symbol-after');
+                var donationSummary = document.getElementsByClassName('give-donation-summary-table-wrapper')[0];
 
-            // todos os atributos dependentes de elementos html
-            var giveInputCurrencySelected = document.getElementById('give-mc-currency-selected');
-            var currencySymbolLabel = document.getElementsByClassName('give-currency-symbol')[0];
-            var currencyCodeButtons = document.getElementsByClassName('currency');
-            
-            // altera o label para o código de moeda selecionado
-            currencySymbolLabel.textContent = currencySymbolArray[currencyCode.value];
-            giveInputCurrencySelected.value = currencyCode.value;
+                // altera o label para o código de moeda selecionado
+                currencySymbolLabel.textContent = currencySymbolArray[currencyCode.value];
+                giveInputCurrencySelected.value = currencyCode.value;
 
-            // símbolo da moeda em todos os botões a partir do classname
-            if(currencyCodeButtons) {
-                for(c = 0; c < currencyCodeButtons.length; c++) {
-                    currencyCodeButtons[c].textContent = currencySymbolArray[currencyCode.value];
+                // Se existir um sumário de doação
+                if(donationSummary) {
+                    // TODO add event listener
+                    var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                    var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                    var amountLabel = document.getElementById('give-amount');
+
+                    if(summaryAmount) {
+                        summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                    }
+
+                    if(summaryTotal) {
+                        summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
+                    }
+                }
+
+                // símbolo da moeda em todos os botões a partir do classname
+                if(currencyCodeButtons[0]) {
+                    console.log('reconheceu botões iframe');
+                    for(c = 0; c < currencyCodeButtons.length; c++) {
+                        currencyCodeButtons[c].textContent = currencySymbolArray[currencyCode.value];
+                    }
+                }else{ // Caso seja template Classic
+                    console.log('reconheceu botões classic');
+                    currencyCode.classList.add('lkn-mc-select-classic');
+                    if(classicCurrencyButonsBefore[0]) {
+                        for(c = 0; c < classicCurrencyButonsBefore.length; c++) {
+                            classicCurrencyButonsBefore[c].textContent = currencySymbolArray[currencyCode.value];
+                        }
+                    }
+                    if(classicCurrencyButonsAfter[0]) {
+                        for(c = 0; c < classicCurrencyButonsAfter.length; c++) {
+                            classicCurrencyButonsAfter[c].textContent = currencySymbolArray[currencyCode.value];
+                        }
+                    }
                 }
             }
-
         }
 
         /**
@@ -580,24 +617,28 @@ function give_multi_currency_selector($form_id, $args) {
         </script>
 
         <style>
-        #give-mc-select{
-            font-size: 18px;
-        }
-        #link-multi-moedas {
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            margin: 5px auto;
-            font-size:11px;
-            font-weight: 600;
-            padding: 5px;
-        }
-        .hidden-lkn{
-            display: none;
-        }
-        .show-lkn{
-            display: block;
-        }
+            .lkn-mc-select-classic {
+                padding: 13px;
+                margin: 0px 50px;
+            }
+            #give-mc-select{
+                font-size: 18px;
+            }
+            #link-multi-moedas {
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                margin: 5px auto;
+                font-size:11px;
+                font-weight: 600;
+                padding: 5px;
+            }
+            .hidden-lkn{
+                display: none;
+            }
+            .show-lkn{
+                display: block;
+            }
         </style>
 
         <input type="hidden" id="give-mc-amount">
@@ -612,8 +653,8 @@ function give_multi_currency_selector($form_id, $args) {
         <a id="link-multi-moedas" href="https://www.linknacional.com.br/wordpress/givewp/multimoeda" target="_blank" rel="nofollow">Plugin Multi Moeda</a>
 
 HTML;
-	}
-	echo $html;
+    }
+    echo $html;
 }
 
 add_action('give_before_donation_levels', 'give_multi_currency_selector', 10, 3);
