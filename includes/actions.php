@@ -478,17 +478,125 @@ function give_multi_currency_selector($form_id, $args) {
 
                 // Se existir um sumário de doação
                 if(donationSummary) {
-                    // TODO add event listener
-                    var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
-                    var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
-                    var amountLabel = document.getElementById('give-amount');
+                    // Suporte para multi-step
+                    var btnContinuar = document.getElementsByClassName('advance-btn');
+                    if(btnContinuar[0]) {
+                        if(btnContinuar.length > 1) {
+                            btnContinuar[1].addEventListener('click', function(){
+                                setTimeout(function () {
+                                    console.log('EVENTO DISPARADO!!');
+                                    var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                                    var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                                    var amountLabel = document.getElementById('give-amount');
 
-                    if(summaryAmount) {
-                        summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                    }
+                                    if(summaryAmount) {
+                                        summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                    }
 
-                    if(summaryTotal) {
-                        summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
+                                    if(summaryTotal) {
+                                        summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
+                                    }
+                                },500);
+                            }, false)
+                        } else { // caso só exista um botão adiciona um evento click nesse botão
+                            btnContinuar[0].addEventListener('click', function(){
+                                setTimeout(function () {
+                                    console.log('EVENTO DISPARADO!!');
+                                    var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                                    var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                                    var amountLabel = document.getElementById('give-amount');
+
+                                    if(summaryAmount) {
+                                        summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                    }
+
+                                    if(summaryTotal) {
+                                        summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
+                                    }
+                                },500);
+                            },false);
+                        }
+                    } else { // Está usando o template Classic
+                        var classicCurrencyButonsBefore = document.getElementsByClassName('give-currency-symbol-before');
+                        var classicCurrencyButonsAfter = document.getElementsByClassName('give-currency-symbol-after');
+                        var mcSelect = document.getElementById('give-mc-select');
+
+                        if(classicCurrencyButonsBefore[0]) {
+                            for(c = 0; c < classicCurrencyButonsBefore.length; c++) {
+                                classicCurrencyButonsBefore[c].addEventListener('click', function() {
+                                    setTimeout(function () {
+                                        console.log('EVENTO DISPARADO!!');
+                                        var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                                        var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                                        var amountLabel = document.getElementById('give-amount');
+
+                                        if(summaryAmount) {
+                                            summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                        }
+
+                                        if(summaryTotal) {
+                                            summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
+                                        }
+                                    },500);
+                                });
+                            }
+                        }
+
+                        if(classicCurrencyButonsAfter[0]) {
+                            for(c = 0; c < classicCurrencyButonsAfter.length; c++) {
+                                classicCurrencyButonsAfter[c].addEventListener('click', function() {
+                                    setTimeout(function () {
+                                        console.log('EVENTO DISPARADO!!');
+                                        var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                                        var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                                        var amountLabel = document.getElementById('give-amount');
+
+                                        if(summaryAmount) {
+                                            summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                        }
+
+                                        if(summaryTotal) {
+                                            summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
+                                        }
+                                    },500);
+                                });
+                            }
+                        }
+
+
+                        document.querySelector('#give-amount').addEventListener('change', function () {
+                            setTimeout(function () {
+                                console.log('EVENTO DISPARADO!!');
+                                var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                                var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                                var amountLabel = document.getElementById('give-amount');
+
+                                if(summaryAmount) {
+                                    summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                }
+
+                                if(summaryTotal) {
+                                    summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
+                                }
+                            },500);
+                        });
+
+                        mcSelect.addEventListener('change', function(){
+                            setTimeout(function () {
+                                console.log('EVENTO DISPARADO!!');
+                                var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                                var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                                var amountLabel = document.getElementById('give-amount');
+
+                                if(summaryAmount) {
+                                    summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                }
+
+                                if(summaryTotal) {
+                                    summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
+                                }
+                            },500);
+                        } , false);
                     }
                 }
 
@@ -621,7 +729,7 @@ function give_multi_currency_selector($form_id, $args) {
                 padding: 13px;
                 margin: 0px 50px;
             }
-            #give-mc-select{
+            #give-mc-select {
                 font-size: 18px;
             }
             #link-multi-moedas {
@@ -633,10 +741,10 @@ function give_multi_currency_selector($form_id, $args) {
                 font-weight: 600;
                 padding: 5px;
             }
-            .hidden-lkn{
+            .hidden-lkn {
                 display: none;
             }
-            .show-lkn{
+            .show-lkn {
                 display: block;
             }
         </style>
