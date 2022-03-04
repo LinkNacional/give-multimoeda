@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Give - Multi Moedas
+ * Plugin Name: Give - Multi-Moedas
  * Plugin URI:  https://www.linknacional.com.br/wordpress/givewp/
  * Description: Adiciona opções de escolher moedas no formulário do give.
- * Version:     2.4.0
+ * Version:     2.5.0
  * Author:      Link Nacional
  * Author URI:  https://www.linknacional.com.br
  * License:     GNU General Public License v2 or later
@@ -32,7 +32,7 @@ final class Give_Multi_Currency {
     private static $instance;
 
     /**
-     * Give - MULTI MOEDAS Admin Object.
+     * Give - Multi Currency Admin Object.
      *
      * @since  1.0.0
      * @access public
@@ -42,7 +42,7 @@ final class Give_Multi_Currency {
     public $plugin_admin;
 
     /**
-     * Give - MULTI MOEDAS Frontend Object.
+     * Give - Multi Currency Frontend Object.
      *
      * @since  1.0.0
      * @access public
@@ -103,12 +103,12 @@ final class Give_Multi_Currency {
     private function setup_constants() {
         // Defines addon version number for easy reference.
         if (!defined('GIVE_MULTI_CURRENCY_VERSION')) {
-            define('GIVE_MULTI_CURRENCY_VERSION', '1.0');
+            define('GIVE_MULTI_CURRENCY_VERSION', '2.5.0');
         }
 
         // Set it to latest.
         if (!defined('GIVE_MULTI_CURRENCY_MIN_GIVE_VERSION')) {
-            define('GIVE_MULTI_CURRENCY_MIN_GIVE_VERSION', '2.3.0');
+            define('GIVE_MULTI_CURRENCY_MIN_GIVE_VERSION', '2.19.2');
         }
 
         if (!defined('GIVE_MULTI_CURRENCY_FILE')) {
@@ -160,14 +160,12 @@ final class Give_Multi_Currency {
             //se não esta logado entra daqui
             self::$instance->load_files();
             self::$instance->setup_hooks();
-            self::$instance->load_license();
 
             return;
         }
 
         self::$instance->load_files();
         self::$instance->setup_hooks();
-        self::$instance->load_license();
     }
 
     /**
@@ -179,7 +177,7 @@ final class Give_Multi_Currency {
      *
      */
     public function check_environment() {
-        // Não é admin inserir aqui
+        // Is not admin
         if (!is_admin() || !current_user_can('activate_plugins')) {
             require_once GIVE_MULTI_CURRENCY_DIR . 'includes/actions.php';
             require_once GIVE_MULTI_CURRENCY_DIR . 'includes/exchange-rates.php';
@@ -208,7 +206,7 @@ final class Give_Multi_Currency {
                     /* Min. Give. plugin version. */
 
                     // Show admin notice.
-                    add_action('admin_notices', '__give_multi_currency_dependency_notice');
+                    add_action('admin_notices', 'lkn_give_multi_currency_dependency_notice');
 
                     $is_deactivate_plugin = true;
                 }
@@ -223,7 +221,7 @@ final class Give_Multi_Currency {
                 $is_give_active = defined('GIVE_PLUGIN_BASENAME') ? is_plugin_active(GIVE_PLUGIN_BASENAME) : false;
 
                 if (!$is_give_active) {
-                    add_action('admin_notices', '__give_multi_currency_inactive_notice');
+                    add_action('admin_notices', 'lkn_give_multi_currency_inactive_notice');
 
                     $is_deactivate_plugin = true;
                 }
@@ -254,6 +252,7 @@ final class Give_Multi_Currency {
      */
     private function load_files() {
         require_once GIVE_MULTI_CURRENCY_DIR . 'includes/misc-functions.php';
+        require_once GIVE_MULTI_CURRENCY_DIR . 'includes/exchange-rates.php';
 
         if (is_admin()) {
             require_once GIVE_MULTI_CURRENCY_DIR . 'includes/admin/setting-admin.php';
@@ -269,23 +268,7 @@ final class Give_Multi_Currency {
      */
     private function setup_hooks() {
         // Filters
-        add_filter('plugin_action_links_' . GIVE_MULTI_CURRENCY_BASENAME, '__give_multi_currency_plugin_row_meta', 10, 2);
-    }
-
-    /**
-     * Load license
-     *
-     * @since
-     * @access private
-     */
-    private function load_license() {
-        new Give_License(
-            GIVE_MULTI_CURRENCY_FILE,
-            'Give Multi Currency',
-            GIVE_MULTI_CURRENCY_VERSION,
-            'WordImpress',
-            'give_multi_currency_license_key'
-        );
+        add_filter('plugin_action_links_' . GIVE_MULTI_CURRENCY_BASENAME, 'lkn_give_multi_currency_plugin_row_meta', 10, 2);
     }
 }
 
@@ -309,15 +292,11 @@ function Give_Multi_Currency() {
 Give_Multi_Currency();
 
 /**
- * Instância do updateChecker, ela exige os seguintes parâmetros:
- *
- * url do JSON
- * caminho completo do arquivo principal do plugin
- * nome do diretório
+ * Instance of update checker
  *
  * @return object
  */
-function lkn_give_multimoeda_updater() {
+function lkn_give_multi_currency_updater() {
     return new Lkn_Puc_Plugin_UpdateChecker(
         'https://api.linknacional.com.br/app/u/link_api_update.php?slug=give-multimoeda',
         __FILE__,//(caso o plugin não precise de compatibilidade com ioncube utilize: __FILE__), //Full path to the main plugin file or functions.php.
@@ -325,4 +304,4 @@ function lkn_give_multimoeda_updater() {
     );
 }
 
-lkn_give_multimoeda_updater();
+lkn_give_multi_currency_updater();

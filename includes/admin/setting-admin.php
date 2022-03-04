@@ -3,8 +3,7 @@
  * Give - Multi Currency Settings Page/Tab
  *
  * @package    Give_Multi_Currency
- * @subpackage Give_Multi_Currency/includes/admin
- * @author     GiveWP <https://givewp.com>
+ * @subpackage Give_Multi_Currency /includes/admin
  */
 
 if (!defined('ABSPATH')) {
@@ -20,7 +19,7 @@ if (!defined('ABSPATH')) {
  *
  * @return array
  */
-function give_multi_currency_add_setting_into_existing_tab($settings) {
+function lkn_give_multi_currency_add_setting_into_existing_tab($settings) {
     if (!Give_Admin_Settings::is_setting_page('general', 'currency-settings')) {
         return $settings;
     }
@@ -40,7 +39,7 @@ function give_multi_currency_add_setting_into_existing_tab($settings) {
                     'disabled' => __('Desabilitado', 'give'),
                 ],
             ];
-            // Campos só aparecem caso o radio esteja selecionado e salvo
+            // Only apears if 'multi_currency_enabled_setting_field' is 'enabled'
             if (give_get_option('multi_currency_enabled_setting_field') == 'enabled' && give_get_option('currency') == 'BRL') {
                 $new_setting[] = [
                     'name' => __('Moedas Habilitadas', 'give'),
@@ -57,7 +56,7 @@ function give_multi_currency_add_setting_into_existing_tab($settings) {
                 ];
             }
 
-            // Opção de moeda padrão
+            // Default currency option
             if (give_get_option('multi_currency_enabled_setting_field') == 'enabled' && give_get_option('currency') == 'BRL') {
                 $new_setting[] = [
                     'name' => __('Moeda padrão', 'give'),
@@ -87,4 +86,4 @@ function give_multi_currency_add_setting_into_existing_tab($settings) {
     return $new_setting;
 }
 
-add_filter('give_get_settings_general', 'give_multi_currency_add_setting_into_existing_tab');
+add_filter('give_get_settings_general', 'lkn_give_multi_currency_add_setting_into_existing_tab');

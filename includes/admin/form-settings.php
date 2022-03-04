@@ -4,13 +4,13 @@ if (!defined('ABSPATH')) {
     exit;
 }
 /**
- * Example code to show how to add metabox tab to give form data settings.
+ * Add metabox tab to give form data settings.
  *
  * @package     Give
  * @copyright   Copyright (c) 2020, Impress.org
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
-class Give_Multi_Currency_Settings {
+class Lkn_Give_Multi_Currency_Settings {
     /**
      * Give_Metabox_Setting_Fields constructor.
      */
@@ -87,4 +87,4 @@ class Give_Multi_Currency_Settings {
         return $html;
     }
 }
-new Give_Multi_Currency_Settings();
+new Lkn_Give_Multi_Currency_Settings();

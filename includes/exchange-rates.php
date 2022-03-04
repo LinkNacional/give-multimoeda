@@ -6,15 +6,15 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Pega a cotação das moedas selecionadas de acordo com a api da linknacional
+ * Query the actual exchange rates in the Link Nacional servers
  *
  * @param array $currenciesCode
  *
  * @return string $suportedCurrencies
  *
  */
-function give_multi_currency_get_exchange_rates($currenciesCode) {
-    $cotacao = lkn_multimoeda_curl_get_contents('https://api.linknacional.com.br/cotacao/cotacao-BRL.json');
+function lkn_give_multi_currency_get_exchange_rates($currenciesCode) {
+    $cotacao = lkn_multi_currency_curl_get_contents('https://api.linknacional.com.br/cotacao/cotacao-BRL.json');
 
     $cotacao = json_decode($cotacao, true);
     $cotacao = $cotacao['rates'];
@@ -33,32 +33,34 @@ function give_multi_currency_get_exchange_rates($currenciesCode) {
 }
 
 /**
- * Pega todos os símbolos das moedas ativas
+ * Gets all active currencies symbols
  *
  * @param array $currenciesCode
  *
  * @return string $currenciesSymbol
  *
  */
-function give_multi_currency_get_symbols($currenciesCode) {
+function lkn_give_multi_currency_get_symbols($currenciesCode) {
     $currenciesSymbol['BRL'] = 'R$';
 
-    for ($c = 0; $c < count($currenciesCode); $c++) {
-        $currenciesSymbol[$currenciesCode[$c]] = give_currency_symbol($currenciesCode[$c], true);
+    if (!empty($currenciesCode)) {
+        for ($c = 0; $c < count($currenciesCode); $c++) {
+            $currenciesSymbol[$currenciesCode[$c]] = give_currency_symbol($currenciesCode[$c], true);
+        }
     }
 
     return json_encode($currenciesSymbol);
 }
 
 /**
- * Faz a requisição do tipo GET
+ * Query a new request
  *
  * @param string $url
  *
  * @return string $response
  *
  */
-function lkn_multimoeda_curl_get_contents($url) {
+function lkn_multi_currency_curl_get_contents($url) {
     $ch = curl_init();
 
     curl_setopt($ch, CURLOPT_HEADER, 0);

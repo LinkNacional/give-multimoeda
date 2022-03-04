@@ -4,7 +4,7 @@
  *
  * @since
  */
-function __give_multi_currency_dependency_notice() {
+function lkn_give_multi_currency_dependency_notice() {
     // Admin notice.
     $message = sprintf(
         '<strong>%1$s</strong> %2$s <a href="%3$s" target="_blank">%4$s</a>  %5$s %6$s+ %7$s.',
@@ -30,7 +30,7 @@ function __give_multi_currency_dependency_notice() {
  *
  * @since
  */
-function __give_multi_currency_inactive_notice() {
+function lkn_give_multi_currency_inactive_notice() {
     // Admin notice.
     $message = sprintf(
         '<div class="notice notice-error"><p><strong>%1$s</strong> %2$s <a href="%3$s" target="_blank">%4$s</a> %5$s.</p></div>',
@@ -54,7 +54,7 @@ function __give_multi_currency_inactive_notice() {
  *
  * @return array
 */
-function __give_multi_currency_plugin_row_meta($plugin_meta, $plugin_file) {
+function lkn_give_multi_currency_plugin_row_meta($plugin_meta, $plugin_file) {
     $new_meta_links['setting'] = sprintf(
         '<a href="%1$s">%2$s</a>',
         admin_url('edit.php?post_type=give_forms&page=give-settings&tab=general&section=currency-settings'),
@@ -70,7 +70,7 @@ function __give_multi_currency_plugin_row_meta($plugin_meta, $plugin_file) {
  * @since
  * @return void
 */
-function __give_multi_currency_activation() {
+function lkn_give_multi_currency_activation() {
     // Initialize activation welcome banner.
     if (class_exists('Give_Multi_Currency')) {
         // Only runs on admin.
