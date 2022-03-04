@@ -265,26 +265,26 @@ function give_multi_currency_selector($form_id, $args) {
                 var giveFinalPrice = document.getElementsByClassName('give-final-total-amount')[0];
                 var currencyCode = document.getElementById('give-mc-select');
 
-                if(giveFinalPrice) {
+                if (giveFinalPrice) {
                     var simboloAntigo = giveFinalPrice.textContent;
-                    
+
                     // Percorre toda a string para encontrar e substituir o símbolo da moeda
-                    for(let d = 0; d < simboloAntigo.length; d++){
-                        if(/\d/.test(simboloAntigo.charAt(d)) === true){
-                            simboloAntigo = simboloAntigo.substr(0, d);
+                    for (let d = 0; d < simboloAntigo.length; d++) {
+                        if (/\d/.test(simboloAntigo.charAt(d)) === true) {
+                            simboloAntigo = simboloAntigo.substring(0, d);
                             break;
                         }
 
-                        if(d > 100) {
+                        if (d > 100) {
                             console.log('erro loop infinito');
                             break;
                         }
 
                     }
-                    
+
                     // Muda o texto dentro do html caso seja um símbolo de moeda diferente
                     // ao esgotar o timeout
-                    if(simboloAntigo !== giveFinalPrice.textContent){
+                    if (simboloAntigo !== giveFinalPrice.textContent) {
                         giveFinalPrice.textContent = giveFinalPrice.textContent.replace(simboloAntigo, currencySymbolArray[currencyCode.value]);
                     }
                 }
@@ -303,56 +303,56 @@ function give_multi_currency_selector($form_id, $args) {
 
             var giveFinalPrice = document.getElementsByClassName('give-final-total-amount')[0];
             var simboloAntigo = giveFinalPrice.textContent;
-                
-                // Percorre toda a string para encontrar e substituir o símbolo da moeda
-                for(let d = 0; d < simboloAntigo.length; d++){
-                    if(/\d/.test(simboloAntigo.charAt(d)) === true){
-                        simboloAntigo = simboloAntigo.substr(0, d);
-                        break;
-                    }
 
-                    if(d > 100) {
-                        console.log('erro loop infinito');
-                        break;
+            // Percorre toda a string para encontrar e substituir o símbolo da moeda
+            for (let d = 0; d < simboloAntigo.length; d++) {
+                if (/\d/.test(simboloAntigo.charAt(d)) === true) {
+                    simboloAntigo = simboloAntigo.substring(0, d);
+                    break;
+                }
+
+                if (d > 100) {
+                    console.log('erro loop infinito');
+                    break;
                 }
 
             }
-                
+
             // Substitui o símbolo de moeda antigo pelo selecionado dentro da tag html
-            if(simboloAntigo !== giveFinalPrice.textContent){
+            if (simboloAntigo !== giveFinalPrice.textContent) {
                 giveFinalPrice.textContent = giveFinalPrice.textContent.replace(simboloAntigo, currencySymbolArray[currencyCode.value]);
             }
 
-            if(priceList) {
-                var elemPriceList = priceList.getElementsByTagName('li'); 
-                for(let c = 0; c < elemPriceList.length; c++){
+            if (priceList) {
+                var elemPriceList = priceList.getElementsByTagName('li');
+                for (let c = 0; c < elemPriceList.length; c++) {
 
-                        var nodeChild = elemPriceList[c].children;
-                        simboloAntigo = nodeChild[0].textContent;
+                    var nodeChild = elemPriceList[c].children;
+                    simboloAntigo = nodeChild[0].textContent;
 
-                        for(let i = 0; i < simboloAntigo.length; i++){
-                            if(/\d/.test(simboloAntigo.charAt(i)) === true){
-                                simboloAntigo = simboloAntigo.substr(0, i);
-                                break;
-                            }
-
-                            if(i > 100) {
-                                console.log('erro loop infinito');
-                                break;
-                            }
-
+                    for (let i = 0; i < simboloAntigo.length; i++) {
+                        if (/\d/.test(simboloAntigo.charAt(i)) === true) {
+                            simboloAntigo = simboloAntigo.substring(0, i);
+                            break;
                         }
-                        if(simboloAntigo !== nodeChild[0].textContent){
-                            nodeChild[0].textContent = nodeChild[0].textContent.replace(simboloAntigo, currencySymbolArray[currencyCode.value]);
+
+                        if (i > 100) {
+                            console.log('erro loop infinito');
+                            break;
                         }
 
                     }
+                    if (simboloAntigo !== nodeChild[0].textContent) {
+                        nodeChild[0].textContent = nodeChild[0].textContent.replace(simboloAntigo, currencySymbolArray[currencyCode.value]);
+                    }
 
-            }else{
+                }
+
+            } else {
                 return null;
             }
 
-            
+
         }
 
         /**
@@ -375,7 +375,7 @@ function give_multi_currency_selector($form_id, $args) {
             var totalFinal = document.getElementsByClassName('give-final-total-amount');
 
             // faz a verificação se o paypal donations está selecionado, é uma moeda estrangeira e se existe taxa de conversão
-            if(exRate !== 'disabled' && paypalCheckbox.checked && currencyCode.value !== 'BRL') {
+            if (exRate !== 'disabled' && paypalCheckbox.checked && currencyCode.value !== 'BRL') {
 
                 form.setAttribute('data-currency_symbol', 'R$');
                 form.setAttribute('data-currency_code', 'BRL');
@@ -384,29 +384,29 @@ function give_multi_currency_selector($form_id, $args) {
                 amountLabel.removeAttribute('name');
                 amount.setAttribute('name', 'give-amount');
                 // retira pontos e vírgulas para fazer a conversão
-                amount.value = amountLabel.value.replace(/\D/gm,'');
+                amount.value = amountLabel.value.replace(/\D/gm, '');
                 amount.value = amount.value / exRate[currencyCode.value];
                 amount.value = Math.round(amount.value);
 
                 // caso exista um 'totalPrice' ele muda para o amount.value
-                if(totalFinal[0]) {
-                    totalFinal[0].setAttribute('data-total', amount.value); 
+                if (totalFinal[0]) {
+                    totalFinal[0].setAttribute('data-total', amount.value);
                 }
 
                 // caso existam níveis de doação faz a mudança dos mesmos para validação do givewp
-                if(giveTier){
+                if (giveTier) {
                     giveTier.value = 'custom';
-                
+
                     // Verifica se o valor convertido faz parte de algum tier de doação
                     var tierButtons = document.getElementsByClassName('give-donation-level-btn');
-                    if(tierButtons) {
-                        for(c = 0; c < tierButtons.length; c++) {
-                            if(amount.value == tierButtons.item(c).value) {
+                    if (tierButtons) {
+                        for (c = 0; c < tierButtons.length; c++) {
+                            if (amount.value == tierButtons.item(c).value) {
                                 // caso o valor convertido seja um tier de doação passa o id do tier para o give validar
                                 giveTier.value = tierButtons.item(c).getAttribute('data-price-id');
                             }
                             // pega exceção de loop infinito
-                            if(c > 100) {
+                            if (c > 100) {
                                 console.log('caught exception infinite loop');
                                 break;
                             }
@@ -418,17 +418,17 @@ function give_multi_currency_selector($form_id, $args) {
                 // reseta o nível da doação para o botão selecionado caso exista
                 amountLabel.setAttribute('name', 'give-amount');
                 amount.removeAttribute('name');
-                if(giveTier){
+                if (giveTier) {
                     var tierButtons = document.getElementsByClassName('give-donation-level-btn');
                     // verifica se existem níveis de doação
-                    if(tierButtons) {
-                        for(c = 0; c < tierButtons.length; c++) {
+                    if (tierButtons) {
+                        for (c = 0; c < tierButtons.length; c++) {
                             // faz o reset do give-price-id pro tier selecionado
-                            if(amountLabel.value == tierButtons.item(c).value) {
+                            if (amountLabel.value == tierButtons.item(c).value) {
                                 giveTier.value = tierButtons.item(c).getAttribute('data-price-id');
                             }
                             // pega exceção de loop infinito
-                            if(c > 100) {
+                            if (c > 100) {
                                 console.log('caught exception infinite loop');
                                 break;
                             }
@@ -447,14 +447,14 @@ function give_multi_currency_selector($form_id, $args) {
          * @return void
          * 
          */
-        function currencyChange () {
+        function currencyChange() {
 
             var currencyCode = document.getElementById('give-mc-select');
             var iframeLoader = parent.document.getElementsByClassName('iframe-loader')[0];
             var form = document.getElementById('give-form-$id_prefix');
 
             // caso for um formulário legado altera também os atributos do formulário para validação do giveWP
-            if(!iframeLoader) { // verifica a existência do iframe loader que é específico do formulário novo
+            if (!iframeLoader) { // verifica a existência do iframe loader que é específico do formulário novo
                 form.setAttribute('data-currency_symbol', currencySymbolArray[currencyCode.value]);
                 form.setAttribute('data-currency_code', currencyCode.value);
                 changeLabelLegacy();
@@ -463,159 +463,34 @@ function give_multi_currency_selector($form_id, $args) {
                 // altera o label para o código de moeda selecionado
                 currencySymbolLabel.textContent = currencySymbolArray[currencyCode.value];
                 giveInputCurrencySelected.value = currencyCode.value;
-            }else{
+            } else {
                 // todos os atributos dependentes de elementos html
                 var giveInputCurrencySelected = document.getElementById('give-mc-currency-selected');
                 var currencySymbolLabel = document.getElementsByClassName('give-currency-symbol')[0];
                 var currencyCodeButtons = document.getElementsByClassName('currency');
                 var classicCurrencyButonsBefore = document.getElementsByClassName('give-currency-symbol-before');
                 var classicCurrencyButonsAfter = document.getElementsByClassName('give-currency-symbol-after');
-                var donationSummary = document.getElementsByClassName('give-donation-summary-table-wrapper')[0];
 
                 // altera o label para o código de moeda selecionado
                 currencySymbolLabel.textContent = currencySymbolArray[currencyCode.value];
                 giveInputCurrencySelected.value = currencyCode.value;
 
-                // Se existir um sumário de doação
-                if(donationSummary) {
-                    // Suporte para multi-step
-                    var btnContinuar = document.getElementsByClassName('advance-btn');
-                    if(btnContinuar[0]) {
-                        if(btnContinuar.length > 1) {
-                            btnContinuar[1].addEventListener('click', function(){
-                                setTimeout(function () {
-                                    console.log('EVENTO DISPARADO!!');
-                                    var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
-                                    var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
-                                    var amountLabel = document.getElementById('give-amount');
-
-                                    if(summaryAmount) {
-                                        summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                                    }
-
-                                    if(summaryTotal) {
-                                        summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
-                                    }
-                                },500);
-                            }, false)
-                        } else { // caso só exista um botão adiciona um evento click nesse botão
-                            btnContinuar[0].addEventListener('click', function(){
-                                setTimeout(function () {
-                                    console.log('EVENTO DISPARADO!!');
-                                    var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
-                                    var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
-                                    var amountLabel = document.getElementById('give-amount');
-
-                                    if(summaryAmount) {
-                                        summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                                    }
-
-                                    if(summaryTotal) {
-                                        summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
-                                    }
-                                },500);
-                            },false);
-                        }
-                    } else { // Está usando o template Classic
-                        var classicCurrencyButonsBefore = document.getElementsByClassName('give-currency-symbol-before');
-                        var classicCurrencyButonsAfter = document.getElementsByClassName('give-currency-symbol-after');
-                        var mcSelect = document.getElementById('give-mc-select');
-
-                        if(classicCurrencyButonsBefore[0]) {
-                            for(c = 0; c < classicCurrencyButonsBefore.length; c++) {
-                                classicCurrencyButonsBefore[c].addEventListener('click', function() {
-                                    setTimeout(function () {
-                                        console.log('EVENTO DISPARADO!!');
-                                        var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
-                                        var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
-                                        var amountLabel = document.getElementById('give-amount');
-
-                                        if(summaryAmount) {
-                                            summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                                        }
-
-                                        if(summaryTotal) {
-                                            summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
-                                        }
-                                    },500);
-                                });
-                            }
-                        }
-
-                        if(classicCurrencyButonsAfter[0]) {
-                            for(c = 0; c < classicCurrencyButonsAfter.length; c++) {
-                                classicCurrencyButonsAfter[c].addEventListener('click', function() {
-                                    setTimeout(function () {
-                                        console.log('EVENTO DISPARADO!!');
-                                        var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
-                                        var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
-                                        var amountLabel = document.getElementById('give-amount');
-
-                                        if(summaryAmount) {
-                                            summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                                        }
-
-                                        if(summaryTotal) {
-                                            summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
-                                        }
-                                    },500);
-                                });
-                            }
-                        }
-
-
-                        document.querySelector('#give-amount').addEventListener('change', function () {
-                            setTimeout(function () {
-                                console.log('EVENTO DISPARADO!!');
-                                var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
-                                var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
-                                var amountLabel = document.getElementById('give-amount');
-
-                                if(summaryAmount) {
-                                    summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                                }
-
-                                if(summaryTotal) {
-                                    summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
-                                }
-                            },500);
-                        });
-
-                        mcSelect.addEventListener('change', function(){
-                            setTimeout(function () {
-                                console.log('EVENTO DISPARADO!!');
-                                var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
-                                var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
-                                var amountLabel = document.getElementById('give-amount');
-
-                                if(summaryAmount) {
-                                    summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                                }
-
-                                if(summaryTotal) {
-                                    summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;  
-                                }
-                            },500);
-                        } , false);
-                    }
-                }
-
                 // símbolo da moeda em todos os botões a partir do classname
-                if(currencyCodeButtons[0]) {
+                if (currencyCodeButtons[0]) {
                     console.log('reconheceu botões iframe');
-                    for(c = 0; c < currencyCodeButtons.length; c++) {
+                    for (c = 0; c < currencyCodeButtons.length; c++) {
                         currencyCodeButtons[c].textContent = currencySymbolArray[currencyCode.value];
                     }
-                }else{ // Caso seja template Classic
+                } else { // Caso seja template Classic
                     console.log('reconheceu botões classic');
                     currencyCode.classList.add('lkn-mc-select-classic');
-                    if(classicCurrencyButonsBefore[0]) {
-                        for(c = 0; c < classicCurrencyButonsBefore.length; c++) {
+                    if (classicCurrencyButonsBefore[0]) {
+                        for (c = 0; c < classicCurrencyButonsBefore.length; c++) {
                             classicCurrencyButonsBefore[c].textContent = currencySymbolArray[currencyCode.value];
                         }
                     }
-                    if(classicCurrencyButonsAfter[0]) {
-                        for(c = 0; c < classicCurrencyButonsAfter.length; c++) {
+                    if (classicCurrencyButonsAfter[0]) {
+                        for (c = 0; c < classicCurrencyButonsAfter.length; c++) {
                             classicCurrencyButonsAfter[c].textContent = currencySymbolArray[currencyCode.value];
                         }
                     }
@@ -627,17 +502,17 @@ function give_multi_currency_selector($form_id, $args) {
         * Seleciona a moeda padrão
         * 
         */
-        function updateCoin(){
+        function updateCoin() {
             var mcSelect = document.getElementById('give-mc-select');
             var defaultCoin = '$defaultCoin';
 
             // faz uma seleção dinâmica a partir das moedas ativas e a moeda padrão selecionada
-            for(var c = 0; c < mcSelect.options.length; c++){
-                if(mcSelect.options[c].value == defaultCoin) {
+            for (var c = 0; c < mcSelect.options.length; c++) {
+                if (mcSelect.options[c].value == defaultCoin) {
                     mcSelect.options[c].setAttribute('selected', defaultCoin);
                 }
                 // trata exceção de loop infinito
-                if(c > 10) {
+                if (c > 10) {
                     console.log('caught exception infinite loop');
                     break;
                 }
@@ -650,20 +525,122 @@ function give_multi_currency_selector($form_id, $args) {
         }
 
         // a função só irá ser executada após a página carregar completamente
-        document.addEventListener('DOMContentLoaded', function() {
-
+        document.addEventListener('DOMContentLoaded', function () {
+            var donationSummary = document.getElementsByClassName('give-donation-summary-table-wrapper')[0];
             var c = 0;
             var activeCurrency = '$activeCurrency';
             activeCurrency = JSON.parse(activeCurrency);
             var activeCurrencyNames = '$activeCurrencyNames';
             activeCurrencyNames = JSON.parse(activeCurrencyNames);
+            var currencyCode = document.getElementById('give-mc-select');
+
+            // Se existir um sumário de doação
+            if (donationSummary) {
+                // Suporte para multi-step
+                var btnContinuar = document.getElementsByClassName('advance-btn');
+                if (btnContinuar[0]) {
+                    if (btnContinuar.length > 1) {
+                        btnContinuar[1].addEventListener('click', function () {
+                            setTimeout(function () {
+                                console.log('EVENTO DISPARADO!!');
+                                var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                                var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                                var amountLabel = document.getElementById('give-amount');
+
+                                if (summaryAmount) {
+                                    summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                }
+
+                                if (summaryTotal) {
+                                    summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                }
+                            }, 500);
+                        }, false)
+                    } else { // caso só exista um botão adiciona um evento click nesse botão
+                        btnContinuar[0].addEventListener('click', function () {
+                            setTimeout(function () {
+                                console.log('EVENTO DISPARADO!!');
+                                var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                                var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                                var amountLabel = document.getElementById('give-amount');
+
+                                if (summaryAmount) {
+                                    summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                }
+
+                                if (summaryTotal) {
+                                    summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                }
+                            }, 500);
+                        }, false);
+                    }
+                } else { // Está usando o template Classic
+                    var mcSelect = document.getElementById('give-mc-select');
+                    var tierButtons = document.getElementsByClassName('give-donation-level-btn');
+
+                    if (tierButtons) {
+                        for (var c = 0; c < tierButtons.length; c++) {
+                            tierButtons[c].addEventListener('click', function () {
+                                setTimeout(function () {
+                                    console.log('EVENTO DISPARADO!!');
+                                    var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                                    var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                                    var amountLabel = document.getElementById('give-amount');
+
+                                    if (summaryAmount) {
+                                        summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                    }
+
+                                    if (summaryTotal) {
+                                        summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                                    }
+                                }, 500);
+                            });
+                        }
+                    }
+
+                    document.querySelector('#give-amount').addEventListener('change', function () {
+                        setTimeout(function () {
+                            console.log('EVENTO DISPARADO!!');
+                            var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                            var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                            var amountLabel = document.getElementById('give-amount');
+
+                            if (summaryAmount) {
+                                summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                            }
+
+                            if (summaryTotal) {
+                                summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                            }
+                        }, 500);
+                    });
+
+                    mcSelect.addEventListener('change', function () {
+                        setTimeout(function () {
+                            console.log('EVENTO DISPARADO!!');
+                            var summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
+                            var summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
+                            var amountLabel = document.getElementById('give-amount');
+
+                            if (summaryAmount) {
+                                summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                            }
+
+                            if (summaryTotal) {
+                                summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
+                            }
+                        }, 500);
+                    }, false);
+                }
+            }
 
             // Pega o objeto do link e o esconde se tiver uma licença válida
             var linkMultiMoedas = document.getElementById('link-multi-moedas');
-            if(hasValidGateway == 'true') {
+            if (hasValidGateway == 'true') {
                 linkMultiMoedas.classList.add('hidden-lkn');
                 linkMultiMoedas.classList.remove('show-lkn');
-            }else{
+            } else {
                 linkMultiMoedas.classList.remove('hidden-lkn');
                 linkMultiMoedas.classList.add('show-lkn');
             }
@@ -681,7 +658,7 @@ function give_multi_currency_selector($form_id, $args) {
                 opt.value = activeCurrency[c];
                 opt.innerHTML = activeCurrencyNames[c];
                 mcSelect.appendChild(opt);
-                if(c > 100) {
+                if (c > 100) {
                     console.log('exception caught infinite loop');
 
                     break;
@@ -689,31 +666,31 @@ function give_multi_currency_selector($form_id, $args) {
             }
 
             // caso exista mais de um botão de continuar só chama a função no botão que o multi-moedas aparece
-            if(btnContinuar.length > 1) {
-                btnContinuar[1].addEventListener('click', function(){
+            if (btnContinuar.length > 1) {
+                btnContinuar[1].addEventListener('click', function () {
                     conversionCurrency();
                 }, false)
-            } else if(btnContinuar.length == 1) { // caso só exista um botão adiciona um evento click nesse botão
-                btnContinuar[0].addEventListener('click', function(){
+            } else if (btnContinuar.length == 1) { // caso só exista um botão adiciona um evento click nesse botão
+                btnContinuar[0].addEventListener('click', function () {
                     conversionCurrency();
-                },false);
+                }, false);
             } else { // caso seja um formulário legado faz a conversão ao selecionar outra moeda
                 conversionCurrency();
-                mcSelect.addEventListener('change', function(){
+                mcSelect.addEventListener('change', function () {
                     conversionCurrency();
-                } , false);
-                if(listaValores){
+                }, false);
+                if (listaValores) {
                     var elemenListaValores = listaValores.getElementsByTagName('button');
-                    for(let i = 0; i < elemenListaValores.length; i++){
-                        elemenListaValores[i].addEventListener('click', function(){
-                            setTimeout(() => {  conversionCurrency(); }, 300);
+                    for (let i = 0; i < elemenListaValores.length; i++) {
+                        elemenListaValores[i].addEventListener('click', function () {
+                            setTimeout(() => { conversionCurrency(); }, 300);
                         }, false);
                     }
                 }
             }
 
             // adiciona um evento para executar a função de conversão caso mude o gateway de pagamento
-            gatewayList.addEventListener('change', function(){
+            gatewayList.addEventListener('change', function () {
                 conversionCurrency();
                 changeLabelFinalAmountLegacy();
             }, false);
