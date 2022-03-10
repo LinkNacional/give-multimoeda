@@ -255,6 +255,7 @@ function lkn_give_multi_currency_selector($form_id, $args) {
         var hasValidGateway = '$hasValidGateway';
         var summaryIntervalId = null;
         var legacyIntervalId = null;
+        var classicBtnIntervalId = null;
 
         /**
          * Change the label of the final total value of the legacy form
@@ -444,6 +445,36 @@ function lkn_give_multi_currency_selector($form_id, $args) {
         }
 
         /**
+         * Compatibility with symbol changes on Classic template
+         *
+         * @return void
+         */
+        function changeBtnLabelClassic() {
+            let currencyCode = document.getElementById('give-mc-select');
+            let updateSymbolsFn = function () {
+                let classicCurrencyButonsBefore = document.getElementsByClassName('give-currency-symbol-before');
+                let classicCurrencyButonsAfter = document.getElementsByClassName('give-currency-symbol-after');
+                if (classicCurrencyButonsBefore[0]) {
+                    for (let c = 0; c < classicCurrencyButonsBefore.length; c++) {
+                        classicCurrencyButonsBefore[c].textContent = currencySymbolArray[currencyCode.value];
+                    }
+                }
+                if (classicCurrencyButonsAfter[0]) {
+                    for (let c = 0; c < classicCurrencyButonsAfter.length; c++) {
+                        classicCurrencyButonsAfter[c].textContent = currencySymbolArray[currencyCode.value];
+                    }
+                }
+            };
+
+            if (classicBtnIntervalId) {
+                clearInterval(classicBtnIntervalId);
+                classicBtnIntervalId = setInterval(updateSymbolsFn, 1000);
+            } else {
+                classicBtnIntervalId = setInterval(updateSymbolsFn, 1000);
+            }
+        }
+
+        /**
          * @function
          * 
          * Change currency symbol when selecting an option
@@ -472,8 +503,6 @@ function lkn_give_multi_currency_selector($form_id, $args) {
                 let giveInputCurrencySelected = document.getElementById('give-mc-currency-selected');
                 let currencySymbolLabel = document.getElementsByClassName('give-currency-symbol')[0];
                 let currencyCodeButtons = document.getElementsByClassName('currency');
-                let classicCurrencyButonsBefore = document.getElementsByClassName('give-currency-symbol-before');
-                let classicCurrencyButonsAfter = document.getElementsByClassName('give-currency-symbol-after');
 
                 // change the label to the selected currency code
                 currencySymbolLabel.textContent = currencySymbolArray[currencyCode.value];
@@ -486,16 +515,7 @@ function lkn_give_multi_currency_selector($form_id, $args) {
                     }
                 } else { // If is template Classic
                     currencyCode.classList.add('lkn-mc-select-classic');
-                    if (classicCurrencyButonsBefore[0]) {
-                        for (let c = 0; c < classicCurrencyButonsBefore.length; c++) {
-                            classicCurrencyButonsBefore[c].textContent = currencySymbolArray[currencyCode.value];
-                        }
-                    }
-                    if (classicCurrencyButonsAfter[0]) {
-                        for (let c = 0; c < classicCurrencyButonsAfter.length; c++) {
-                            classicCurrencyButonsAfter[c].textContent = currencySymbolArray[currencyCode.value];
-                        }
-                    }
+                    changeBtnLabelClassic();
                 }
             }
         }
@@ -532,7 +552,6 @@ function lkn_give_multi_currency_selector($form_id, $args) {
         function changeSummaryAmount() {
             let currencyCode = document.getElementById('give-mc-select');
             let updateSummary = function () {
-                console.log('intervalo rodou');
                 let summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
                 let summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
                 let amountLabel = document.getElementById('give-amount');
@@ -564,9 +583,8 @@ function lkn_give_multi_currency_selector($form_id, $args) {
             activeCurrencyNames = JSON.parse(activeCurrencyNames);
             let currencyCode = document.getElementById('give-mc-select');
             let updateSummaryFn = function () {
-                // Change the summary amount and total labels after a delay
-                // Because Give has active actions that prevent instant change
-                setTimeout(function () {
+                let currencyCode = document.getElementById('give-mc-select');
+                let updateSummary = function () {
                     let summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
                     let summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
                     let amountLabel = document.getElementById('give-amount');
@@ -578,7 +596,15 @@ function lkn_give_multi_currency_selector($form_id, $args) {
                     if (summaryTotal) {
                         summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
                     }
-                }, 500);
+                };
+                // Change the summary amount and total labels after a delay
+                // Because Give has active actions that prevent instant change
+                if (summaryIntervalId) {
+                    clearInterval(summaryIntervalId);
+                    summaryIntervalId = setInterval(updateSummary, 1000);
+                } else {
+                    summaryIntervalId = setInterval(updateSummary, 1000);
+                }
             };
 
             // If donation summary exists
@@ -588,7 +614,7 @@ function lkn_give_multi_currency_selector($form_id, $args) {
                 if (btnContinue[0]) {
                     if (btnContinue.length > 1) {
                         btnContinue[1].addEventListener('click', updateSummaryFn, false)
-                    } else { // caso só exista um botão adiciona um evento click nesse botão
+                    } else { // if there is only one button, add a click event to that button
                         btnContinue[0].addEventListener('click', updateSummaryFn, false);
                     }
                 } else { // Is template Classic
@@ -604,17 +630,21 @@ function lkn_give_multi_currency_selector($form_id, $args) {
                     document.querySelector('#give-amount').addEventListener('change', updateSummaryFn, false);
 
                     mcSelect.addEventListener('change', updateSummaryFn, false);
+
+                    if (currencyCode !== 'BRL') {
+                        updateSummaryFn();
+                    }
                 }
             }
 
             // Take the link object and hide it if it has a valid license
-            let linkMultiMoedas = document.getElementById('link-multi-currency');
+            let linkMultiCurrency = document.getElementById('link-multi-currency');
             if (hasValidGateway == 'true') {
-                linkMultiMoedas.classList.add('hidden-lkn');
-                linkMultiMoedas.classList.remove('show-lkn');
+                linkMultiCurrency.classList.add('hidden-lkn');
+                linkMultiCurrency.classList.remove('show-lkn');
             } else {
-                linkMultiMoedas.classList.remove('hidden-lkn');
-                linkMultiMoedas.classList.add('show-lkn');
+                linkMultiCurrency.classList.remove('hidden-lkn');
+                linkMultiCurrency.classList.add('show-lkn');
             }
 
             // attributes for verification
@@ -669,6 +699,12 @@ function lkn_give_multi_currency_selector($form_id, $args) {
 
             // Verifies initial currency
             updateCoin();
+
+            // Compatibility with template Classic
+            // Change tier btn labels
+            if (currencyCode.value !== 'BRL') {
+                currencyChange();
+            }
         }, false);
 
 
