@@ -39,7 +39,23 @@ Lembre-se de salvar as alterações.
 
 Pronto! Agora o plugin do Give-Multi-Moedas está ativo e em funcionamento.
 
-## CHANGELOGS
+## Modo de uso
+
+1) Entre em um formulário de doação criado via Give WP;
+
+2) No cabeçalho do formulário terá um seletor com a moeda padrão selecionada, geralmente será "Real Brasileiro" mas pode mudar de acordo com a moeda padrão definida;
+
+3) Caso deseje doar em outra moeda clique no seletor e um drop-down com as opções de moedas ativas irá aparecer;
+
+4) Escolha uma moeda;
+
+5) Continue o processo de doação escolhendo valor e método de pagamento;
+
+6) Clique em 'Doar';
+
+Pronto! Você realizou sua primeira doação via plugin do multimoedas.
+
+## Changelog
 
 ### v2.5.0
 
