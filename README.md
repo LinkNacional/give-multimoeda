@@ -16,7 +16,7 @@ Lembre-se de salvar as alterações.
 
 1) Procure na barra lateral a área de plugins do Wordpress;
 
-2) Em plugins instalados procure pela opção 'adicionar novo';
+2) Em plugins instalados procure pela opção 'adicionar novo' no cabeçalho;
 
 3) Clique na opção de 'enviar plugin' no título da página e faça o upload do plugin give-multimoeda.zip;
 
