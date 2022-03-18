@@ -365,6 +365,7 @@ function lkn_give_multi_currency_selector($form_id, $args) {
          * 
          * Compatibility with PayPal Donations gateway
          * Calculate the final price
+         * Compatibility with front-end dependent gateways
          * 
          * @return void
          * 
@@ -390,7 +391,7 @@ function lkn_give_multi_currency_selector($form_id, $args) {
                 amount.setAttribute('name', 'give-amount');
                 // Remove semicolons to convert
                 amount.value = amountLabel.value.replace(/\D/gm, '');
-                amount.value = amount.value / exRate[currencyCode.value];
+                amount.value = amount.value * exRate[currencyCode.value];
                 amount.value = Math.round(amount.value);
 
                 // If there is a 'totalPrice' it changes to 'amount.value'
@@ -423,6 +424,20 @@ function lkn_give_multi_currency_selector($form_id, $args) {
                 // Reset the donation level for the selected button if it exists
                 amountLabel.setAttribute('name', 'give-amount');
                 amount.removeAttribute('name');
+
+                if (currencyCode.value !== 'BRL') {
+                    // Remove semicolons to convert
+                    amount.value = amountLabel.value.replace(/\D/gm, '');
+                    amount.value = amount.value * exRate[currencyCode.value];
+                    amount.value = parseFloat(amount.value).toFixed(2);
+
+                    // If there is a 'totalPrice' it changes to 'amount.value'
+                    if (finalAmount[0]) {
+                        finalAmount[0].setAttribute('data-total', amount.value);
+                    }
+                }
+
+
                 if (giveTier) {
                     let tierButtons = document.getElementsByClassName('give-donation-level-btn');
                     // Checks for donation levels
@@ -706,7 +721,6 @@ function lkn_give_multi_currency_selector($form_id, $args) {
                 currencyChange();
             }
         }, false);
-
 
         </script>
 

@@ -57,6 +57,10 @@ Pronto! Você realizou sua primeira doação via plugin do multimoedas.
 
 ## Changelog
 
+### v2.5.1
+- Atualização de método de consulta de cotação;
+- Atualização de método de cálculo de preço convertido.
+
 ### v2.5.0
 
 - Adição de compatibilidade com template 'Classic';

@@ -14,22 +14,16 @@ if (!defined('ABSPATH')) {
  *
  */
 function lkn_give_multi_currency_get_exchange_rates($currenciesCode) {
-    $cotacao = lkn_multi_currency_curl_get_contents('https://api.linknacional.com.br/cotacao/cotacao-BRL.json');
+    $exRate = [];
 
-    $cotacao = json_decode($cotacao, true);
-    $cotacao = $cotacao['rates'];
-
-    // pega só os exchange rate das moedas ativas
-    for ($c = 0; $c < count($currenciesCode); $c++) {
-        foreach ($cotacao as $code => $value) {
-            if ($currenciesCode[$c] == $code) {
-                $suportedCurrencies[$code] = "$value";
-            }
-        }
+    foreach ($currenciesCode as $key => $currency) {
+        $result = lkn_multi_currency_curl_get_contents('https://api.linknacional.com.br/cotacao/cotacao-' . $currency . '.json');
+        $result = json_decode($result);
+        $exRate[$currency] = $result->rates->BRL;
     }
 
     // retorna um array com o rate das moedas ativas
-    return json_encode($suportedCurrencies);
+    return json_encode($exRate);
 }
 
 /**
