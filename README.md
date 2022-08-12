@@ -57,6 +57,11 @@ Pronto! Você realizou sua primeira doação via plugin do multimoedas.
 
 ## Changelog
 
+### v2.5.2
+- Atualização de endpoint de atualizações;
+- Correção de notices de ativação do plugin;
+- Adição de licença GPL 2.0.
+
 ### v2.5.1
 - Atualização de método de consulta de cotação;
 - Atualização de método de cálculo de preço convertido.

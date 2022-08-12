@@ -3,7 +3,7 @@
  * Plugin Name: Give - Multi-Moedas
  * Plugin URI:  https://www.linknacional.com.br/wordpress/givewp/
  * Description: Adiciona opções de escolher moedas no formulário do give.
- * Version:     2.5.1
+ * Version:     2.5.2
  * Author:      Link Nacional
  * Author URI:  https://www.linknacional.com.br
  * License:     GNU General Public License v2 or later
@@ -103,7 +103,7 @@ final class Give_Multi_Currency {
     private function setup_constants() {
         // Defines addon version number for easy reference.
         if (!defined('GIVE_MULTI_CURRENCY_VERSION')) {
-            define('GIVE_MULTI_CURRENCY_VERSION', '2.5.0');
+            define('GIVE_MULTI_CURRENCY_VERSION', '2.5.2');
         }
 
         // Set it to latest.
@@ -298,7 +298,7 @@ Give_Multi_Currency();
  */
 function lkn_give_multi_currency_updater() {
     return new Lkn_Puc_Plugin_UpdateChecker(
-        'https://api.linknacional.com.br/app/u/link_api_update.php?slug=give-multimoeda',
+        'https://api.linknacional.com.br/v2/u/?slug=give-multimoeda',
         __FILE__,//(caso o plugin não precise de compatibilidade com ioncube utilize: __FILE__), //Full path to the main plugin file or functions.php.
         'give-multimoeda'
     );

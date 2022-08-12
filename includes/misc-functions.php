@@ -1,4 +1,10 @@
 <?php
+
+// Exit, if accessed directly.
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 /**
  * Show plugin dependency notice
  *
@@ -14,7 +20,7 @@ function lkn_give_multi_currency_dependency_notice() {
         __('Give', 'give'),
         __('version', 'give'),
         GIVE_MULTI_CURRENCY_MIN_GIVE_VERSION,
-        __('for the Give add-on to activate', 'give')
+        __('for the Give Multi Currency add-on to activate', 'give')
     );
 
     Give()->notices->register_notice([
@@ -38,7 +44,7 @@ function lkn_give_multi_currency_inactive_notice() {
         __('You must have', 'give'),
         'https://givewp.com',
         __('Give', 'give'),
-        __(' plugin installed and activated for the Give Addon', 'give')
+        __(' plugin installed and activated for the Give Multi Currency to activate', 'give')
     );
 
     echo $message;
