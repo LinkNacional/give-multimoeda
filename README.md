@@ -1,6 +1,6 @@
 # GiveWP multi-moeda
 
-O GiveWP Multi-Moeda é um plugin para a plataforma de doação GiveWP que tem o objetivo de fazer a conversão da moeda estrangeira para a moeda nacional (BRL) a fim de realizar um determinado pagamento internacional e o mesmo ser reconhecido pelos processadores de pagamento do Brasil.
+O [GiveWP Multi-Moeda](https://www.linknacional.com.br/wordpress/givewp/multimoeda/) é um plugin para a plataforma de doação GiveWP que tem o objetivo de fazer a conversão da moeda estrangeira para a moeda nacional (BRL) a fim de realizar um determinado pagamento internacional e o mesmo ser reconhecido pelos processadores de pagamento do Brasil.
 
 ## Dependências
 
