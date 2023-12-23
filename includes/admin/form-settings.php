@@ -49,6 +49,7 @@ class Lkn_Give_Multi_Currency_Settings {
                         'EUR' => __('Euro (€)', 'give'),
                         'JPY' => __('Iene (¥)', 'give'),
                         'GBP' => __('Libra esterlina (£)', 'give'),
+                        'SAR' => __('Rial Saudita (ر.س)', 'give')
                     ],
                     'default' => 'BRL',
                 ],
@@ -63,6 +64,7 @@ class Lkn_Give_Multi_Currency_Settings {
                         'EUR' => __('Euro (€)', 'give'),
                         'JPY' => __('Iene (¥)', 'give'),
                         'GBP' => __('Libra esterlina (£)', 'give'),
+                        'SAR' => __('Rial Saudita (ر.س)', 'give')
                     ],
                 ],
             ],
