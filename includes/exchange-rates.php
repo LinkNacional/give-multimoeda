@@ -17,7 +17,7 @@ function lkn_give_multi_currency_get_exchange_rates($currenciesCode) {
     $exRate = [];
 
     foreach ($currenciesCode as $key => $currency) {
-        $result = lkn_multi_currency_curl_get_contents('https://api.linknacional.com.br/cotacao/cotacao-' . $currency . '.json');
+        $result = lkn_multi_currency_curl_get_contents('https://api.linknacional.com/cotacao/cotacao-' . $currency . '.json');
         $result = json_decode($result);
         $exRate[$currency] = $result->rates->BRL;
     }
