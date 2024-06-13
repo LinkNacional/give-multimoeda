@@ -1,3 +1,7 @@
+# 2.7.0 - 13/06/2024
+* Adição de suporte a peso mexicano;
+* Adição de notificação para plugins instalados e inativos da Link Nacional.
+
 # 2.6.0 - 23/12/2023
 * Adição de changelogs;
 * Adição de suporte a moeda Rial Saudito;
