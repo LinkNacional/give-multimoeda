@@ -52,7 +52,8 @@ function lkn_give_multi_currency_add_setting_into_existing_tab($settings) {
                         'eur' => __('Euro (€)', 'give'),
                         'jpy' => __('Iene (¥)', 'give'),
                         'gbp' => __('Libra esterlina (£)', 'give'),
-                        'sar' => __('Rial Saudita (ر.س)', 'give')
+                        'sar' => __('Rial Saudita (ر.س)', 'give'),
+                        'mxn' => __('Peso mexicano ($)', 'give')
                     ],
                 ];
             }
@@ -71,7 +72,8 @@ function lkn_give_multi_currency_add_setting_into_existing_tab($settings) {
                         'EUR' => __('Euro (€)', 'give'),
                         'JPY' => __('Iene (¥)', 'give'),
                         'GBP' => __('Libra esterlina (£)', 'give'),
-                        'SAR' => __('Rial Saudita (ر.س)', 'give')
+                        'SAR' => __('Rial Saudita (ر.س)', 'give'),
+                        'MXN' => __('Peso mexicano ($)', 'give')
                     ],
                 ];
             }
