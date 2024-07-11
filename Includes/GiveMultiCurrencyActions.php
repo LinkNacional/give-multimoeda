@@ -179,7 +179,7 @@ final class GiveMultiCurrencyActions {
                     esc_html__('Plugin Multi Moedas só funciona com a moeda base reais (R$).', 'give')
                 )
             );
-        } elseif (give_get_option('number_decimals') > 2) {
+        } elseif (give_get_option('number_decimals') > 0) {
             Give()->notices->print_frontend_notice(
                 sprintf(
                     '<strong>%1$s</strong> %2$s',
@@ -205,79 +205,38 @@ final class GiveMultiCurrencyActions {
             if (give_is_gateway_active('paypal-commerce')) {
                 $exchangeRate = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_exchange_rates($activeCurrency);
             } else {
-                $exchangeRate = json_encode('disabled');
+                $exchangeRate = wp_json_encode('disabled');
             }
 
             // Front-end with EOT
 
             // To pass the attributes to javascript correctly it is necessary to convert to JSON
-            $activeCurrency = json_encode($activeCurrency);
-            $activeCurrencyNames = json_encode($activeCurrencyNames);
+            $activeCurrency = wp_json_encode($activeCurrency);
+            $activeCurrencyNames = wp_json_encode($activeCurrencyNames);
 
-            $html = <<<HTML
+            $html = 
 
-        <script>
+'<script>
 
-        // Global attributes that do not depend on HTML elements
-        var currencySymbolArray = $activeSymbolArr;
-        var exRate = $exchangeRate;
-        var hasValidGateway = '$hasValidGateway';
-        var summaryIntervalId = null;
-        var legacyIntervalId = null;
-        var classicBtnIntervalId = null;
+// Global attributes that do not depend on HTML elements
+var currencySymbolArray = ' . $activeSymbolArr . ';
+var exRate = ' . $exchangeRate . ';
+var hasValidGateway = "' . $hasValidGateway . '";
+var summaryIntervalId = null;
+var legacyIntervalId = null;
+var classicBtnIntervalId = null;
 
-        /**
-         * Change the label of the final total value of the legacy form
-         * 
-         * @return void
-         */
-        function changeLabelFinalAmountLegacy() {
-            let updateTotalAmountFn = function () {
-                let giveFinalPrice = document.getElementsByClassName('give-final-total-amount')[0];
-                let currencyCode = document.getElementById('give-mc-select');
+/**
+ * Change the label of the final total value of the legacy form
+ * 
+ * @return void
+ */
+function changeLabelFinalAmountLegacy() {
+    let updateTotalAmountFn = function () {
+        let giveFinalPrice = document.getElementsByClassName(\'give-final-total-amount\')[0];
+        let currencyCode = document.getElementById(\'give-mc-select\');
 
-                if (giveFinalPrice) {
-                    let pastSymbol = giveFinalPrice.textContent;
-
-                    // Cycles through the entire string to find and replace the currency symbol
-                    for (let c = 0; c < pastSymbol.length; c++) {
-                        if (/\d/.test(pastSymbol.charAt(c)) === true) {
-                            pastSymbol = pastSymbol.substring(0, c);
-                            break;
-                        }
-
-                        if (c > 100) {
-                            console.error('Inifinite loop exception');
-                            break;
-                        }
-                    }
-
-                    // Change the text inside the html if it is a different currency symbol when timeout runs
-                    if (pastSymbol !== giveFinalPrice.textContent) {
-                        giveFinalPrice.textContent = giveFinalPrice.textContent.replace(pastSymbol, currencySymbolArray[currencyCode.value]);
-                    }
-                }
-            };
-
-            if (legacyIntervalId) {
-                clearInterval(legacyIntervalId);
-                legacyIntervalId = setInterval(updateTotalAmountFn, 1000);
-            } else {
-                legacyIntervalId = setInterval(updateTotalAmountFn, 1000);
-            }
-        }
-
-        /**
-         * Change label for Legacy template
-         * 
-         * @return void
-         */
-        function changeLabelLegacy() {
-
-            let priceList = document.getElementById('give-donation-level-button-wrap');
-            let currencyCode = document.getElementById('give-mc-select');
-
-            let giveFinalPrice = document.getElementsByClassName('give-final-total-amount')[0];
+        if (giveFinalPrice) {
             let pastSymbol = giveFinalPrice.textContent;
 
             // Cycles through the entire string to find and replace the currency symbol
@@ -288,410 +247,260 @@ final class GiveMultiCurrencyActions {
                 }
 
                 if (c > 100) {
-                    console.error('Inifinite loop exception');
+                    console.error(\'Inifinite loop exception\');
                     break;
                 }
-
             }
 
-            // Changes currency inside HTML element
+            // Change the text inside the html if it is a different currency symbol when timeout runs
             if (pastSymbol !== giveFinalPrice.textContent) {
                 giveFinalPrice.textContent = giveFinalPrice.textContent.replace(pastSymbol, currencySymbolArray[currencyCode.value]);
             }
+        }
+    };
 
-            if (priceList) {
-                let elemPriceList = priceList.getElementsByTagName('li');
-                for (let c = 0; c < elemPriceList.length; c++) {
+    if (legacyIntervalId) {
+        clearInterval(legacyIntervalId);
+        legacyIntervalId = setInterval(updateTotalAmountFn, 1000);
+    } else {
+        legacyIntervalId = setInterval(updateTotalAmountFn, 1000);
+    }
+}
 
-                    let nodeChild = elemPriceList[c].children;
-                    pastSymbol = nodeChild[0].textContent;
+/**
+ * Change label for Legacy template
+ * 
+ * @return void
+ */
+function changeLabelLegacy() {
 
-                    for (let i = 0; i < pastSymbol.length; i++) {
-                        if (/\d/.test(pastSymbol.charAt(i)) === true) {
-                            pastSymbol = pastSymbol.substring(0, i);
-                            break;
-                        }
+    let priceList = document.getElementById(\'give-donation-level-button-wrap\');
+    let currencyCode = document.getElementById(\'give-mc-select\');
 
-                        if (i > 100) {
-                            console.error('Inifinite loop exception');
-                            break;
-                        }
+    let giveFinalPrice = document.getElementsByClassName(\'give-final-total-amount\')[0];
+    let pastSymbol = giveFinalPrice.textContent;
 
-                    }
-                    if (pastSymbol !== nodeChild[0].textContent) {
-                        nodeChild[0].textContent = nodeChild[0].textContent.replace(pastSymbol, currencySymbolArray[currencyCode.value]);
-                    }
-
-                }
-
-            } else {
-                return null;
-            }
+    // Cycles through the entire string to find and replace the currency symbol
+    for (let c = 0; c < pastSymbol.length; c++) {
+        if (/\d/.test(pastSymbol.charAt(c)) === true) {
+            pastSymbol = pastSymbol.substring(0, c);
+            break;
         }
 
-        /**
-         * @function
-         * 
-         * Compatibility with PayPal Donations gateway
-         * Calculate the final price
-         * Compatibility with front-end dependent gateways
-         * 
-         * @return void
-         * 
-         */
-        function conversionCurrency() {
-            // Attributes needed to convert paypal donations
-            let form = document.getElementById('give-form-$id_prefix');
-            let paypalCheckbox = document.getElementById('give-gateway-paypal-commerce-$id_prefix');
-            let currencyCode = document.getElementById('give-mc-select');
-            let amountLabel = document.getElementById('give-amount');
-            let amount = document.getElementById('give-mc-amount');
-            let giveTier = document.getElementsByName('give-price-id')[0];
-            let finalAmount = document.getElementsByClassName('give-final-total-amount');
-
-            // Check if paypal donations is selected, is a foreign currency and if there is a conversion fee
-            if (exRate !== 'disabled' && paypalCheckbox.checked && currencyCode.value !== 'BRL') {
-
-                form.setAttribute('data-currency_symbol', 'R$');
-                form.setAttribute('data-currency_code', 'BRL');
-
-                // To do the conversion put the converted value hidden from the displayed value
-                amountLabel.removeAttribute('name');
-                amount.setAttribute('name', 'give-amount');
-                // Remove semicolons to convert
-                amount.value = amountLabel.value.replace(/\D/gm, '');
-                amount.value = amount.value * exRate[currencyCode.value];
-                amount.value = Math.round(amount.value);
-
-                // If there is a 'totalPrice' it changes to 'amount.value'
-                if (finalAmount[0]) {
-                    finalAmount[0].setAttribute('data-total', amount.value);
-                }
-
-                // If there are donation levels, change them for givewp validation
-                if (giveTier) {
-                    giveTier.value = 'custom';
-
-                    // Checks if the converted amount is part of any donation tier
-                    let tierButtons = document.getElementsByClassName('give-donation-level-btn');
-                    if (tierButtons) {
-                        for (let c = 0; c < tierButtons.length; c++) {
-                            if (amount.value == tierButtons.item(c).value) {
-                                // If the converted value is a donation tier, pass the id of the tier for the give to validate
-                                giveTier.value = tierButtons.item(c).getAttribute('data-price-id');
-                            }
-                            // Catch infinite loop exception
-                            if (c > 100) {
-                                console.error('caught exception infinite loop');
-                                break;
-                            }
-                        }
-                    }
-                }
-
-            } else { // If it is BRL or another gateway other than paypal donations, it does not convert and
-                // Reset the donation level for the selected button if it exists
-                amountLabel.setAttribute('name', 'give-amount');
-                amount.removeAttribute('name');
-
-                if (currencyCode.value !== 'BRL') {
-                    // Remove semicolons to convert
-                    amount.value = amountLabel.value.replace(/\D/gm, '');
-                    amount.value = amount.value * exRate[currencyCode.value];
-                    amount.value = parseFloat(amount.value).toFixed(2);
-
-                    // If there is a 'totalPrice' it changes to 'amount.value'
-                    if (finalAmount[0]) {
-                        finalAmount[0].setAttribute('data-total', amount.value);
-                    }
-                }
-
-
-                if (giveTier) {
-                    let tierButtons = document.getElementsByClassName('give-donation-level-btn');
-                    // Checks for donation levels
-                    if (tierButtons) {
-                        for (let c = 0; c < tierButtons.length; c++) {
-                            // Reset the give-price-id for the selected tier
-                            if (amountLabel.value == tierButtons.item(c).value) {
-                                giveTier.value = tierButtons.item(c).getAttribute('data-price-id');
-                            }
-                            // Catch infinite loop exception
-                            if (c > 100) {
-                                console.error('caught exception infinite loop');
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
+        if (c > 100) {
+            console.error(\'Inifinite loop exception\');
+            break;
         }
 
-        /**
-         * Compatibility with symbol changes on Classic template
-         *
-         * @return void
-         */
-        function changeBtnLabelClassic() {
-            let currencyCode = document.getElementById('give-mc-select');
-            let updateSymbolsFn = function () {
-                let classicCurrencyButonsBefore = document.getElementsByClassName('give-currency-symbol-before');
-                let classicCurrencyButonsAfter = document.getElementsByClassName('give-currency-symbol-after');
-                if (classicCurrencyButonsBefore[0]) {
-                    for (let c = 0; c < classicCurrencyButonsBefore.length; c++) {
-                        classicCurrencyButonsBefore[c].textContent = currencySymbolArray[currencyCode.value];
-                    }
-                }
-                if (classicCurrencyButonsAfter[0]) {
-                    for (let c = 0; c < classicCurrencyButonsAfter.length; c++) {
-                        classicCurrencyButonsAfter[c].textContent = currencySymbolArray[currencyCode.value];
-                    }
-                }
-            };
+    }
 
-            if (classicBtnIntervalId) {
-                clearInterval(classicBtnIntervalId);
-                classicBtnIntervalId = setInterval(updateSymbolsFn, 1000);
-            } else {
-                classicBtnIntervalId = setInterval(updateSymbolsFn, 1000);
-            }
-        }
+    // Changes currency inside HTML element
+    if (pastSymbol !== giveFinalPrice.textContent) {
+        giveFinalPrice.textContent = giveFinalPrice.textContent.replace(pastSymbol, currencySymbolArray[currencyCode.value]);
+    }
 
-        /**
-         * @function
-         * 
-         * Change currency symbol when selecting an option
-         * 
-         * @return void
-         * 
-         */
-        function currencyChange() {
+    if (priceList) {
+        let elemPriceList = priceList.getElementsByTagName(\'li\');
+        for (let c = 0; c < elemPriceList.length; c++) {
 
-            let currencyCode = document.getElementById('give-mc-select');
-            let iframeLoader = parent.document.getElementsByClassName('iframe-loader')[0];
-            let form = document.getElementById('give-form-$id_prefix');
+            let nodeChild = elemPriceList[c].children;
+            pastSymbol = nodeChild[0].textContent;
 
-            // if it is a legacy form also change the form attributes for giveWP validation
-            if (!iframeLoader) { // verify if template uses iframe, currently the multi-step and classic templates use them
-                form.setAttribute('data-currency_symbol', currencySymbolArray[currencyCode.value]);
-                form.setAttribute('data-currency_code', currencyCode.value);
-                changeLabelLegacy();
-                let giveInputCurrencySelected = document.getElementById('give-mc-currency-selected');
-                let currencySymbolLabel = document.getElementsByClassName('give-currency-symbol')[0];
-                // change the label to the selected currency code
-                currencySymbolLabel.textContent = currencySymbolArray[currencyCode.value];
-                giveInputCurrencySelected.value = currencyCode.value;
-            } else {
-                // all attributes dependent on html elements
-                let giveInputCurrencySelected = document.getElementById('give-mc-currency-selected');
-                let currencySymbolLabel = document.getElementsByClassName('give-currency-symbol')[0];
-                let currencyCodeButtons = document.getElementsByClassName('currency');
-
-                // change the label to the selected currency code
-                currencySymbolLabel.textContent = currencySymbolArray[currencyCode.value];
-                giveInputCurrencySelected.value = currencyCode.value;
-
-                // currency symbol on all buttons from classname
-                if (currencyCodeButtons[0]) {
-                    for (let c = 0; c < currencyCodeButtons.length; c++) {
-                        currencyCodeButtons[c].textContent = currencySymbolArray[currencyCode.value];
-                    }
-                } else { // If is template Classic
-                    currencyCode.classList.add('lkn-mc-select-classic');
-                    changeBtnLabelClassic();
-                }
-            }
-        }
-
-        /**
-        * Selects default currency
-        * 
-        */
-        function updateCoin() {
-            let mcSelect = document.getElementById('give-mc-select');
-            let defaultCoin = '$defaultCoin';
-
-            // makes a dynamic selection from the active currencies and the selected default currency
-            for (let c = 0; c < mcSelect.options.length; c++) {
-                if (mcSelect.options[c].value == defaultCoin) {
-                    mcSelect.options[c].setAttribute('selected', defaultCoin);
-                }
-                // Catch infinite loop exception
-                if (c > 100) {
-                    console.error('caught exception infinite loop');
+            for (let i = 0; i < pastSymbol.length; i++) {
+                if (/\d/.test(pastSymbol.charAt(i)) === true) {
+                    pastSymbol = pastSymbol.substring(0, i);
                     break;
                 }
-            }
 
-            // Does the visual change
-            currencyChange();
-            // Does conversion if is PayPal Donations gateway
-            conversionCurrency();
-        }
-
-        /**
-         * Updates summary amount
-         */
-        function changeSummaryAmount() {
-            let currencyCode = document.getElementById('give-mc-select');
-            let updateSummary = function () {
-                let summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
-                let summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
-                let amountLabel = document.getElementById('give-amount');
-
-                if (summaryAmount) {
-                    summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                }
-
-                if (summaryTotal) {
-                    summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                }
-            };
-            // Change the summary amount and total labels after a delay
-            // Because Give has active actions that prevent instant change
-            if (summaryIntervalId) {
-                clearInterval(summaryIntervalId);
-                summaryIntervalId = setInterval(updateSummary, 1000);
-            } else {
-                summaryIntervalId = setInterval(updateSummary, 1000);
-            }
-        }
-
-        // Only runs if page is fully loaded
-        document.addEventListener('DOMContentLoaded', function () {
-            let donationSummary = document.getElementsByClassName('give-donation-summary-table-wrapper')[0];
-            let activeCurrency = '$activeCurrency';
-            activeCurrency = JSON.parse(activeCurrency);
-            let activeCurrencyNames = '$activeCurrencyNames';
-            activeCurrencyNames = JSON.parse(activeCurrencyNames);
-            let currencyCode = document.getElementById('give-mc-select');
-            let updateSummaryFn = function () {
-                let currencyCode = document.getElementById('give-mc-select');
-                let updateSummary = function () {
-                    let summaryAmount = document.querySelectorAll("[data-tag='amount']")[0];
-                    let summaryTotal = document.querySelectorAll("[data-tag='total']")[0];
-                    let amountLabel = document.getElementById('give-amount');
-
-                    if (summaryAmount) {
-                        summaryAmount.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                    }
-
-                    if (summaryTotal) {
-                        summaryTotal.innerHTML = currencySymbolArray[currencyCode.value] + amountLabel.value;
-                    }
-                };
-                // Change the summary amount and total labels after a delay
-                // Because Give has active actions that prevent instant change
-                if (summaryIntervalId) {
-                    clearInterval(summaryIntervalId);
-                    summaryIntervalId = setInterval(updateSummary, 1000);
-                } else {
-                    summaryIntervalId = setInterval(updateSummary, 1000);
-                }
-            };
-
-            // If donation summary exists
-            if (donationSummary) {
-                // Multi-step support
-                let btnContinue = document.getElementsByClassName('advance-btn');
-                if (btnContinue[0]) {
-                    if (btnContinue.length > 1) {
-                        btnContinue[1].addEventListener('click', updateSummaryFn, false)
-                    } else { // if there is only one button, add a click event to that button
-                        btnContinue[0].addEventListener('click', updateSummaryFn, false);
-                    }
-                } else { // Is template Classic
-                    let mcSelect = document.getElementById('give-mc-select');
-                    let tierButtons = document.getElementsByClassName('give-donation-level-btn');
-
-                    if (tierButtons) {
-                        for (let c = 0; c < tierButtons.length; c++) {
-                            tierButtons[c].addEventListener('click', updateSummaryFn, false);
-                        }
-                    }
-
-                    document.querySelector('#give-amount').addEventListener('change', updateSummaryFn, false);
-
-                    mcSelect.addEventListener('change', updateSummaryFn, false);
-
-                    if (currencyCode !== 'BRL') {
-                        updateSummaryFn();
-                    }
-                }
-            }
-
-            // Take the link object and hide it if it has a valid license
-            let linkMultiCurrency = document.getElementById('link-multi-currency');
-            if (hasValidGateway == 'true') {
-                linkMultiCurrency.classList.add('hidden-lkn');
-                linkMultiCurrency.classList.remove('show-lkn');
-            } else {
-                linkMultiCurrency.classList.remove('hidden-lkn');
-                linkMultiCurrency.classList.add('show-lkn');
-            }
-
-            // attributes for verification
-            let mcSelect = document.getElementById('give-mc-select');
-            let btnLevelsList = document.getElementById('give-donation-level-button-wrap');
-            let gatewayList = document.getElementById('give-gateway-radio-list');
-            let btnContinue = document.getElementsByClassName('advance-btn');
-
-            // Populate with the <option></option> element the html select object
-            for (let c = 0; c < activeCurrency.length; c++) {
-                let opt = document.createElement('option');
-                opt.value = activeCurrency[c];
-                opt.innerHTML = activeCurrencyNames[c];
-                mcSelect.appendChild(opt);
-                if (c > 100) {
-                    console.error('exception caught infinite loop');
-
+                if (i > 100) {
+                    console.error(\'Inifinite loop exception\');
                     break;
                 }
+
+            }
+            if (pastSymbol !== nodeChild[0].textContent) {
+                nodeChild[0].textContent = nodeChild[0].textContent.replace(pastSymbol, currencySymbolArray[currencyCode.value]);
             }
 
-            // if there is more than one continue button, just call the function on the button that the multi-currencies appear
-            if (btnContinue.length > 1) {
-                btnContinue[1].addEventListener('click', function () {
-                    conversionCurrency();
-                }, false)
-            } else if (btnContinue.length == 1) { // if there is only one button, add a click event to that button
-                btnContinue[0].addEventListener('click', function () {
-                    conversionCurrency();
-                }, false);
-            } else { // if it is a legacy form, it converts when selecting another currency
-                conversionCurrency();
-                mcSelect.addEventListener('change', function () {
-                    conversionCurrency();
-                }, false);
-                if (btnLevelsList) {
-                    let elementList = btnLevelsList.getElementsByTagName('button');
-                    for (let i = 0; i < elementList.length; i++) {
-                        elementList[i].addEventListener('click', function () {
-                            setTimeout(() => { conversionCurrency(); }, 300);
-                        }, false);
+        }
+
+    } else {
+        return null;
+    }
+}
+
+/**
+ * @function
+ * 
+ * Compatibility with PayPal Donations gateway
+ * Calculate the final price
+ * Compatibility with front-end dependent gateways
+ * 
+ * @return void
+ * 
+ */
+function conversionCurrency() {
+    // Attributes needed to convert paypal donations
+    let form = document.getElementById(\'give-form-' . $id_prefix . '\');
+    let paypalCheckbox = document.getElementById(\'give-gateway-paypal-commerce-' . $id_prefix . '\');
+    let currencyCode = document.getElementById(\'give-mc-select\');
+    let amountLabel = document.getElementById(\'give-amount\');
+    let amount = document.getElementById(\'give-mc-amount\');
+    let giveTier = document.getElementsByName(\'give-price-id\')[0];
+    let finalAmount = document.getElementsByClassName(\'give-final-total-amount\');
+
+    // Check if paypal donations is selected, is a foreign currency and if there is a conversion fee
+    if (exRate !== \'disabled\' && paypalCheckbox.checked && currencyCode.value !== \'BRL\') {
+
+        form.setAttribute(\'data-currency_symbol\', \'R$\');
+        form.setAttribute(\'data-currency_code\', \'BRL\');
+
+        // To do the conversion put the converted value hidden from the displayed value
+        amountLabel.removeAttribute(\'name\');
+        amount.setAttribute(\'name\', \'give-amount\');
+        // Remove semicolons to convert
+        amount.value = amountLabel.value.replace(/\D/gm, \'\');
+        amount.value = amount.value * exRate[currencyCode.value];
+        amount.value = Math.round(amount.value);
+
+        // If there is a \'totalPrice\' it changes to \'amount.value\'
+        if (finalAmount[0]) {
+            finalAmount[0].setAttribute(\'data-total\', amount.value);
+        }
+
+        // If there are donation levels, change them for givewp validation
+        if (giveTier) {
+            giveTier.value = \'custom\';
+
+            // Checks if the converted amount is part of any donation tier
+            let tierButtons = document.getElementsByClassName(\'give-donation-level-btn\');
+            if (tierButtons) {
+                for (let c = 0; c < tierButtons.length; c++) {
+                    if (amount.value == tierButtons.item(c).value) {
+                        // If the converted value is a donation tier, pass the id of the tier for the give to validate
+                        giveTier.value = tierButtons.item(c).getAttribute(\'data-price-id\');
+                    }
+                    // Catch infinite loop exception
+                    if (c > 100) {
+                        console.error(\'caught exception infinite loop\');
+                        break;
                     }
                 }
             }
+        }
 
-            // add an event to run the conversion function in case you change the payment gateway
-            gatewayList.addEventListener('change', function () {
-                conversionCurrency();
-                changeLabelFinalAmountLegacy();
-                changeSummaryAmount();
-            }, false);
+    } else { // If it is BRL or another gateway other than paypal donations, it does not convert and
+        // Reset the donation level for the selected button if it exists
+        amountLabel.setAttribute(\'name\', \'give-amount\');
+        amount.removeAttribute(\'name\');
 
-            // Verifies initial currency
-            updateCoin();
+        if (currencyCode.value !== \'BRL\') {
+            // Remove semicolons to convert
+            amount.value = amountLabel.value.replace(/\D/gm, \'\');
+            amount.value = amount.value * exRate[currencyCode.value];
+            amount.value = parseFloat(amount.value).toFixed(2);
 
-            // Compatibility with template Classic
-            // Change tier btn labels
-            if (currencyCode.value !== 'BRL') {
-                currencyChange();
+            // If there is a \'totalPrice\' it changes to \'amount.value\'
+            if (finalAmount[0]) {
+                finalAmount[0].setAttribute(\'data-total\', amount.value);
             }
-        }, false);
+        }
 
-        </script>
+
+        if (giveTier) {
+            let tierButtons = document.getElementsByClassName(\'give-donation-level-btn\');
+            // Checks for donation levels
+            if (tierButtons) {
+                for (let c = 0; c < tierButtons.length; c++) {
+                    // Reset the give-price-id for the selected tier
+                    if (amountLabel.value == tierButtons.item(c).value) {
+                        giveTier.value = tierButtons.item(c).getAttribute(\'data-price-id\');
+                    }
+                    // Catch infinite loop exception
+                    if (c > 100) {
+                        console.error(\'caught exception infinite loop\');
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/**
+ * Compatibility with symbol changes on Classic template
+ *
+ * @return void
+ */
+function changeBtnLabelClassic() {
+    let currencyCode = document.getElementById(\'give-mc-select\');
+    let updateSymbolsFn = function () {
+        let classicCurrencyButonsBefore = document.getElementsByClassName(\'give-currency-symbol-before\');
+        let classicCurrencyButonsAfter = document.getElementsByClassName(\'give-currency-symbol-after\');
+        if (classicCurrencyButonsBefore[0]) {
+            for (let c = 0; c < classicCurrencyButonsBefore.length; c++) {
+                classicCurrencyButonsBefore[c].textContent = currencySymbolArray[currencyCode.value];
+            }
+        }
+        if (classicCurrencyButonsAfter[0]) {
+            for (let c = 0; c < classicCurrencyButonsAfter.length; c++) {
+                classicCurrencyButonsAfter[c].textContent = currencySymbolArray[currencyCode.value];
+            }
+        }
+    };
+
+    if (classicBtnIntervalId) {
+        clearInterval(classicBtnIntervalId);
+        classicBtnIntervalId = setInterval(updateSymbolsFn, 1000);
+    } else {
+        classicBtnIntervalId = setInterval(updateSymbolsFn, 1000);
+    }
+}
+
+/**
+ * @function
+ * 
+ * Change the symbol of the amount in Summary template
+ * 
+ * @return void
+ * 
+ */
+function changeLabelSummary() {
+    let updateSymbolsFn = function () {
+        let currencyCode = document.getElementById(\'give-mc-select\');
+        let giveSummaryAmount = document.getElementsByClassName(\'give-amount-summery\')[0];
+        let pastSymbol = giveSummaryAmount.textContent;
+
+        // Cycles through the entire string to find and replace the currency symbol
+        for (let c = 0; c < pastSymbol.length; c++) {
+            if (/\d/.test(pastSymbol.charAt(c)) === true) {
+                pastSymbol = pastSymbol.substring(0, c);
+                break;
+            }
+
+            if (c > 100) {
+                console.error(\'Inifinite loop exception\');
+                break;
+            }
+        }
+
+        // Changes the amount in the summary template
+        if (pastSymbol !== giveSummaryAmount.textContent) {
+            giveSummaryAmount.textContent = giveSummaryAmount.textContent.replace(pastSymbol, currencySymbolArray[currencyCode.value]);
+        }
+    };
+
+    if (summaryIntervalId) {
+        clearInterval(summaryIntervalId);
+        summaryIntervalId = setInterval(updateSymbolsFn, 1000);
+    } else {
+        summaryIntervalId = setInterval(updateSymbolsFn, 1000);
+    }
+
+}
+
+</script>
 
         <style>
             .lkn-mc-select-classic {
@@ -729,7 +538,7 @@ final class GiveMultiCurrencyActions {
 
         <a id="link-multi-currency" href="https://www.linknacional.com.br/wordpress/givewp/multimoeda" target="_blank" rel="nofollow">Plugin Multi Moeda</a>
 
-HTML;
+';
         }
         echo $html;
     }

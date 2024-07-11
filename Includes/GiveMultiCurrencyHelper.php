@@ -97,12 +97,12 @@ final class GiveMultiCurrencyHelper {
     
         foreach ($currenciesCode as $key => $currency) {
             $result = self::lkn_multi_currency_curl_get_contents('https://api.linknacional.com/cotacao/cotacao-' . $currency . '.json');
-            $result = json_decode($result);
+            $result = wp_json_decode($result);
             $exRate[$currency] = $result->rates->BRL;
         }
     
         // retorna um array com o rate das moedas ativas
-        return json_encode($exRate);
+        return wp_json_encode($exRate);
     }
     
     /**
@@ -122,7 +122,7 @@ final class GiveMultiCurrencyHelper {
             }
         }
     
-        return json_encode($currenciesSymbol);
+        return wp_json_encode($currenciesSymbol);
     }
     
     /**
