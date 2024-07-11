@@ -11,7 +11,6 @@
  */
 
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrency;
-use Phan\Language\Element\Func;
 
 require_once __DIR__ . '/plugin-updater/plugin-update-checker.php';
 require_once __DIR__ . "/vendor/autoload.php";

@@ -1,4 +1,5 @@
 <?php
+
 namespace Lkn\GiveMultimoedas\Admin;
 
 use Give_Admin_Settings;
@@ -76,7 +77,7 @@ final class GiveMultiCurrencyAdmin {
         if ( ! Give_Admin_Settings::is_setting_page('general', 'currency-settings')) {
             return $settings;
         }
-    
+
         // Make sure you will create your own section or add new setting before array with type 'sectionend' otherwise setting field with not align properly with other setting fields.
         $new_setting = array();
         foreach ($settings as $key => $setting) {
@@ -110,7 +111,7 @@ final class GiveMultiCurrencyAdmin {
                         ),
                     );
                 }
-    
+
                 // Default currency option
                 if (give_get_option('multi_currency_enabled_setting_field') == 'enabled' && give_get_option('currency') == 'BRL') {
                     $new_setting[] = array(
@@ -130,16 +131,16 @@ final class GiveMultiCurrencyAdmin {
                         ),
                     );
                 }
-    
+
                 $new_setting[] = array(
                     'id' => 'multi_currency',
                     'type' => 'sectionend',
                 );
             }
-    
+
             $new_setting[] = $setting;
         }
-    
+
         return $new_setting;
     }
 

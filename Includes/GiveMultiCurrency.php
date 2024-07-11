@@ -7,8 +7,7 @@ use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions;
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyLoader;
 use Phan\Language\Element\Func;
 
-final class GiveMultiCurrency
-{
+final class GiveMultiCurrency {
     /**
      * @since
      * @access private
@@ -42,8 +41,7 @@ final class GiveMultiCurrency
      * @since
      * @access private
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->load_dependency();
         $this->setup();
         $this->setup_hooks();
@@ -55,8 +53,7 @@ final class GiveMultiCurrency
      * @since
      * @access private
      */
-    private function setup(): void
-    {
+    private function setup(): void {
         $this->setup_constants();
     }
 
@@ -68,35 +65,34 @@ final class GiveMultiCurrency
      * @since
      * @access private
      */
-    private function setup_constants(): void
-    {
+    private function setup_constants(): void {
         // Defines addon version number for easy reference.
-        if (! defined('GIVE_MULTI_CURRENCY_VERSION')) {
+        if ( ! defined('GIVE_MULTI_CURRENCY_VERSION')) {
             define('GIVE_MULTI_CURRENCY_VERSION', '2.7.0');
         }
 
         // Set it to latest.
-        if (! defined('GIVE_MULTI_CURRENCY_MIN_GIVE_VERSION')) {
+        if ( ! defined('GIVE_MULTI_CURRENCY_MIN_GIVE_VERSION')) {
             define('GIVE_MULTI_CURRENCY_MIN_GIVE_VERSION', '2.19.2');
         }
 
-        if (! defined('GIVE_MULTI_CURRENCY_FILE')) {
+        if ( ! defined('GIVE_MULTI_CURRENCY_FILE')) {
             define('GIVE_MULTI_CURRENCY_FILE', __FILE__);
         }
 
-        if (! defined('GIVE_MULTI_CURRENCY_SLUG')) {
+        if ( ! defined('GIVE_MULTI_CURRENCY_SLUG')) {
             define('GIVE_MULTI_CURRENCY_SLUG', 'give-multi-currency');
         }
 
-        if (! defined('GIVE_MULTI_CURRENCY_DIR')) {
+        if ( ! defined('GIVE_MULTI_CURRENCY_DIR')) {
             define('GIVE_MULTI_CURRENCY_DIR', plugin_dir_path(GIVE_MULTI_CURRENCY_FILE));
         }
 
-        if (! defined('GIVE_MULTI_CURRENCY_URL')) {
+        if ( ! defined('GIVE_MULTI_CURRENCY_URL')) {
             define('GIVE_MULTI_CURRENCY_URL', plugin_dir_url(GIVE_MULTI_CURRENCY_FILE));
         }
 
-        if (! defined('GIVE_MULTI_CURRENCY_BASENAME')) {
+        if ( ! defined('GIVE_MULTI_CURRENCY_BASENAME')) {
             define('GIVE_MULTI_CURRENCY_BASENAME', plugin_basename(GIVE_MULTI_CURRENCY_FILE));
         }
     }
@@ -107,10 +103,9 @@ final class GiveMultiCurrency
      * @since
      * @access public
      */
-    public function install(): void
-    {
+    public function install(): void {
         // Bailout.
-        if (! $this->check_environment()) {
+        if ( ! $this->check_environment()) {
             return;
         }
     }
@@ -123,12 +118,11 @@ final class GiveMultiCurrency
      * @access public
      *
      */
-    public function check_environment()
-    {
+    public function check_environment() {
         // Is not admin
 
         // Load plugin helper functions.
-        if (! function_exists('deactivate_plugins') || ! function_exists('is_plugin_active')) {
+        if ( ! function_exists('deactivate_plugins') || ! function_exists('is_plugin_active')) {
             require_once ABSPATH . '/wp-admin/includes/plugin.php';
         }
 
@@ -159,7 +153,7 @@ final class GiveMultiCurrency
                 // Check for if give plugin activate or not.
                 $is_give_active = defined('GIVE_PLUGIN_BASENAME') ? is_plugin_active(GIVE_PLUGIN_BASENAME) : false;
 
-                if (! $is_give_active) {
+                if ( ! $is_give_active) {
                     add_action('admin_notices', 'lkn_give_multi_currency_inactive_notice');
 
                     $is_deactivate_plugin = true;
@@ -189,8 +183,7 @@ final class GiveMultiCurrency
      * @since
      * @access private
      */
-    private function load_dependency(): void
-    {
+    private function load_dependency(): void {
         $this->loader = new GiveMultiCurrencyLoader();
     }
 
@@ -200,23 +193,20 @@ final class GiveMultiCurrency
      * @since
      * @access private
      */
-    private function setup_hooks(): void
-    {
+    private function setup_hooks(): void {
         $this->admin_hooks();
         $this->public_hooks();
         $this->loader->run();
     }
 
-    private function admin_hooks(): void
-    {
+    private function admin_hooks(): void {
         register_activation_hook(GIVE_MULTI_CURRENCY_FILE, array($this, 'install'));
         $plugin_admin = new GiveMultiCurrencyAdmin();
         $this->loader->add_filter('give_get_settings_general', $plugin_admin, 'lkn_give_multi_currency_add_setting_into_existing_tab');
         $this->loader->add_filter('give_metabox_form_data_settings', $plugin_admin, 'setup_setting', 999);
     }
 
-    private function public_hooks(): void
-    {
+    private function public_hooks(): void {
         $this->loader->add_action('plugins_loaded', $this, 'check_environment', 999);
         $this->loader->add_filter('plugin_action_links_' . GIVE_MULTI_CURRENCY_BASENAME, 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lkn_give_multi_currency_plugin_row_meta', 10, 2);
         $this->loader->add_filter('give_currency', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_change_multi_currency');

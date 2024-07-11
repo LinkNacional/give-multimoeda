@@ -94,17 +94,17 @@ final class GiveMultiCurrencyHelper {
 
     public static function lkn_give_multi_currency_get_exchange_rates($currenciesCode) {
         $exRate = array();
-    
+
         foreach ($currenciesCode as $key => $currency) {
             $result = self::lkn_multi_currency_curl_get_contents('https://api.linknacional.com/cotacao/cotacao-' . $currency . '.json');
-            $result = wp_json_decode($result);
+            $result = wp_json_file_decode($result);
             $exRate[$currency] = $result->rates->BRL;
         }
-    
+
         // retorna um array com o rate das moedas ativas
         return wp_json_encode($exRate);
     }
-    
+
     /**
      * Gets all active currencies symbols
      *
@@ -115,16 +115,16 @@ final class GiveMultiCurrencyHelper {
      */
     public static function lkn_give_multi_currency_get_symbols($currenciesCode) {
         $currenciesSymbol['BRL'] = 'R$';
-    
+
         if ( ! empty($currenciesCode)) {
             for ($c = 0; $c < count($currenciesCode); $c++) {
                 $currenciesSymbol[$currenciesCode[$c]] = give_currency_symbol($currenciesCode[$c], true);
             }
         }
-    
+
         return wp_json_encode($currenciesSymbol);
     }
-    
+
     /**
      * Query a new request
      *
@@ -135,14 +135,14 @@ final class GiveMultiCurrencyHelper {
      */
     public static function lkn_multi_currency_curl_get_contents($url) {
         $ch = curl_init();
-    
+
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_URL, $url);
-    
+
         $data = curl_exec($ch);
         curl_close($ch);
-    
+
         return $data;
     }
 }
