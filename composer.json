@@ -1,0 +1,23 @@
+{
+    "name": "lkn/lkn-give-multimoedas",
+    "type": "project",
+    "license": "Proprietary",
+    "autoload": {
+        "psr-4": {
+            "Lkn\\GiveMultimoedas\\Includes\\": "Includes/",
+            "Lkn\\GiveMultimoedas\\Admin\\": "Admin/",
+            "Lkn\\GiveMultimoedas\\PublicView\\": "Public/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Link Nacional",
+            "email": "ticket@linknacional.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phan/phan": "5.4.1"
+    },
+    "require": {}
+}
