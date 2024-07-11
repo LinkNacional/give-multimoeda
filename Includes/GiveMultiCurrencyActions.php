@@ -214,9 +214,7 @@ final class GiveMultiCurrencyActions {
             $activeCurrency = wp_json_encode($activeCurrency);
             $activeCurrencyNames = wp_json_encode($activeCurrencyNames);
 
-            $html = 
-
-'<script>
+            $html = '<script>
 
 // Global attributes that do not depend on HTML elements
 var currencySymbolArray = ' . $activeSymbolArr . ';
@@ -532,7 +530,7 @@ function changeLabelSummary() {
 
         <select id="give-mc-select" class="give-donation-amount" onchange="currencyChange()">
 
-        <option value=$mainCurrency>$mainCurrencyName</option>
+        <option value=' . $mainCurrency . '>' . $mainCurrencyName . '</option>
 
         </select>
 
@@ -540,6 +538,37 @@ function changeLabelSummary() {
 
 ';
         }
-        echo $html;
+        $allowed_html = array(
+            'script' => array(
+                'type' => true,
+                'src' => true
+            ),
+            'style' => true,
+            'input' => array(
+                'type' => true,
+                'id' => true,
+                'name' => true,
+                'value' => true,
+                'class' => true,
+                'onchange' => true
+            ),
+            'select' => array(
+                'id' => true,
+                'class' => true,
+                'onchange' => true
+            ),
+            'option' => array(
+                'value' => true
+            ),
+            'a' => array(
+                'id' => true,
+                'href' => true,
+                'target' => true,
+                'rel' => true
+            )
+        );
+        
+        // Filtra o HTML conforme as regras definidas
+        echo wp_kses($html, $allowed_html);
     }
 }
