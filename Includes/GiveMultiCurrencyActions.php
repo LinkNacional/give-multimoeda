@@ -114,7 +114,7 @@ final class GiveMultiCurrencyActions {
      *
      * @return string
      *
-     */
+     */    
     public static function lkn_give_multi_currency_decimal_count($count) {
         $count = 0;
 
@@ -132,7 +132,7 @@ final class GiveMultiCurrencyActions {
      *
      * @return bool|void
      *
-     */
+     */   
     public static function lkn_give_multi_currency_selector($form_id, $args) {
         $id_prefix = ! empty($args['id_prefix']) ? $args['id_prefix'] : '';
         $configs = self::lkn_give_multi_currency_get_configs();
@@ -145,14 +145,14 @@ final class GiveMultiCurrencyActions {
         $activeSymbolArr = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_symbols($activeCurrency);
         $defaultCoin = $configs['defaultCoin'];
         $html = null;
-
+    
         $globalConfigs = get_post_meta($form_id, 'lkn_multi_currency_fields_status', true);
         if ('disabled' === $globalConfigs) {
             $defaultCoin = get_post_meta($form_id, 'lkn_multi_currency_fields_default_currency', true);
             $activeCurrency = get_post_meta($form_id, 'lkn_multi_currency_fields_active_currency', true);
             $activeSymbolArr = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_symbols($activeCurrency);
         }
-
+    
         // Get all payment gateways
         $gateways = give_get_payment_gateways();
         // Search for plugin keys
@@ -162,11 +162,11 @@ final class GiveMultiCurrencyActions {
             $optionName = give_get_option($gateways[$c] . '_setting_field');
             if ($optionName) {
                 $hasValidGateway = 'true';
-
+    
                 break;
             }
         }
-
+    
         if ('enabled' !== $pluginEnabled || false == $activeCurrency) {
             // If no active currency don't render the selector
             return false;
@@ -200,22 +200,22 @@ final class GiveMultiCurrencyActions {
             for ($c = 0; $c < count($activeCurrency); $c++) {
                 $activeCurrencyNames[] = give_get_currency_name($activeCurrency[$c]);
             }
-
+    
             // Compatibility with Paypal-Commerce gateway
             if (give_is_gateway_active('paypal-commerce')) {
                 $exchangeRate = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_exchange_rates($activeCurrency);
             } else {
                 $exchangeRate = wp_json_encode('disabled');
             }
-
+    
             // Front-end with EOT
-
+    
             // To pass the attributes to javascript correctly it is necessary to convert to JSON
             $activeCurrency = wp_json_encode($activeCurrency);
             $activeCurrencyNames = wp_json_encode($activeCurrencyNames);
-
+    
             $html = <<<HTML
-
+    
             <script>
     
             // Global attributes that do not depend on HTML elements
@@ -731,38 +731,6 @@ final class GiveMultiCurrencyActions {
     
     HTML;
         }
-        $allowed_html = array(
-            'script' => array(
-                'type' => true,
-                'src' => true
-            ),
-            'style' => true,
-            'input' => array(
-                'type' => true,
-                'id' => true,
-                'name' => true,
-                'value' => true,
-                'class' => true,
-                'onchange' => true
-            ),
-            'select' => array(
-                'id' => true,
-                'class' => true,
-                'onchange' => true
-            ),
-            'option' => array(
-                'value' => true
-            ),
-            'a' => array(
-                'id' => true,
-                'href' => true,
-                'target' => true,
-                'rel' => true
-            )
-        );
-        
-        // Filtra o HTML conforme as regras definidas
-        // echo wp_kses($html, $allowed_html);
         echo $html;
     }
-}
+}    
