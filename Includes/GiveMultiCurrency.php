@@ -6,6 +6,7 @@ use Lkn\GiveMultimoedas\Admin\GiveMultiCurrencyAdmin;
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions;
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyLoader;
 use Phan\Language\Element\Func;
+use Lkn_Puc_Plugin_UpdateChecker;
 
 final class GiveMultiCurrency {
     /**
@@ -153,6 +154,7 @@ final class GiveMultiCurrency {
         $plugin_admin = new GiveMultiCurrencyAdmin();
         $this->loader->add_filter('give_get_settings_general', $plugin_admin, 'lkn_give_multi_currency_add_setting_into_existing_tab');
         $this->loader->add_filter('give_metabox_form_data_settings', $plugin_admin, 'setup_setting', 999);
+        $this->loader->add_action("give_init", $this, "lkn_give_multi_currency_updater");
     }
 
     private function public_hooks(): void {
@@ -163,5 +165,13 @@ final class GiveMultiCurrency {
         $this->loader->add_filter('give_get_price_decimal_separator', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_decimal_separator');
         $this->loader->add_filter('give_sanitize_amount_decimals', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_decimal_count');
         $this->loader->add_action('give_before_donation_levels', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_selector', 10, 3);
+    }
+
+    public function lkn_give_multi_currency_updater() {
+        return new Lkn_Puc_Plugin_UpdateChecker(
+            'https://api.linknacional.com.br/v2/u/?slug=give-multimoeda',
+            GIVE_MULTI_CURRENCY_FILE,//(caso o plugin não precise de compatibilidade com ioncube utilize: __FILE__), //Full path to the main plugin file or functions.php.
+            'give-multimoeda'
+        );
     }
 }
