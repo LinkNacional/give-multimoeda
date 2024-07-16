@@ -14,6 +14,7 @@ use Lkn\GiveMultimoedas\Includes\GiveMultiCurrency;
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper;
 
 require_once __DIR__ . "/vendor/autoload.php";
+require_once __DIR__ . "/Includes/plugin-updater/plugin-update-checker.php";
 // Exit if accessed directly. ABSPATH is attribute in wp-admin - plugin.php
 if ( ! defined('ABSPATH')) {
     exit;
@@ -60,7 +61,7 @@ function Give_Multi_Currency_Check_Cielo(): void {
         $lkn_multicurrency_all_plugins = get_plugins();
     
         if (isset($lkn_multicurrency_all_plugins['give-cielo/lkn-give-cielo.php']) && ! isset($lkn_multicurrency_all_plugins['give-cielo/give-cielo.php'])) {
-            add_action('admin_notices', array('GiveMultiCurrencyHelper', '__lkn_multicurrency_linkn_inactive_notice'));
+            add_action('admin_notices', array('Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', '__lkn_multicurrency_linkn_inactive_notice'));
         }
     }
 }

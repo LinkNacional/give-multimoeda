@@ -7,6 +7,7 @@ use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions;
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyLoader;
 use Phan\Language\Element\Func;
 use Lkn_Puc_Plugin_UpdateChecker;
+use Give\Helpers\Hooks;
 
 final class GiveMultiCurrency {
     /**
@@ -158,13 +159,32 @@ final class GiveMultiCurrency {
     }
 
     private function public_hooks(): void {
+        // Verificiação de dependencia
         $this->loader->add_action('plugins_loaded', $this, 'check_environment', 999);
+        // Aviso de falta do Cielo
         $this->loader->add_filter('plugin_action_links_' . GIVE_MULTI_CURRENCY_BASENAME, 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lkn_give_multi_currency_plugin_row_meta', 10, 2);
+        // Funcionalidades Multimoedas
         $this->loader->add_filter('give_currency', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_change_multi_currency');
         $this->loader->add_filter('give_get_price_thousand_separator', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_thousand_separator');
         $this->loader->add_filter('give_get_price_decimal_separator', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_decimal_separator');
         $this->loader->add_filter('give_sanitize_amount_decimals', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_decimal_count');
         $this->loader->add_action('give_before_donation_levels', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_selector', 10, 3);
+        
+        //Frontend
+        $this->loader->add_action( 'wp_enqueue_scripts', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'give_import_script_method', 11, 1 );
+    
+        // add_action( 'give_pre_form_output', 'my_custom_give_change_currency', 10, 1 );
+        // Compatibilidade Stripe e Paypal
+        
+        add_action("plugins_loaded", function(): void {
+            Hooks::addAction(
+                'givewp_donation_form_schema',
+                'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions',
+                'lkn_add_currency_selector_to_give_form',
+                10,
+                2
+            );
+        });
     }
 
     public function lkn_give_multi_currency_updater() {
