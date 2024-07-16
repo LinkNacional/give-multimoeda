@@ -94,7 +94,6 @@ final class GiveMultiCurrencyActions {
     }
 
     public static function lkn_give_change_multi_currency($currency) {
-        add_option(uniqid("Lkn_Post"), json_encode($_POST));
         // checks if a foreign currency was selected and the gateway is not paypal donations
         if ( ! empty($_POST['give-mc-selected-currency']) && 'paypal-commerce' !== $_POST['payment-mode']) {
             $currency = $_POST['give-mc-selected-currency'];
@@ -150,62 +149,12 @@ final class GiveMultiCurrencyActions {
      *
      */
     public static function lkn_give_multi_currency_selector($form_id, $args) {
-        $id_prefix = ! empty($args['id_prefix']) ? $args['id_prefix'] : '';
         $configs = self::lkn_give_multi_currency_get_configs();
         $pluginEnabled = $configs['mcEnabled'];
         $mainCurrency = $configs['mainCurrency'];
         $mainCurrencyName = give_get_currency_name($mainCurrency);
-        $activeCurrencyNames = array();
-        $activeCurrency = $configs['activeCurrency'];
-        $activeSymbolArr = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_symbols($activeCurrency);
-        $defaultCoin = $configs['defaultCoin'];
-        $html = null;
-
-        $globalConfigs = get_post_meta($form_id, 'lkn_multi_currency_fields_status', true);
-        if ('disabled' === $globalConfigs) {
-            $defaultCoin = get_post_meta($form_id, 'lkn_multi_currency_fields_default_currency', true);
-            $activeCurrency = get_post_meta($form_id, 'lkn_multi_currency_fields_active_currency', true);
-            $activeSymbolArr = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_symbols($activeCurrency);
-        }
-
-        // Get all payment gateways
-        $gateways = give_get_payment_gateways();
-        // Search for plugin keys
-        $gateways = array_keys($gateways);
-        for ($c = 0; $c < count($gateways); $c++) {
-            // Found a license key
-            $optionName = give_get_option($gateways[$c] . '_setting_field');
-            if ($optionName) {
-                $hasValidGateway = 'true';
-
-                break;
-            }
-        }
-
-        if ('enabled' !== $pluginEnabled || false == $activeCurrency) {
-            // If no active currency don't render the selector
-            return false;
-        } 
-
-        // Saves all active currencies from Give WP
-        for ($c = 0; $c < count($activeCurrency); $c++) {
-            $activeCurrencyNames[] = give_get_currency_name($activeCurrency[$c]);
-        }
-
-        // Compatibility with Paypal-Commerce gateway
-        if (give_is_gateway_active('paypal-commerce')) {
-            $exchangeRate = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_exchange_rates($activeCurrency);
-        } else {
-            $exchangeRate = wp_json_encode('disabled');
-        }
-
-        // Front-end with EOT
-
-        // To pass the attributes to javascript correctly it is necessary to convert to JSON
-        $activeCurrency = wp_json_encode($activeCurrency);
-        $activeCurrencyNames = wp_json_encode($activeCurrencyNames);
-
-        ?>
+        if ("enabled" == $pluginEnabled) {
+            ?>
 
 <style>
     .lkn-mc-select-classic {
@@ -251,18 +200,17 @@ final class GiveMultiCurrencyActions {
     class="give-donation-amount"
 >
 
-    <option value=<?php echo esc_html($mainCurrency)?> simbol=<?php echo esc_attr(give_currency_symbol($mainCurrency))?>><?php echo esc_html($mainCurrencyName)?>
+    <option value=<?php echo esc_html($mainCurrency)?>
+        simbol=<?php echo esc_attr(give_currency_symbol($mainCurrency))?>><?php echo esc_html($mainCurrencyName)?>
     </option>
 
     <?php foreach($configs['activeCurrency'] as $currency): ?>
-    <option value=<?php echo esc_attr($currency)?> simbol=<?php echo esc_attr(give_currency_symbol($currency))?>><?php echo esc_html(give_get_currency_name($currency))?>
+    <option value=<?php echo esc_attr($currency)?>
+        simbol=<?php echo esc_attr(give_currency_symbol($currency))?>><?php echo esc_html(give_get_currency_name($currency))?>
     </option>
 
     <?php endforeach; ?>
 </select>
-
-
-
 <a
     id="link-multi-currency"
     href="https://www.linknacional.com.br/wordpress/givewp/multimoeda"
@@ -271,13 +219,12 @@ final class GiveMultiCurrencyActions {
 >Plugin Multi Moeda</a>
 
 <?php
-
+        }
     }
 
     // GiveWp 3.0.0
 
     public function lkn_add_currency_selector_to_give_form(DonationFormNode $form, $formId): void {
-        $donationForm = DonationForm::find($formId);
         $gateways = $this->lkn_get_gateways($formId);
         //Moedas Habilitadas
         $adminCurrency = self::lkn_give_multi_currency_get_active_currency();
