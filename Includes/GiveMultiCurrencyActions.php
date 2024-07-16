@@ -2,9 +2,6 @@
 
 namespace Lkn\GiveMultimoedas\Includes;
 
-use Give\DonationForms\Models\DonationForm;
-use Give\Donations\Models\Donation;
-use Give_Payment;
 use Give\Framework\FieldsAPI\DonationForm as DonationFormNode;
 use Give\Framework\FieldsAPI\Properties\DonationForm\CurrencySwitcherSetting;
 
