@@ -168,14 +168,12 @@ final class GiveMultiCurrency {
         $this->loader->add_filter('give_get_price_thousand_separator', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_thousand_separator');
         $this->loader->add_filter('give_get_price_decimal_separator', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_decimal_separator');
         $this->loader->add_filter('give_sanitize_amount_decimals', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_decimal_count');
-        $this->loader->add_action('give_before_donation_levels', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_selector', 10, 3);
         
-        //Frontend
+        // FrontEnd Multimoedas Legado
+        $this->loader->add_action('give_before_donation_levels', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_selector', 10, 3);
         $this->loader->add_action( 'wp_enqueue_scripts', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'give_import_script_method', 11, 1 );
     
-        // add_action( 'give_pre_form_output', 'my_custom_give_change_currency', 10, 1 );
-        // Compatibilidade Stripe e Paypal
-        
+        // Front End Multimoedas 3.0.0
         add_action("plugins_loaded", function(): void {
             Hooks::addAction(
                 'givewp_donation_form_schema',

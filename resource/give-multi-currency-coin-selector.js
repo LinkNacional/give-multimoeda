@@ -1,7 +1,5 @@
 window.addEventListener("load", function () {
     let iframe = document.querySelector("iframe");
-
-
     if (iframe) {
         var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
         let select = iframeDocument.querySelector("#give-mc-select");
@@ -11,7 +9,6 @@ window.addEventListener("load", function () {
             let inputSelect = iframeDocument.querySelector("#give-mc-currency-selected")
 
             if (simbol) {
-
                 changeCurrencyCoin(iframeDocument, simbol);
             }
 
