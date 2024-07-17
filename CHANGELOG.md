@@ -1,3 +1,8 @@
+# 3.0.0 - 17/07/2024
+* Adição de suporte ao formulario GiveWP 3.0.0
+* Correção de bugs
+* Limpeza no código
+
 # 2.7.0 - 13/06/2024
 * Adição de suporte a peso mexicano;
 * Adição de notificação para plugins instalados e inativos da Link Nacional.
