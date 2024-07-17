@@ -222,7 +222,7 @@ final class GiveMultiCurrencyActions {
     // GiveWp 3.0.0
 
     public function lkn_add_currency_selector_to_give_form(DonationFormNode $form, $formId): void {
-        $gateways = $this->lkn_get_gateways($formId);
+        $gateways = $this->lkn_get_gateways($form);
         //Moedas Habilitadas
         $adminCurrency = self::lkn_give_multi_currency_get_active_currency();
         // Moeda Padrão
@@ -230,11 +230,11 @@ final class GiveMultiCurrencyActions {
         $currencySettings = array();
 
         //Adicionando as moedas Habilitadas no formulário
+        $currencySettings[] = new CurrencySwitcherSetting(strtoupper($standardCurrency), 1, $gateways);
 
         foreach ($adminCurrency as $currency) {
             $currencySettings[] = new CurrencySwitcherSetting($currency, 1, $gateways);
         }
-        $currencySettings[] = new CurrencySwitcherSetting(strtoupper($standardCurrency), 1, $gateways);
 
         $form->currencySwitcherSettings(...$currencySettings);
         //Script para escolher a moeda
