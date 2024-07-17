@@ -11,11 +11,9 @@ window.addEventListener("load", function () {
             if (simbol) {
                 changeCurrencyCoin(iframeDocument, simbol);
             }
-
             if (inputSelect) {
                 inputSelect.value = selectedOption.value;
             }
-
             select.addEventListener("change", function () {
 
                 let selectedOption = select.options[select.selectedIndex];
@@ -27,9 +25,6 @@ window.addEventListener("load", function () {
                 inputSelect.value = selectedOption.value;
 
             })
-
-
-
         }
     }
 
