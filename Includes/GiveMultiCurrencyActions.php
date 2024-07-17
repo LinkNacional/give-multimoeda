@@ -205,13 +205,13 @@ final class GiveMultiCurrencyActions {
     class="give-donation-amount"
 >
 
-    <option value=<?php echo esc_html($mainCurrency)?>
-        simbol=<?php echo esc_attr(give_currency_symbol($mainCurrency))?>><?php echo esc_html($mainCurrencyName)?>
+    <option value=<?php echo esc_html($mainCurrency) ?>
+        simbol=<?php echo esc_attr(give_currency_symbol($mainCurrency)) ?>><?php echo esc_html($mainCurrencyName) ?>
     </option>
 
-    <?php foreach($configs['activeCurrency'] as $currency): ?>
-    <option value=<?php echo esc_attr($currency)?>
-        simbol=<?php echo esc_attr(give_currency_symbol($currency))?>><?php echo esc_html(give_get_currency_name($currency))?>
+    <?php foreach ($configs['activeCurrency'] as $currency) : ?>
+    <option value=<?php echo esc_attr($currency) ?>
+        simbol=<?php echo esc_attr(give_currency_symbol($currency)) ?>><?php echo esc_html(give_get_currency_name($currency)) ?>
     </option>
 
     <?php endforeach; ?>
@@ -248,11 +248,6 @@ final class GiveMultiCurrencyActions {
             }
 
             $form->currencySwitcherSettings(...$currencySettings);
-            //Script para escolher a moeda
-            wp_enqueue_script("lkn-multi-edit-coin", GIVE_MULTI_CURRENCY_URL . "resource/index.js");
-            wp_localize_script("lkn-multi-edit-coin", "varsPhp", array(
-                "standardCurrency" => $standardCurrency
-            ));
         }
     }
 
