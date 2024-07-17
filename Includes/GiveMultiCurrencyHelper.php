@@ -20,7 +20,7 @@ final class GiveMultiCurrencyHelper {
             GIVE_MULTI_CURRENCY_MIN_GIVE_VERSION,
             __('for the Give Multi Currency add-on to activate', 'give')
         );
-
+        $message = wp_kses_post( $message );
         Give()->notices->register_notice(array(
             'id' => 'give-activation-error',
             'type' => 'error',
@@ -134,14 +134,15 @@ final class GiveMultiCurrencyHelper {
      *
      */
     public static function lkn_multi_currency_curl_get_contents($url) {
-        $ch = curl_init();
+        // $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_URL, $url);
+        // curl_setopt($ch, CURLOPT_HEADER, 0);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // curl_setopt($ch, CURLOPT_URL, $url);
 
-        $data = curl_exec($ch);
-        curl_close($ch);
+        // $data = curl_exec($ch);
+        // curl_close($ch);
+        $data = wp_remote_get($url);
 
         return $data;
     }
