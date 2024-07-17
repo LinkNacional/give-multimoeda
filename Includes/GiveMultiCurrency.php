@@ -160,7 +160,6 @@ final class GiveMultiCurrency {
     private function public_hooks(): void {
         // Verificiação de dependencia
         $this->loader->add_action('plugins_loaded', $this, 'check_environment', 999);
-        // Aviso de falta do Cielo
         $this->loader->add_filter('plugin_action_links_' . GIVE_MULTI_CURRENCY_BASENAME, 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lkn_give_multi_currency_plugin_row_meta', 10, 2);
         // Funcionalidades Multimoedas
         $this->loader->add_filter('give_currency', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_change_multi_currency');
@@ -182,6 +181,8 @@ final class GiveMultiCurrency {
                 2
             );
         });
+        // Aviso de falta do Cielo
+        $this->loader->add_action("init", 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', "give_multi_currency_check_cielo");
     }
 
     public function lkn_give_multi_currency_updater() {
