@@ -93,7 +93,7 @@ final class GiveMultiCurrencyActions {
     public static function lkn_give_change_multi_currency($currency) {
         $configs = self::lkn_give_multi_currency_get_configs();
         if ("enabled" == $configs["mcEnabled"]) {
-            if ( ! empty($_POST['give-mc-selected-currency']) && 'paypal-commerce' !== $_POST['payment-mode']) {
+            if ( ! empty($_POST['give-mc-selected-currency']) && wp_verify_nonce($_POST['lkn-give-multi-nonce'], 'lkn-give-multi-currency-nonce') && 'paypal-commerce' !== $_POST['payment-mode']) {
                 $currency = $_POST['give-mc-selected-currency'];
             }
         }
@@ -216,6 +216,7 @@ final class GiveMultiCurrencyActions {
 
     <?php endforeach; ?>
 </select>
+<?php wp_nonce_field('lkn-give-multi-currency-nonce', 'lkn-give-multi-nonce'); ?>
 <a
     id="link-multi-currency"
     href="https://www.linknacional.com.br/wordpress/givewp/multimoeda"
