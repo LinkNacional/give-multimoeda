@@ -45,7 +45,7 @@ final class GiveMultiCurrencyHelper {
             __(' plugin installed and activated for the Give Multi Currency to activate', 'give')
         );
 
-        echo $message;
+        echo wp_kses_post($message);
     }
 
     /**
@@ -149,6 +149,6 @@ final class GiveMultiCurrencyHelper {
 
     public static function __lkn_multicurrency_linkn_inactive_notice(): void {
         $message = '<div id="message" class="error"><p><b>Atenção: </b>O plugin Give Multimoedas detectou que o plugin Cielo API 3.0 encontra-se inativo. <a href="plugins.php">Ativar na área de plugins</a>.</div>';
-        echo $message;
+        echo wp_kses_post($message);
     }
 }
