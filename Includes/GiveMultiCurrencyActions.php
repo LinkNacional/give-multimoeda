@@ -230,26 +230,29 @@ final class GiveMultiCurrencyActions {
     // GiveWp 3.0.0
 
     public function lkn_add_currency_selector_to_give_form(DonationFormNode $form, $formId): void {
-        $gateways = $this->lkn_get_gateways($form);
-        //Moedas Habilitadas
-        $adminCurrency = self::lkn_give_multi_currency_get_active_currency();
-        // Moeda Padrão
-        $standardCurrency = give_get_option("multi_currency_default_currency");
-        $currencySettings = array();
+        $configs = self::lkn_give_multi_currency_get_configs();
+        if ("enabled" == $configs["mcEnabled"]) {
+            $gateways = $this->lkn_get_gateways($form);
+            //Moedas Habilitadas
+            $adminCurrency = self::lkn_give_multi_currency_get_active_currency();
+            // Moeda Padrão
+            $standardCurrency = give_get_option("multi_currency_default_currency");
+            $currencySettings = array();
 
-        //Adicionando as moedas Habilitadas no formulário
-        $currencySettings[] = new CurrencySwitcherSetting(strtoupper($standardCurrency), 1, $gateways);
+            //Adicionando as moedas Habilitadas no formulário
+            $currencySettings[] = new CurrencySwitcherSetting(strtoupper($standardCurrency), 1, $gateways);
 
-        foreach ($adminCurrency as $currency) {
-            $currencySettings[] = new CurrencySwitcherSetting($currency, 1, $gateways);
+            foreach ($adminCurrency as $currency) {
+                $currencySettings[] = new CurrencySwitcherSetting($currency, 1, $gateways);
+            }
+
+            $form->currencySwitcherSettings(...$currencySettings);
+            //Script para escolher a moeda
+            wp_enqueue_script("lkn-multi-edit-coin", GIVE_MULTI_CURRENCY_URL . "resource/index.js");
+            wp_localize_script("lkn-multi-edit-coin", "varsPhp", array(
+                "standardCurrency" => $standardCurrency
+            ));
         }
-
-        $form->currencySwitcherSettings(...$currencySettings);
-        //Script para escolher a moeda
-        wp_enqueue_script("lkn-multi-edit-coin", GIVE_MULTI_CURRENCY_URL . "resource/index.js");
-        wp_localize_script("lkn-multi-edit-coin", "varsPhp", array(
-            "standardCurrency" => $standardCurrency
-        ));
     }
 
     //Pegar os gateways no formato desejado
