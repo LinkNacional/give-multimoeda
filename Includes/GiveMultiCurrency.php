@@ -90,7 +90,7 @@ final class GiveMultiCurrency {
                     /* Min. Give. plugin version. */
 
                     // Show admin notice.
-                    add_action('admin_notices', 'lkn_give_multi_currency_dependency_notice');
+                    add_action('admin_notices', array('Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lkn_give_multi_currency_dependency_notice'));
 
                     $is_deactivate_plugin = true;
                 }
@@ -117,7 +117,6 @@ final class GiveMultiCurrency {
         if ($is_deactivate_plugin) {
             // Deactivate plugin.
             deactivate_plugins(GIVE_MULTI_CURRENCY_BASENAME);
-
             if (isset($_GET['activate'])) {
                 unset($_GET['activate']);
             }
