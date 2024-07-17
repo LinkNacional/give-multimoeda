@@ -91,17 +91,21 @@ final class GiveMultiCurrencyActions {
     }
 
     public static function lkn_give_change_multi_currency($currency) {
-        // checks if a foreign currency was selected and the gateway is not paypal donations
-        if ( ! empty($_POST['give-mc-selected-currency']) && 'paypal-commerce' !== $_POST['payment-mode']) {
-            $currency = $_POST['give-mc-selected-currency'];
+        $configs = self::lkn_give_multi_currency_get_configs();
+        if ("enabled" == $configs["mcEnabled"]) {
+            if ( ! empty($_POST['give-mc-selected-currency']) && 'paypal-commerce' !== $_POST['payment-mode']) {
+                $currency = $_POST['give-mc-selected-currency'];
+            }
         }
-
         return $currency;
     }
 
     public static function lkn_give_multi_currency_thousand_separator($separator) {
-        $separator = '.';
+        $configs = self::lkn_give_multi_currency_get_configs();
 
+        if ("enabled" == $configs["mcEnabled"]) {
+            $separator = '.';
+        }
         return $separator;
     }
 
@@ -114,8 +118,10 @@ final class GiveMultiCurrencyActions {
      *
      */
     public static function lkn_give_multi_currency_decimal_separator($separator) {
-        $separator = ',';
-
+        $configs = self::lkn_give_multi_currency_get_configs();
+        if ("enabled" == $configs["mcEnabled"]) {
+            $separator = ',';
+        }
         return $separator;
     }
 
@@ -128,8 +134,10 @@ final class GiveMultiCurrencyActions {
      *
      */
     public static function lkn_give_multi_currency_decimal_count($count) {
-        $count = 0;
-
+        $configs = self::lkn_give_multi_currency_get_configs();
+        if ("enabled" == $configs["mcEnabled"]) {
+            $count = 0;
+        }
         return $count;
     }
 
