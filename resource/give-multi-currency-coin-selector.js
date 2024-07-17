@@ -27,9 +27,6 @@ window.addEventListener("load", function () {
             })
         }
     }
-
-
-
 })
 
 function changeCurrencyCoin(iframe, value) {
@@ -40,7 +37,6 @@ function changeCurrencyCoin(iframe, value) {
             let filho = element.querySelector(".currency")
             if (filho) {
                 filho.textContent = value;
-
             }
         });
     }

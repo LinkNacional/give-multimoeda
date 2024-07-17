@@ -223,7 +223,6 @@ final class GiveMultiCurrencyActions {
     target="_blank"
     rel="nofollow"
 >Plugin Multi Moeda</a>
-
 <?php
         }
     }
