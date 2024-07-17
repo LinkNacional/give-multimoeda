@@ -105,7 +105,7 @@ final class GiveMultiCurrency {
                 $is_give_active = defined('GIVE_PLUGIN_BASENAME') ? is_plugin_active(GIVE_PLUGIN_BASENAME) : false;
 
                 if ( ! $is_give_active) {
-                    add_action('admin_notices', 'lkn_give_multi_currency_inactive_notice');
+                    add_action('admin_notices', array('Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lkn_give_multi_currency_inactive_notice'));
 
                     $is_deactivate_plugin = true;
                 }
@@ -174,7 +174,7 @@ final class GiveMultiCurrency {
         $this->loader->add_action( 'wp_enqueue_scripts', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'give_import_script_method', 11, 1 );
     
         // Front End Multimoedas 3.0.0
-        add_action("plugins_loaded", function(): void {
+        add_action("give_init", function(): void {
             Hooks::addAction(
                 'givewp_donation_form_schema',
                 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions',
