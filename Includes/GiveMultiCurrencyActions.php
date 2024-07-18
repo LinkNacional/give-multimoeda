@@ -11,6 +11,13 @@ if ( ! defined('ABSPATH')) {
 }
 
 final class GiveMultiCurrencyActions {
+    private static $currency_separators = array(
+        'USD' => array('thousand' => ',', 'decimal' => '.'),
+        'EUR' => array('thousand' => '.', 'decimal' => ','),
+        'BRL' => array('thousand' => '.', 'decimal' => ','),
+        // Add more currencies as needed
+    );
+
     //  FrontEnd
     public static function give_import_script_method(): void {
         wp_enqueue_script("lkn-multi-currency-coin", GIVE_MULTI_CURRENCY_URL . "/resource/give-multi-currency-coin-selector.js");
@@ -102,11 +109,13 @@ final class GiveMultiCurrencyActions {
     }
 
     public static function lkn_give_multi_currency_thousand_separator($separator) {
+        $currency_code = isset($_POST['give-mc-selected-currency']) ? $_POST['give-mc-selected-currency'] : 'USD';
         $configs = self::lkn_give_multi_currency_get_configs();
 
-        if ("enabled" == $configs["mcEnabled"]) {
-            $separator = '.';
+        if ("enabled" == $configs["mcEnabled"] && isset(self::$currency_separators[$currency_code])) {
+            $separator = self::$currency_separators[$currency_code]['thousand'];
         }
+
         return $separator;
     }
 
@@ -119,10 +128,13 @@ final class GiveMultiCurrencyActions {
      *
      */
     public static function lkn_give_multi_currency_decimal_separator($separator) {
+        $currency_code = isset($_POST['give-mc-selected-currency']) ? $_POST['give-mc-selected-currency'] : 'USD';
         $configs = self::lkn_give_multi_currency_get_configs();
-        if ("enabled" == $configs["mcEnabled"]) {
-            $separator = ',';
+
+        if ("enabled" == $configs["mcEnabled"] && isset(self::$currency_separators[$currency_code])) {
+            $separator = self::$currency_separators[$currency_code]['decimal'];
         }
+
         return $separator;
     }
 
@@ -135,9 +147,15 @@ final class GiveMultiCurrencyActions {
      *
      */
     public static function lkn_give_multi_currency_decimal_count($count) {
+        $currency_code = isset($_POST['give-mc-selected-currency']) ? $_POST['give-mc-selected-currency'] : 'BRL';
+
         $configs = self::lkn_give_multi_currency_get_configs();
         if ("enabled" == $configs["mcEnabled"]) {
-            $count = 0;
+            if(isset(self::$currency_separators[$currency_code])) {
+                $count = 2;
+            } else {
+                $count = 0;
+            }
         }
         return $count;
     }
