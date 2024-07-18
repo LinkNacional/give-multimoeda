@@ -1,60 +1,102 @@
 window.addEventListener("load", function () {
     let iframe = document.querySelector("iframe");
     if (iframe) {
-        var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-        let select = iframeDocument.querySelector("#give-mc-select");
-        if (select) {
-            let selectedOption = select.options[select.selectedIndex];
-            let simbol = selectedOption.getAttribute("simbol");
-            let inputSelect = iframeDocument.querySelector("#give-mc-currency-selected")
-
-            if (simbol) {
-                changeCurrencyCoin(iframeDocument, simbol);
-            }
-            if (inputSelect) {
-                inputSelect.value = selectedOption.value;
-            }
-            select.addEventListener("change", function () {
-
-                let selectedOption = select.options[select.selectedIndex];
-                let simbol = selectedOption.getAttribute("simbol");
-                if (simbol) {
-                    changeCurrencyCoin(iframeDocument, simbol);
-
-                }
-                inputSelect.value = selectedOption.value;
-
-            })
-        }
+        let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+        initializeGiveWP(iframeDocument);
     }
-})
+});
 
-function changeCurrencyCoin(iframe, value) {
-    let btns = iframe.querySelectorAll(".give-donation-level-btn");
-    let span = iframe.querySelector(".give-currency-symbol");
-    if (btns) {
-        btns.forEach(element => {
-            let filho = element.querySelector(".currency")
-            if (filho) {
-                filho.textContent = value;
-            }
+function initializeGiveWP(iframeDocument) {
+    let select = iframeDocument.querySelector("#give-mc-select");
+    let inputSelect = iframeDocument.querySelector("#give-mc-currency-selected");
+    let give_amount = iframeDocument.querySelector("#give-amount");
+    let give_purchase_buttons = iframeDocument.querySelectorAll(".give-donation-level-btn");
+
+    if (select) {
+        handleSelectChange(select, inputSelect, iframeDocument);
+        addEventListeners(select, inputSelect, give_amount, give_purchase_buttons, iframeDocument);
+    }
+}
+
+function handleSelectChange(select, inputSelect, iframeDocument) {
+    let selectedOption = select.options[select.selectedIndex];
+    let simbol = selectedOption.getAttribute("simbol");
+
+    if (simbol) {
+        changeCurrencyCoin(iframeDocument, simbol);
+    }
+
+    if (inputSelect) {
+        inputSelect.value = selectedOption.value;
+    }
+}
+
+function addEventListeners(select, inputSelect, give_amount, give_purchase_buttons, iframeDocument) {
+    select.addEventListener("change", function () {
+        updateCurrency(select, inputSelect, iframeDocument);
+    });
+
+    if (give_amount) {
+        give_amount.addEventListener('change', function () {
+            updateCurrency(select, inputSelect, iframeDocument);
         });
     }
-    if (span) {
-        span.innerText = value
+
+    if (give_purchase_buttons) {
+        give_purchase_buttons.forEach(button => {
+            button.addEventListener("click", function () {
+                updateCurrency(select, inputSelect, iframeDocument);
+            });
+        });
+    }
+}
+
+function updateCurrency(select, inputSelect, iframeDocument) {
+    let selectedOption = select.options[select.selectedIndex];
+    let simbol = selectedOption.getAttribute("simbol");
+
+    if (simbol) {
+        changeCurrencyCoin(iframeDocument, simbol);
     }
 
-    var amount = null
-    if (iframe.querySelector("#give-amount")) {
-        amount = iframe.querySelector("#give-amount").value;
-        const valor = iframe.querySelectorAll('[data-tag="amount"]')[0];
-        const valorTotal = iframe.querySelector('th[data-tag="total"]');
+    if (inputSelect) {
+        inputSelect.value = selectedOption.value;
+    }
+}
 
-        if (valor && valorTotal) {
-            valor.firstChild.innerHTML = value + amount;
-            valorTotal.innerHTML = value + amount
+function changeCurrencyCoin(iframe, value) {
+    updateButtonSymbols(iframe, value);
+    updateCurrencySymbol(iframe, value);
+    updateAmounts(iframe, value);
+}
+
+function updateButtonSymbols(iframe, value) {
+    let buttons = iframe.querySelectorAll(".give-donation-level-btn .currency");
+    buttons.forEach(button => {
+        button.textContent = value;
+    });
+}
+
+function updateCurrencySymbol(iframe, value) {
+    let currencySymbol = iframe.querySelector(".give-currency-symbol");
+    if (currencySymbol) {
+        currencySymbol.innerText = value;
+    }
+}
+
+function updateAmounts(iframe, value) {
+    let inputAmount = iframe.querySelector("#give-amount");
+    if (inputAmount) {
+        let amount = inputAmount.value;
+        let amountCell = iframe.querySelector('td[data-tag="amount"]');
+        let totalCell = iframe.querySelector('th[data-tag="total"]');
+
+        if (amountCell && totalCell) {
+            setTimeout(() => {
+                amountCell.innerText = value + amount;
+                totalCell.innerHTML = value + amount;
+                console.log(amountCell.innerText, totalCell.innerHTML);
+            }, 3000);
         }
     }
-
-
 }

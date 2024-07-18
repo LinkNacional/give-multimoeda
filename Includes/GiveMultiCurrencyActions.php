@@ -97,6 +97,7 @@ final class GiveMultiCurrencyActions {
                 $currency = $_POST['give-mc-selected-currency'];
             }
         }
+
         return $currency;
     }
 
@@ -223,6 +224,7 @@ final class GiveMultiCurrencyActions {
     target="_blank"
     rel="nofollow"
 >Plugin Multi Moeda</a>
+
 <?php
         }
     }
