@@ -106,7 +106,7 @@ final class GiveMultiCurrencyActions {
 
         $currency_code = isset($_POST['give-mc-selected-currency']) ? $_POST['give-mc-selected-currency'] : "BRL";
 
-        if ("enabled" == $configs["mcEnabled"] && isset(self::$currency_separators[$currency_code])) {
+        if ("enabled" == $configs["mcEnabled"]) {
             $separator = ".";
         }
 
@@ -123,9 +123,8 @@ final class GiveMultiCurrencyActions {
      */
     public static function lkn_give_multi_currency_decimal_separator($separator) {
         $configs = self::lkn_give_multi_currency_get_configs();
-        $currency_code = isset($_POST['give-mc-selected-currency']) ? $_POST['give-mc-selected-currency'] : "BRL";
 
-        if ("enabled" == $configs["mcEnabled"] && isset(self::$currency_separators[$currency_code])) {
+        if ("enabled" == $configs["mcEnabled"]) {
             $separator = ",";
         }
         return $separator;
