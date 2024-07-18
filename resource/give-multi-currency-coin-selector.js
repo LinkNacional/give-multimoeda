@@ -95,7 +95,6 @@ function updateAmounts(iframe, value) {
             setTimeout(() => {
                 amountCell.innerText = value + amount;
                 totalCell.innerHTML = value + amount;
-                console.log(amountCell.innerText, totalCell.innerHTML);
             }, 3000);
         }
     }
