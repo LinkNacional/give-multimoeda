@@ -141,7 +141,6 @@ final class GiveMultiCurrencyActions {
      */
     public static function lkn_give_multi_currency_decimal_count($count) {
         $configs = self::lkn_give_multi_currency_get_configs();
-        // $currency_code = isset($_POST['give-mc-selected-currency']) ? $_POST['give-mc-selected-currency'] : "BRL";
 
         if ("enabled" == $configs["mcEnabled"]) {
             $count = 0;
