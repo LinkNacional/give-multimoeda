@@ -95,16 +95,15 @@ final class GiveMultiCurrencyActions {
         if ("enabled" == $configs["mcEnabled"]) {
             if ( ! empty($_POST['give-mc-selected-currency']) && wp_verify_nonce($_POST['lkn-give-multi-nonce'], 'lkn-give-multi-currency-nonce') && 'paypal-commerce' !== $_POST['payment-mode']) {
                 $currency = $_POST['give-mc-selected-currency'];
+            } elseif (isset($_POST["currency"])) {
+                $currency = $_POST['currency'];
             }
         }
-
         return $currency;
     }
 
     public static function lkn_give_multi_currency_thousand_separator($separator) {
         $configs = self::lkn_give_multi_currency_get_configs();
-
-        $currency_code = isset($_POST['give-mc-selected-currency']) ? $_POST['give-mc-selected-currency'] : "BRL";
 
         if ("enabled" == $configs["mcEnabled"]) {
             $separator = ".";
@@ -124,9 +123,11 @@ final class GiveMultiCurrencyActions {
     public static function lkn_give_multi_currency_decimal_separator($separator) {
         $configs = self::lkn_give_multi_currency_get_configs();
 
+        // Verifica se a funcionalidade de multi-moeda está habilitada
         if ("enabled" == $configs["mcEnabled"]) {
             $separator = ",";
         }
+
         return $separator;
     }
 
@@ -211,11 +212,9 @@ final class GiveMultiCurrencyActions {
     id="give-mc-select"
     class="give-donation-amount"
 >
-
     <option value=<?php echo esc_html($mainCurrency) ?>
         simbol=<?php echo esc_attr(give_currency_symbol($mainCurrency)) ?>><?php echo esc_html($mainCurrencyName) ?>
     </option>
-
     <?php foreach ($configs['activeCurrency'] as $currency) : ?>
     <option value=<?php echo esc_attr($currency) ?>
         simbol=<?php echo esc_attr(give_currency_symbol($currency)) ?>><?php echo esc_html(give_get_currency_name($currency)) ?>
