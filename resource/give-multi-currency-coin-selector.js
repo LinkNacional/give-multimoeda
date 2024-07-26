@@ -1,20 +1,23 @@
 window.addEventListener("load", function () {
-    let iframe = document.querySelector("#iFrameResizer0");
+    let iframe = document.querySelector("iframe");
     if (iframe) {
         let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
         initializeGiveWP(iframeDocument);
     } else {
-        updateCurrencySymbolLegacy();
-
+        initializeGiveWP();
     }
 });
 
-function initializeGiveWP(iframeDocument) {
+function initializeGiveWP(iframeDocument = null) {
+    if (!iframeDocument) {
+        iframeDocument = document;
+    }
     let select = iframeDocument.querySelector("#give-mc-select");
     let inputSelect = iframeDocument.querySelector("#give-mc-currency-selected");
     let give_amount = iframeDocument.querySelector("#give-amount");
     let give_purchase_buttons = iframeDocument.querySelectorAll(".give-donation-level-btn");
-    if (select && iframeDocument) {
+
+    if (select) {
         handleSelectChange(select, inputSelect, iframeDocument);
         addEventListeners(select, inputSelect, give_amount, give_purchase_buttons, iframeDocument);
     }
@@ -74,15 +77,73 @@ function changeCurrencyCoin(iframe, value) {
 
 function updateButtonSymbols(iframe, value) {
     let buttons = iframe.querySelectorAll(".give-donation-level-btn .currency");
-    buttons.forEach(button => {
-        button.textContent = value;
-    });
+    if (buttons.length > 0) {
+        buttons.forEach(button => {
+            button.textContent = value;
+        });
+    } else {
+        buttons = iframe.querySelectorAll(".give-donation-level-btn:not([data-price-id='custom'])");
+        buttons.forEach(button => {
+            const price = button.getAttribute("value");
+            button.innerHTML = `${value}${price}`;
+        });
+    }
 }
 
 function updateCurrencySymbol(iframe, value) {
     let currencySymbol = iframe.querySelector(".give-currency-symbol");
     if (currencySymbol) {
         currencySymbol.innerText = value;
+    }
+
+    let inputAmount = iframe.querySelector("#give-amount");
+    let finalTotalAmount = iframe.querySelector(".give-final-total-amount");
+    let give_purchase_buttons = iframe.querySelectorAll(".give-donation-level-btn");
+    let paymentModeElements = iframe.querySelectorAll('[name="payment-mode"]');
+    console.log(paymentModeElements)
+    if(paymentModeElements){
+        paymentModeElements.forEach(element => {
+            element.addEventListener("change", function () {
+                setTimeout(() => {
+                    finalTotalAmount = iframe.querySelector(".give-final-total-amount");
+                    amountCell = iframe.querySelector('td[data-tag="amount"]');
+                    totalCell = iframe.querySelector('th[data-tag="total"]');
+                    if(amountCell && totalCell){
+                        updateTotalSibol(amountCell, value);
+                        updateTotalSibol(totalCell, value);
+                    }
+                    updateTotalSibol(finalTotalAmount, value);
+                }, 1000);
+            });
+        });
+    }
+
+    if(inputAmount){
+        inputAmount.onchange = () => {
+            if (finalTotalAmount) {
+                setTimeout(() => {
+                    updateTotalSibol(finalTotalAmount, value);
+                }, 1);
+            }
+        }
+    }
+
+    give_purchase_buttons.forEach(button => {
+        button.addEventListener("click", function () {
+            setTimeout(() => {
+                updateTotalSibol(finalTotalAmount, value);
+            }, 1);
+        });
+    });
+
+    updateTotalSibol(finalTotalAmount, value);
+}
+
+function updateTotalSibol(finalTotalAmount, value) {
+    if (finalTotalAmount) {
+        let amount = finalTotalAmount.innerText.trim();
+        let newAmount = amount.replace(/^[^\d]+/, value);
+        finalTotalAmount.innerText = newAmount;
     }
 }
 
@@ -100,70 +161,4 @@ function updateAmounts(iframe, value) {
             }, 3000);
         }
     }
-}
-
-
-function updateCurrencySymbolLegacy() {
-    // Seleciona os elementos necessários
-    const select = document.querySelector("#give-mc-select");
-    const simbol = document.querySelector('.give-currency-symbol');
-    const finalAmount = document.querySelector('.give-final-total-amount');
-    const buttons = document.querySelectorAll('.give-donation-level-btn');
-    const amount = document.querySelector("#give-amount");
-
-    if (!select || !simbol || !finalAmount || !buttons || !amount) {
-        console.warn("Nem todos os elementos necessários foram encontrados.");
-        return;
-    }
-
-    // Função para atualizar todos os elementos com o novo símbolo
-    const updateElements = () => {
-        // Obtém o novo símbolo da moeda
-        const newSymbol = select.options[select.selectedIndex].getAttribute("simbol");
-
-        // Atualiza os botões de doação
-        buttons.forEach(button => {
-            if (button.value === "custom") {
-                return;
-            }
-
-            const currentPriceValue = button.textContent.replace(/[^0-9.]/g, '');
-            button.textContent = `${newSymbol}${currentPriceValue}`;
-
-            // Adiciona o listener de clique apenas uma vez
-            button.removeEventListener("click", handleButtonClick); // Remove o listener se já existir
-            button.addEventListener("click", handleButtonClick);
-        });
-
-        // Atualiza o valor final
-        const currentPriceValue = finalAmount.textContent.replace(/[^0-9.]/g, '');
-        finalAmount.textContent = `${newSymbol} ${currentPriceValue}`;
-        simbol.innerHTML = newSymbol;
-    };
-
-    // Função para lidar com o clique nos botões de doação
-    function handleButtonClick(event) {
-        const clickedButtonText = event.target.textContent;
-        finalAmount.textContent = clickedButtonText;
-
-        // Atualiza o símbolo no final após um pequeno atraso
-        setTimeout(() => {
-            const newSymbol = select.options[select.selectedIndex].getAttribute("simbol");
-            finalAmount.textContent = `${newSymbol}${clickedButtonText.replace(/[^0-9.]/g, '')}`;
-        }, 500);
-    }
-
-    // Listener para mudança no select
-    select.addEventListener("change", updateElements);
-
-    // Listener para mudança no input de valor
-    amount.addEventListener("change", () => {
-        const newSymbol = select.options[select.selectedIndex].getAttribute("simbol");
-        const currentPriceValue = finalAmount.textContent.replace(/[^0-9.]/g, '');
-        finalAmount.textContent = `${newSymbol}${currentPriceValue}`;
-        simbol.innerHTML = newSymbol;
-    });
-
-    // Chamada inicial para configurar os elementos com o símbolo inicial
-    updateElements();
 }
