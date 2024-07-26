@@ -1,5 +1,5 @@
 window.addEventListener("load", function () {
-    let iframe = document.querySelector("iframe");
+    let iframe = document.querySelector("#iFrameResizer0");
     if (iframe) {
         let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
         initializeGiveWP(iframeDocument);
