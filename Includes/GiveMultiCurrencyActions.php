@@ -13,7 +13,7 @@ if ( ! defined('ABSPATH')) {
 final class GiveMultiCurrencyActions {
     //  FrontEnd
     public static function give_import_script_method(): void {
-        wp_enqueue_script("lkn-multi-currency-coin", GIVE_MULTI_CURRENCY_URL . "/resource/give-multi-currency-coin-selector.js");
+        wp_enqueue_script("lkn-multi-currency-coin", GIVE_MULTI_CURRENCY_URL . "resource/give-multi-currency-coin-selector.js");
         $configs = self::lkn_give_multi_currency_get_configs();
         $currency = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_symbols($configs["activeCurrency"]);
         wp_localize_script("lkn-multi-currency-coin", "varsPhp", array("moedas" => $currency));
