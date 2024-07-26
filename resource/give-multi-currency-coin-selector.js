@@ -100,7 +100,6 @@ function updateCurrencySymbol(iframe, value) {
     let finalTotalAmount = iframe.querySelector(".give-final-total-amount");
     let give_purchase_buttons = iframe.querySelectorAll(".give-donation-level-btn");
     let paymentModeElements = iframe.querySelectorAll('[name="payment-mode"]');
-    console.log(paymentModeElements)
     if(paymentModeElements){
         paymentModeElements.forEach(element => {
             element.addEventListener("change", function () {
