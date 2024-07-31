@@ -36,7 +36,7 @@ jobs:
       uses: mathieudutour/github-tag-action@v6.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        custom_tag: "2.7.0" # // TODO remove this after update
+        custom_tag: "3.0.0" # // TODO remove this after update
 
     # Generate new release
     - name: Generate new Release
