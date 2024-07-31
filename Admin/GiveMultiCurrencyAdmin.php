@@ -98,7 +98,7 @@ final class GiveMultiCurrencyAdmin {
                     $new_setting[] = array(
                         'name' => __('Moedas Habilitadas', 'give'),
                         'id' => 'multi_currency_active_currency',
-                        'desc' => __('Selecione as moedas que seu formulário irá aceitar'),
+                        'desc' => __('Selecione as moedas que seu formulário irá aceitar') . '<br><a href="https://www.linknacional.com.br/wordpress/givewp/multimoeda/#nova-moeda" target="_blank">Adicionar nova moeda</a>',
                         'type' => 'multicheck',
                         'default' => 1,
                         'options' => array(
