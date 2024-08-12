@@ -12,12 +12,14 @@
 
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrency;
 
-require_once __DIR__ . "/vendor/autoload.php";
-require_once __DIR__ . "/Includes/plugin-updater/plugin-update-checker.php";
 // Exit if accessed directly. ABSPATH is attribute in wp-admin - plugin.php
 if ( ! defined('ABSPATH')) {
     exit;
 }
+
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/Includes/plugin-updater/plugin-update-checker.php';
+
 if ( ! defined('GIVE_MULTI_CURRENCY_VERSION')) {
     define('GIVE_MULTI_CURRENCY_VERSION', '3.0.0');
 }
