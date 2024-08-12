@@ -6,8 +6,8 @@
  * Version:     3.0.0
  * Author:      Link Nacional
  * Author URI:  https://www.linknacional.com.br
- * License:     GNU General Public License v2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * License:     GNU General Public License v3 or later
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  */
 
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrency;
