@@ -150,7 +150,7 @@ final class GiveMultiCurrencyHelper {
         }
         if (is_plugin_inactive('give-cielo/lkn-give-cielo.php')) {
             $lkn_multicurrency_all_plugins = get_plugins();
-        
+
             if (isset($lkn_multicurrency_all_plugins['give-cielo/lkn-give-cielo.php']) && ! isset($lkn_multicurrency_all_plugins['give-cielo/give-cielo.php'])) {
                 add_action('admin_notices', array('Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', '__lkn_multicurrency_linkn_inactive_notice'));
             }
