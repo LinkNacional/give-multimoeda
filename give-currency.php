@@ -6,18 +6,20 @@
  * Version:     3.0.0
  * Author:      Link Nacional
  * Author URI:  https://www.linknacional.com.br
- * License:     GNU General Public License v2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * License:     GNU General Public License v3 or later
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  */
 
-use Lkn\GiveMultimoedas\Includes\GiveMultiCurrency;
-
-require_once __DIR__ . "/vendor/autoload.php";
-require_once __DIR__ . "/Includes/plugin-updater/plugin-update-checker.php";
 // Exit if accessed directly. ABSPATH is attribute in wp-admin - plugin.php
 if ( ! defined('ABSPATH')) {
     exit;
 }
+
+require_once __DIR__ . '/Includes/plugin-updater/plugin-update-checker.php';
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Lkn\GiveMultimoedas\Includes\GiveMultiCurrency;
+
 if ( ! defined('GIVE_MULTI_CURRENCY_VERSION')) {
     define('GIVE_MULTI_CURRENCY_VERSION', '3.0.0');
 }

@@ -25,7 +25,9 @@
           "bmewburn.vscode-intelephense-client",
           "neilbrayfield.php-docblocker",
           "dbaeumer.vscode-eslint",
-          "aswinkumar863.smarty-template-support"
+          "jkiviluoto.tws",
+          "lacroixdavid1.vscode-format-context-menu",
+          "Gruntfuggly.todo-tree"
         ],
         "settings": {
           "[html]": {
