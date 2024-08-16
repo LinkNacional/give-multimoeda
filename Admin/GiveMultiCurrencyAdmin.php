@@ -13,6 +13,20 @@ use Give_Admin_Settings;
  */
 final class GiveMultiCurrencyAdmin {
     /**
+     * Admin ID
+     *
+     * @var string
+     */
+    private $id;
+
+    /**
+     * Admin prefix
+     *
+     * @var string
+     */
+    private $prefix;
+
+    /**
      * Give_Metabox_Setting_Fields constructor.
      */
     public function __construct() {

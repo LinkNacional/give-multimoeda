@@ -3,9 +3,7 @@
 namespace Lkn\GiveMultimoedas\Includes;
 
 use Lkn\GiveMultimoedas\Admin\GiveMultiCurrencyAdmin;
-use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions;
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyLoader;
-use Phan\Language\Element\Func;
 use Lkn_Puc_Plugin_UpdateChecker;
 use Give\Helpers\Hooks;
 
@@ -15,7 +13,7 @@ final class GiveMultiCurrency {
      * @access private
      * @var GiveMultiCurrencyLoader
      */
-    private GiveMultiCurrencyLoader $loader;
+    private $loader;
 
     /**
      * Give - Multi Currency Admin Object.
