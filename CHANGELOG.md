@@ -1,4 +1,4 @@
-# 3.0.0 - 17/07/2024
+# 3.0.0 - 16/08/2024
 * Adição de suporte ao formulario GiveWP 3.0.0
 * Correção de bugs
 * Limpeza no código
