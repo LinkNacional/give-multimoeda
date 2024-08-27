@@ -1,3 +1,6 @@
+# 3.0.1 - 27/08/2024
+* Correção e melhoria visual na exibição do plugin
+
 # 3.0.0 - 16/08/2024
 * Adição de suporte ao formulario GiveWP 3.0.0
 * Correção de bugs

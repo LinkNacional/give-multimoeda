@@ -168,7 +168,7 @@ final class GiveMultiCurrency {
         // FrontEnd Multimoedas Legado
         $this->loader->add_action('give_before_donation_levels', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_selector', 10, 3);
         $this->loader->add_action( 'wp_enqueue_scripts', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'give_import_script_method', 11, 1 );
-        // Front End Multimoedas 3.0.0
+        // Front End Multimoedas 3.0.1
 
         add_action("give_init", function(): void {
             Hooks::addAction(
