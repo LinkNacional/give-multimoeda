@@ -169,23 +169,55 @@ final class GiveMultiCurrencyActions {
             ?>
 
 <style>
-    .lkn-mc-select-classic {
-        padding: 13px;
-        margin: 0px 50px;
+   .lkn-mc-select-classic {
+        padding: 20px;
+        text-align: center;
+        margin: 0 auto;
     }
 
     #give-mc-select {
         font-size: 18px;
+        display: block; 
+        margin: 0 auto;
+        max-width: 300px;
+        padding: 10px;
     }
 
     #link-multi-currency {
-        justify-content: center;
-        align-items: center;
+        display: block;
         text-align: center;
-        margin: 5px auto;
-        font-size: 11px;
+        font-size: 17px;
         font-weight: 600;
-        padding: 5px;
+        padding: 5px 10px;
+        margin: 5px 0px 15px 0px;
+        color: #0073e6;
+        text-decoration: none;
+        position: relative;
+        transition: color 0.3s, transform 0.3s;
+    }
+
+    #link-multi-currency::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: #0073e6;
+        transition: width 0.3s, background-color 0.3s;
+        transform: translateX(-50%);
+    }
+
+    #link-multi-currency:hover::after,
+    #link-multi-currency:focus::after {
+        width: 35%;
+        background-color: #005bb5;
+    }
+
+    #link-multi-currency:hover,
+    #link-multi-currency:focus {
+        color: #005bb5;
+        transform: translateY(-2px);
     }
 
     .hidden-lkn {
