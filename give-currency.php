@@ -21,7 +21,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrency;
 
 if ( ! defined('GIVE_MULTI_CURRENCY_VERSION')) {
-    define('GIVE_MULTI_CURRENCY_VERSION', '1');
+    define('GIVE_MULTI_CURRENCY_VERSION', '3.0.1');
 }
 
 // Set it to latest.
