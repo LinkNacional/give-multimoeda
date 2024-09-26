@@ -5,6 +5,7 @@
  * Description: Adiciona opções de escolha de moedas aos formulários do GiveWP.
  * Version:     3.0.2
  * Author:      Link Nacional
+ * Requires Plugins: give
  * Author URI:  https://www.linknacional.com.br
  * License:     GNU General Public License v3 or later
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
