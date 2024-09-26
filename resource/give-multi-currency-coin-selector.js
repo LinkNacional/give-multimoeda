@@ -2,31 +2,33 @@ window.addEventListener("load", function () {
     // Get the div element using its class
     const rootDiv = document.querySelector('.root-data-givewp-embed');
 
-    // Find the iframe inside this div
-    const iframeFormBuilder = rootDiv.querySelector('iframe');
+    if(rootDiv) {
+        // Find the iframe inside this div
+        const iframeFormBuilder = rootDiv.querySelector('iframe');
 
-    if(iframeFormBuilder) {
-        const iframeDoc = iframeFormBuilder.contentDocument || iframeFormBuilder.contentWindow.document
+        if(iframeFormBuilder) {
+            const iframeDoc = iframeFormBuilder.contentDocument || iframeFormBuilder.contentWindow.document
 
-        if(iframeDoc) {
-            const lknAmountCustom = iframeDoc.getElementById('amount-custom')
+            if(iframeDoc) {
+                const lknAmountCustom = iframeDoc.getElementById('amount-custom')
 
-            if(lknAmountCustom){
-                lknAmountCustom.addEventListener('keydown',lknPreventSpecificKeys)
+                if(lknAmountCustom){
+                    lknAmountCustom.addEventListener('keydown',lknPreventSpecificKeys)
 
-                lknAmountCustom.addEventListener('blur', () => {
-                setTimeout(() => {
-                    const hiddenAmount = iframeDoc.getElementsByName('amount')[0]
+                    lknAmountCustom.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        const hiddenAmount = iframeDoc.getElementsByName('amount')[0]
 
-                    if(hiddenAmount) {
-                        const result = lknFormatAndRoundNumber(lknAmountCustom.value)
+                        if(hiddenAmount) {
+                            const result = lknFormatAndRoundNumber(lknAmountCustom.value)
 
-                        if(result && result > 0) {
-                            hiddenAmount.value = result
+                            if(result && result > 0) {
+                                hiddenAmount.value = result
+                            }
                         }
-                    }
-                }, 1000)
-            })
+                    }, 1000)
+                })
+                }
             }
         }
     }
