@@ -1,3 +1,6 @@
+# 3.0.2 - 26/09/2024
+* Adição de tratamento para valores com decimal.
+
 # 3.0.1 - 27/08/2024
 * Correção e melhoria visual na exibição do plugin
 
