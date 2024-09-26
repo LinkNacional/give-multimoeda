@@ -185,7 +185,7 @@ final class GiveMultiCurrency {
 
     public function lkn_give_multi_currency_updater() {
         return new Lkn_Puc_Plugin_UpdateChecker(
-            'https://api.linknacional.com.br/v2/u/?slug=give-multimoeda',
+            'https://api.linknacional.com/v2/u/?slug=give-multimoeda',
             GIVE_MULTI_CURRENCY_FILE,//(caso o plugin não precise de compatibilidade com ioncube utilize: __FILE__), //Full path to the main plugin file or functions.php.
             'give-multimoeda'
         );

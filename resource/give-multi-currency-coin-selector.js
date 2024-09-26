@@ -1,4 +1,36 @@
 window.addEventListener("load", function () {
+    // Get the div element using its class
+    const rootDiv = document.querySelector('.root-data-givewp-embed');
+
+    // Find the iframe inside this div
+    const iframeFormBuilder = rootDiv.querySelector('iframe');
+
+    if(iframeFormBuilder) {
+        const iframeDoc = iframeFormBuilder.contentDocument || iframeFormBuilder.contentWindow.document
+
+        if(iframeDoc) {
+            const lknAmountCustom = iframeDoc.getElementById('amount-custom')
+
+            if(lknAmountCustom){
+                lknAmountCustom.addEventListener('keydown',lknPreventSpecificKeys)
+
+                lknAmountCustom.addEventListener('blur', () => {
+                setTimeout(() => {
+                    const hiddenAmount = iframeDoc.getElementsByName('amount')[0]
+
+                    if(hiddenAmount) {
+                        const result = lknFormatAndRoundNumber(lknAmountCustom.value)
+
+                        if(result && result > 0) {
+                            hiddenAmount.value = result
+                        }
+                    }
+                }, 1000)
+            })
+            }
+        }
+    }
+
     let iframe = document.querySelector("#iFrameResizer0");
     if (iframe) {
         let iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
@@ -7,6 +39,29 @@ window.addEventListener("load", function () {
         initializeGiveWP();
     }
 });
+
+function lknPreventSpecificKeys(event) {
+    // Check for the keys that should be prevented
+    const forbiddenKeys = ['.', ','];
+
+    // If the pressed key matches any of the forbidden keys
+    if (forbiddenKeys.includes(event.key)) {
+        event.preventDefault(); // Prevent the default action
+    }
+}
+
+function lknFormatAndRoundNumber(input) {
+    // Remove todas as letras, deixando apenas números e vírgula
+    let onlyNumbersAndComma = input.replace(/[^\d,]/g, '');
+
+    // Substituir vírgula por ponto
+    let numberWithDot = onlyNumbersAndComma.replace(',', '.');
+
+    // Converter para número e arredondar para inteiro
+    let roundedNumber = Math.round(parseFloat(numberWithDot));
+
+    return roundedNumber;
+}
 
 function initializeGiveWP(iframeDocument = null) {
     if (!iframeDocument) {
