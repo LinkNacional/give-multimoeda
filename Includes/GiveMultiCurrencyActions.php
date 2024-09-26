@@ -2,6 +2,7 @@
 
 namespace Lkn\GiveMultimoedas\Includes;
 
+use Give\Framework\FieldsAPI\Contracts\Node;
 use Give\Framework\FieldsAPI\DonationForm as DonationFormNode;
 use Give\Framework\FieldsAPI\Properties\DonationForm\CurrencySwitcherSetting;
 
@@ -278,10 +279,10 @@ final class GiveMultiCurrencyActions {
             $currencySettings = array();
 
             //Adicionando as moedas Habilitadas no formulário
-            $currencySettings[] = new CurrencySwitcherSetting(strtoupper($standardCurrency), 1, $gateways);
+            $currencySettings[] = new CurrencySwitcherSetting(strtoupper($standardCurrency), 1, $gateways, 0);
 
             foreach ($adminCurrency as $currency) {
-                $currencySettings[] = new CurrencySwitcherSetting($currency, 1, $gateways);
+                $currencySettings[] = new CurrencySwitcherSetting($currency, 1, $gateways, 0);
             }
 
             $form->currencySwitcherSettings(...$currencySettings);
