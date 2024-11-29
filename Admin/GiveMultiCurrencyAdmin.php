@@ -63,7 +63,9 @@ final class GiveMultiCurrencyAdmin {
                         'EUR' => __('Euro (€)', 'give'),
                         'JPY' => __('Iene (¥)', 'give'),
                         'GBP' => __('Libra esterlina (£)', 'give'),
-                        'SAR' => __('Rial Saudita (ر.س)', 'give')
+                        'SAR' => __('Rial Saudita (ر.س)', 'give'),
+                        'MXN' => __('Peso mexicano ($)', 'give'),
+                        'CHF' => __('Franco Suíço (CHF)', 'give')
                     ),
                     'default' => 'BRL',
                 ),
@@ -78,7 +80,9 @@ final class GiveMultiCurrencyAdmin {
                         'EUR' => __('Euro (€)', 'give'),
                         'JPY' => __('Iene (¥)', 'give'),
                         'GBP' => __('Libra esterlina (£)', 'give'),
-                        'SAR' => __('Rial Saudita (ر.س)', 'give')
+                        'SAR' => __('Rial Saudita (ر.س)', 'give'),
+                        'MXN' => __('Peso mexicano ($)', 'give'),
+                        'CHF' => __('Franco Suíço (CHF)', 'give')
                     ),
                 ),
             ),
@@ -121,7 +125,8 @@ final class GiveMultiCurrencyAdmin {
                             'jpy' => __('Iene (¥)', 'give'),
                             'gbp' => __('Libra esterlina (£)', 'give'),
                             'sar' => __('Rial Saudita (ر.س)', 'give'),
-                            'mxn' => __('Peso mexicano ($)', 'give')
+                            'mxn' => __('Peso mexicano ($)', 'give'),
+                            'chf' => __('Franco Suíço (CHF)', 'give')
                         ),
                     );
                 }
@@ -141,7 +146,8 @@ final class GiveMultiCurrencyAdmin {
                             'JPY' => __('Iene (¥)', 'give'),
                             'GBP' => __('Libra esterlina (£)', 'give'),
                             'SAR' => __('Rial Saudita (ر.س)', 'give'),
-                            'MXN' => __('Peso mexicano ($)', 'give')
+                            'MXN' => __('Peso mexicano ($)', 'give'),
+                            'CHF' => __('Franco Suíço (CHF)', 'give')
                         ),
                     );
                 }

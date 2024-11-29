@@ -1,3 +1,6 @@
+# 3.0.3 - 29/11/2024
+* Add new currency Swiss Franc(CHF)
+
 # 3.0.2 - 26/09/2024
 * Adição de tratamento para valores com decimal.
 
