@@ -7,17 +7,34 @@ use Give\Framework\FieldsAPI\DonationForm as DonationFormNode;
 use Give\Framework\FieldsAPI\Properties\DonationForm\CurrencySwitcherSetting;
 
 // Exit, if accessed directly.
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
-final class GiveMultiCurrencyActions {
+final class GiveMultiCurrencyActions
+{
     //  FrontEnd
-    public static function give_import_script_method(): void {
+    public static function give_import_script_method(): void
+    {
         wp_enqueue_script("lkn-multi-currency-coin", GIVE_MULTI_CURRENCY_URL . "resource/give-multi-currency-coin-selector.js");
         $configs = self::lkn_give_multi_currency_get_configs();
         $currency = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_symbols($configs["activeCurrency"]);
-        wp_localize_script("lkn-multi-currency-coin", "varsPhp", array("moedas" => $currency));
+
+        $defaultCurrency = give_get_option('currency');
+        $data = wp_remote_get('https://api.linknacional.com/cotacao/cotacao-' . $defaultCurrency . '.json');
+
+        $response = json_decode($data['body'], true);
+
+        wp_localize_script(
+            "lkn-multi-currency-coin",
+            "varsPhp",
+            array(
+                "moedas" => $currency,
+                "moedaPadrao" => $defaultCurrency,
+                "rates" => $response['rates']
+            )
+        );
+
     }
 
     /**
@@ -25,7 +42,8 @@ final class GiveMultiCurrencyActions {
      *
      * @return array
      */
-    public static function lkn_give_multi_currency_get_configs() {
+    public static function lkn_give_multi_currency_get_configs()
+    {
         $configs = array();
 
         $configs['mcEnabled'] = self::lkn_give_multi_currency_get_enabled();
@@ -42,7 +60,8 @@ final class GiveMultiCurrencyActions {
      * @return string enabled | disabled
      *
      */
-    public static function lkn_give_multi_currency_get_enabled() {
+    public static function lkn_give_multi_currency_get_enabled()
+    {
         $enabled = give_get_option('multi_currency_enabled_setting_field');
 
         return $enabled;
@@ -54,7 +73,8 @@ final class GiveMultiCurrencyActions {
      * @return string enabled | disabled
      *
      */
-    public static function lkn_give_multi_currency_get_default_currency() {
+    public static function lkn_give_multi_currency_get_default_currency()
+    {
         $mainCurrency = give_get_option('currency');
 
         return $mainCurrency;
@@ -65,7 +85,8 @@ final class GiveMultiCurrencyActions {
      *
      * @return string
      */
-    public static function lkn_give_multi_currency_get_default_coin() {
+    public static function lkn_give_multi_currency_get_default_coin()
+    {
         $defaultCoin = give_get_option('multi_currency_default_currency');
 
         return $defaultCoin;
@@ -76,10 +97,11 @@ final class GiveMultiCurrencyActions {
      *
      * @return string|array
      */
-    public static function lkn_give_multi_currency_get_active_currency() {
+    public static function lkn_give_multi_currency_get_active_currency()
+    {
         $currency = give_get_option('multi_currency_active_currency');
 
-        if ( ! empty($currency)) {
+        if (! empty($currency)) {
             // Conversion to uppercase
             for ($c = 0; $c < count($currency); $c++) {
                 $currency[$c] = strtoupper($currency[$c]);
@@ -91,10 +113,12 @@ final class GiveMultiCurrencyActions {
         return $currency;
     }
 
-    public static function lkn_give_change_multi_currency($currency) {
+    public static function lkn_give_change_multi_currency($currency)
+    {
         $configs = self::lkn_give_multi_currency_get_configs();
+
         if ("enabled" == $configs["mcEnabled"]) {
-            if ( ! empty($_POST['give-mc-selected-currency']) && wp_verify_nonce($_POST['lkn-give-multi-nonce'], 'lkn-give-multi-currency-nonce') && 'paypal-commerce' !== $_POST['payment-mode']) {
+            if (! empty($_POST['give-mc-selected-currency']) && wp_verify_nonce($_POST['lkn-give-multi-nonce'], 'lkn-give-multi-currency-nonce') && 'paypal-commerce' !== $_POST['payment-mode']) {
                 $currency = $_POST['give-mc-selected-currency'];
             } elseif (isset($_POST["currency"])) {
                 $currency = $_POST['currency'];
@@ -103,7 +127,8 @@ final class GiveMultiCurrencyActions {
         return $currency;
     }
 
-    public static function lkn_give_multi_currency_thousand_separator($separator) {
+    public static function lkn_give_multi_currency_thousand_separator($separator)
+    {
         $configs = self::lkn_give_multi_currency_get_configs();
 
         if ("enabled" == $configs["mcEnabled"]) {
@@ -121,7 +146,8 @@ final class GiveMultiCurrencyActions {
      * @return string
      *
      */
-    public static function lkn_give_multi_currency_decimal_separator($separator) {
+    public static function lkn_give_multi_currency_decimal_separator($separator)
+    {
         $configs = self::lkn_give_multi_currency_get_configs();
 
         // Verifica se a funcionalidade de multi-moeda está habilitada
@@ -140,7 +166,8 @@ final class GiveMultiCurrencyActions {
      * @return string
      *
      */
-    public static function lkn_give_multi_currency_decimal_count($count) {
+    public static function lkn_give_multi_currency_decimal_count($count)
+    {
         $configs = self::lkn_give_multi_currency_get_configs();
 
         if ("enabled" == $configs["mcEnabled"]) {
@@ -161,7 +188,8 @@ final class GiveMultiCurrencyActions {
      * @return bool|void
      *
      */
-    public static function lkn_give_multi_currency_selector($form_id, $args) {
+    public static function lkn_give_multi_currency_selector($form_id, $args)
+    {
         $configs = self::lkn_give_multi_currency_get_configs();
         $pluginEnabled = $configs['mcEnabled'];
         $mainCurrency = $configs['mainCurrency'];
@@ -170,7 +198,7 @@ final class GiveMultiCurrencyActions {
             ?>
 
 <style>
-   .lkn-mc-select-classic {
+    .lkn-mc-select-classic {
         padding: 20px;
         text-align: center;
         margin: 0 auto;
@@ -178,7 +206,7 @@ final class GiveMultiCurrencyActions {
 
     #give-mc-select {
         font-size: 18px;
-        display: block; 
+        display: block;
         margin: 0 auto;
         max-width: 300px;
         padding: 10px;
@@ -268,7 +296,8 @@ final class GiveMultiCurrencyActions {
 
     // GiveWp 3.0.0
 
-    public function lkn_add_currency_selector_to_give_form(DonationFormNode $form, $formId): void {
+    public function lkn_add_currency_selector_to_give_form(DonationFormNode $form, $formId): void
+    {
         $configs = self::lkn_give_multi_currency_get_configs();
         if ("enabled" == $configs["mcEnabled"]) {
             $gateways = $this->lkn_get_gateways($form);
@@ -290,7 +319,8 @@ final class GiveMultiCurrencyActions {
     }
 
     //Pegar os gateways no formato desejado
-    public function lkn_get_gateways($formId): array {
+    public function lkn_get_gateways($formId): array
+    {
         $gateways = give_get_enabled_payment_gateways($formId);
         $gatewaysR = array();
         foreach ($gateways as $gateway => $item) {

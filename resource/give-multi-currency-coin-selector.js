@@ -1,33 +1,34 @@
 window.addEventListener("load", function () {
+
     // Get the div element using its class
     const rootDiv = document.querySelector('.root-data-givewp-embed');
 
-    if(rootDiv) {
+    if (rootDiv) {
         // Find the iframe inside this div
         const iframeFormBuilder = rootDiv.querySelector('iframe');
 
-        if(iframeFormBuilder) {
+        if (iframeFormBuilder) {
             const iframeDoc = iframeFormBuilder.contentDocument || iframeFormBuilder.contentWindow.document
 
-            if(iframeDoc) {
+            if (iframeDoc) {
                 const lknAmountCustom = iframeDoc.getElementById('amount-custom')
 
-                if(lknAmountCustom){
-                    lknAmountCustom.addEventListener('keydown',lknPreventSpecificKeys)
+                if (lknAmountCustom) {
+                    lknAmountCustom.addEventListener('keydown', lknPreventSpecificKeys)
 
                     lknAmountCustom.addEventListener('blur', () => {
-                    setTimeout(() => {
-                        const hiddenAmount = iframeDoc.getElementsByName('amount')[0]
+                        setTimeout(() => {
+                            const hiddenAmount = iframeDoc.getElementsByName('amount')[0]
 
-                        if(hiddenAmount) {
-                            const result = lknFormatAndRoundNumber(lknAmountCustom.value)
+                            if (hiddenAmount) {
+                                const result = lknFormatAndRoundNumber(lknAmountCustom.value)
 
-                            if(result && result > 0) {
-                                hiddenAmount.value = result
+                                if (result && result > 0) {
+                                    hiddenAmount.value = result
+                                }
                             }
-                        }
-                    }, 1000)
-                })
+                        }, 1000)
+                    })
                 }
             }
         }
@@ -74,10 +75,90 @@ function initializeGiveWP(iframeDocument = null) {
     let give_amount = iframeDocument.querySelector("#give-amount");
     let give_purchase_buttons = iframeDocument.querySelectorAll(".give-donation-level-btn");
 
+    const rootDiv = document.querySelector('.root-data-givewp-embed');
+    if (rootDiv) {
+        const iframeFormBuilder = rootDiv.querySelector('iframe');
+
+
+        if (iframeFormBuilder) {
+            const iframeDoc = iframeFormBuilder.contentDocument || iframeFormBuilder.contentWindow.document
+            const paypalGateway = iframeDoc.querySelector('.givewp-fields-gateways__gateway__fields div .paypal-buttons')
+            if (paypalGateway) {
+                handlePaypalGateway(iframeDoc)
+            }
+        }
+    }
+
     if (select) {
         handleSelectChange(select, inputSelect, iframeDocument);
         addEventListeners(select, inputSelect, give_amount, give_purchase_buttons, iframeDocument);
     }
+}
+
+function handlePaypalGateway(iframeDoc) {
+    observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType === 1) { // Garante que o node é um elemento
+                    let paypalIframe = iframeDoc.querySelector?.('iframe[title="PayPal"]');
+
+                    if (paypalIframe) {
+                        let retries = 0;
+                        const maxRetries = 20;
+
+                        const checkIframeLoaded = setInterval(() => {
+                            if (paypalIframe.contentWindow) {
+                                clearInterval(checkIframeLoaded);
+
+                                if (!paypalIframe.dataset.fetchModified) {
+                                    paypalIframe.dataset.fetchModified = "true";
+
+                                    const originalFetch = paypalIframe.contentWindow.parent.fetch;
+
+                                    paypalIframe.contentWindow.parent.fetch = function (url, options = {}) {
+                                        const paymentGatewayValidade = options.body.get('gatewayId');
+                                        const paymentGatewayCreateOrder = options.body.get('give_payment_mode');
+                                        let currencyConverted = 0;
+
+                                        if (options.body.get('amount') || options.body.get('give-amount')) {
+                                            const currency = iframeDoc.querySelector?.('input[name="currency"]');
+                                            const amount = iframeDoc.querySelector?.('input[name="amount"]');
+
+                                            const amountValue = amount.value
+                                            const currencyValue = varsPhp.rates[currency.value] || 1;
+
+                                            currencyConverted = (amountValue / currencyValue).toFixed(0);
+                                        }
+
+                                        if (url.includes('givewp-route=validate') && paymentGatewayValidade === 'paypal-commerce') {
+                                            options.body.set('amount', currencyConverted);
+                                            options.body.set('currency', varsPhp.moedaPadrao);
+                                        } else if (url.includes('give_paypal_commerce_create_order') && paymentGatewayCreateOrder === 'paypal-commerce') {
+                                            options.body.set('give-amount', currencyConverted);
+                                            options.body.set('give-cs-form-currency', varsPhp.moedaPadrao);
+                                        } else if (url.includes('givewp-route=donate') && paymentGatewayValidade === 'paypal-commerce') {
+                                            options.body.set('amount', currencyConverted);
+                                            options.body.set('currency', varsPhp.moedaPadrao);
+                                        }
+
+                                        return originalFetch(url, options);
+                                    };
+                                }
+                            } else {
+                                retries++;
+                                if (retries >= maxRetries) {
+                                    clearInterval(checkIframeLoaded);
+                                }
+                            }
+                        }, 200);
+                    }
+                }
+            });
+        });
+    });
+
+    // Inicia o observer no body
+    observer.observe(iframeDoc.body, { childList: true, subtree: true });
 }
 
 function handleSelectChange(select, inputSelect, iframeDocument) {
@@ -157,14 +238,14 @@ function updateCurrencySymbol(iframe, value) {
     let finalTotalAmount = iframe.querySelector(".give-final-total-amount");
     let give_purchase_buttons = iframe.querySelectorAll(".give-donation-level-btn");
     let paymentModeElements = iframe.querySelectorAll('[name="payment-mode"]');
-    if(paymentModeElements){
+    if (paymentModeElements) {
         paymentModeElements.forEach(element => {
             element.addEventListener("change", function () {
                 setTimeout(() => {
                     finalTotalAmount = iframe.querySelector(".give-final-total-amount");
                     amountCell = iframe.querySelector('td[data-tag="amount"]');
                     totalCell = iframe.querySelector('th[data-tag="total"]');
-                    if(amountCell && totalCell){
+                    if (amountCell && totalCell) {
                         updateTotalSibol(amountCell, value);
                         updateTotalSibol(totalCell, value);
                     }
@@ -174,7 +255,7 @@ function updateCurrencySymbol(iframe, value) {
         });
     }
 
-    if(inputAmount){
+    if (inputAmount) {
         inputAmount.onchange = () => {
             if (finalTotalAmount) {
                 setTimeout(() => {
