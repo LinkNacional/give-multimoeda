@@ -16,7 +16,7 @@ final class GiveMultiCurrencyActions
     //  FrontEnd
     public static function give_import_script_method(): void
     {
-        wp_enqueue_script("lkn-multi-currency-coin", GIVE_MULTI_CURRENCY_URL . "resource/give-multi-currency-coin-selector.js");
+        wp_enqueue_script("lkn-multi-currency-coin", GIVE_MULTI_CURRENCY_URL . "resource/give-multi-currency-coin-selector.js", array(), GIVE_MULTI_CURRENCY_VERSION, false);
         $configs = self::lkn_give_multi_currency_get_configs();
         $currency = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_symbols($configs["activeCurrency"]);
 
@@ -118,10 +118,10 @@ final class GiveMultiCurrencyActions
         $configs = self::lkn_give_multi_currency_get_configs();
 
         if ("enabled" == $configs["mcEnabled"]) {
-            if (! empty($_POST['give-mc-selected-currency']) && wp_verify_nonce($_POST['lkn-give-multi-nonce'], 'lkn-give-multi-currency-nonce') && 'paypal-commerce' !== $_POST['payment-mode']) {
-                $currency = $_POST['give-mc-selected-currency'];
+            if (! empty($_POST['give-mc-selected-currency']) && isset($_POST['lkn-give-multi-nonce']) && isset($_POST['payment-mode']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['lkn-give-multi-nonce'])), 'lkn-give-multi-currency-nonce') && 'paypal-commerce' !== sanitize_text_field(wp_unslash($_POST['payment-mode']))) {
+                $currency = sanitize_text_field(wp_unslash($_POST['give-mc-selected-currency']));
             } elseif (isset($_POST["currency"])) {
-                $currency = $_POST['currency'];
+                $currency = sanitize_text_field(wp_unslash($_POST['currency']));
             }
         }
         return $currency;
