@@ -79,10 +79,10 @@ function initializeGiveWP(iframeDocument = null) {
     if (rootDiv) {
         const iframeFormBuilder = rootDiv.querySelector('iframe');
 
-
         if (iframeFormBuilder) {
             const iframeDoc = iframeFormBuilder.contentDocument || iframeFormBuilder.contentWindow.document
             const paypalGateway = iframeDoc.querySelector('.givewp-fields-gateways__gateway__fields div .paypal-buttons')
+
             if (paypalGateway) {
                 handlePaypalGateway(iframeDoc)
             }
@@ -92,6 +92,11 @@ function initializeGiveWP(iframeDocument = null) {
     if (select) {
         handleSelectChange(select, inputSelect, iframeDocument);
         addEventListeners(select, inputSelect, give_amount, give_purchase_buttons, iframeDocument);
+
+        const paypalGateway = this.document.getElementById('give-gateway-option-paypal-commerce')
+        if (paypalGateway) {
+            handlePaypalGateway(document)
+        }
     }
 }
 
@@ -117,17 +122,24 @@ function handlePaypalGateway(iframeDoc) {
 
                                     paypalIframe.contentWindow.parent.fetch = function (url, options = {}) {
                                         const paymentGatewayValidade = options.body.get('gatewayId');
-                                        const paymentGatewayCreateOrder = options.body.get('give_payment_mode');
+                                        const paymentGatewayCreateOrder = options.body.get('give_payment_mode') || options.body.get('payment-mode');
                                         let currencyConverted = 0;
+                                        let currencyValue = 1
 
                                         if (options.body.get('amount') || options.body.get('give-amount')) {
-                                            const currency = iframeDoc.querySelector?.('input[name="currency"]');
-                                            const amount = iframeDoc.querySelector?.('input[name="amount"]');
+                                            const currency = iframeDoc.querySelector?.('input[name="currency"]') || iframeDoc.getElementById('give-mc-select')
 
-                                            const amountValue = amount.value
-                                            const currencyValue = varsPhp.rates[currency.value] || 1;
+                                            const amount = iframeDoc.querySelector('input[name="amount"]') || iframeDoc.querySelector('.give-final-total-amount');
+
+                                            const amountValue = amount.value || amount.getAttribute('data-total')
+
+                                            // Obtém o valor selecionado
+                                            currencyValue = varsPhp.rates[currency.value];
 
                                             currencyConverted = (amountValue / currencyValue).toFixed(0);
+
+                                            // Force update
+                                            console.log()
                                         }
 
                                         if (url.includes('givewp-route=validate') && paymentGatewayValidade === 'paypal-commerce') {
@@ -136,9 +148,22 @@ function handlePaypalGateway(iframeDoc) {
                                         } else if (url.includes('give_paypal_commerce_create_order') && paymentGatewayCreateOrder === 'paypal-commerce') {
                                             options.body.set('give-amount', currencyConverted);
                                             options.body.set('give-cs-form-currency', varsPhp.moedaPadrao);
+                                            options.body.set('give-mc-selected-currency', varsPhp.moedaPadrao);
+                                        } else if (url.includes('give_paypal_commerce_approve_order') && paymentGatewayCreateOrder === 'paypal-commerce') {
+                                            options.body.set('give-amount', currencyConverted);
+                                            options.body.set('give-cs-form-currency', varsPhp.moedaPadrao);
+                                            options.body.set('give-mc-selected-currency', varsPhp.moedaPadrao);
                                         } else if (url.includes('givewp-route=donate') && paymentGatewayValidade === 'paypal-commerce') {
                                             options.body.set('amount', currencyConverted);
                                             options.body.set('currency', varsPhp.moedaPadrao);
+                                        } else if (url.includes('wp-admin/admin-ajax.php') && options.body.get('give-amount')) {
+                                            const inputtest = iframeDoc.querySelector('input[name="give-price-id"]')
+                                            inputtest.value = "custom"
+                                            const legacyAmount = iframeDoc.getElementById('give-amount')
+                                            if (legacyAmount) {
+                                                legacyAmount.value = currencyConverted
+                                                legacyAmount.dispatchEvent(new Event('click', { bubbles: true }));
+                                            }
                                         }
 
                                         return originalFetch(url, options);
@@ -150,7 +175,7 @@ function handlePaypalGateway(iframeDoc) {
                                     clearInterval(checkIframeLoaded);
                                 }
                             }
-                        }, 200);
+                        }, 500);
                     }
                 }
             });
