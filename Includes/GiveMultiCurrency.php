@@ -161,26 +161,6 @@ final class GiveMultiCurrency
         $this->loader->add_filter('give_get_settings_general', $plugin_admin, 'lkn_give_multi_currency_add_setting_into_existing_tab');
         $this->loader->add_filter('give_metabox_form_data_settings', $plugin_admin, 'setup_setting', 999);
         $this->loader->add_action("give_init", $this, "lkn_give_multi_currency_updater");
-
-        $this->loader->add_filter('give_payment_gateways', $this, 'lkn_give_multi_currency_paypal_gateway', 10, 1);
-    }
-
-    public function lkn_give_multi_currency_paypal_gateway($gateways)
-    {
-        $give_settings = get_option('give_settings');
-
-        if (!empty($give_settings['gateways']['paypal-commerce'])) {
-            wp_deregister_script('paypal-commerce');
-            wp_enqueue_script('paypal-commerce', GIVE_MULTI_CURRENCY_URL . 'resource/payPalCommerceGateway.js', array('react', 'wp-components', 'wp-i18n'), GIVE_MULTI_CURRENCY_VERSION, true);
-            wp_localize_script('paypal-commerce', 'giveMulti', [
-                'currency' => $give_settings['currency'],
-            ]);
-
-
-            Language::setScriptTranslations('paypal-commerce');
-        }
-
-        return $gateways;
     }
 
     private function public_hooks(): void

@@ -40,6 +40,11 @@ final class GiveMultiCurrencyActions
                 "rates" => $response['rates']
             )
         );
+
+        wp_enqueue_script('paypal-commerce', GIVE_MULTI_CURRENCY_URL . 'resource/payPalCommerceGateway.js', array('react', 'wp-components', 'wp-i18n'), GIVE_MULTI_CURRENCY_VERSION, true);
+        wp_localize_script('paypal-commerce', 'giveMulti', [
+            'currency' => $give_settings['currency'],
+        ]);
     }
 
     /**

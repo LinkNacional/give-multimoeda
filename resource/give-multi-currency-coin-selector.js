@@ -81,11 +81,25 @@ function initializeGiveWP(iframeDocument = null) {
 
         if (iframeFormBuilder) {
             const iframeDoc = iframeFormBuilder.contentDocument || iframeFormBuilder.contentWindow.document
-            const paypalGateway = iframeDoc.querySelector('.givewp-fields-gateways__gateway__fields div .paypal-buttons')
 
-            if (paypalGateway) {
-                handlePaypalGateway(iframeDoc)
-            }
+            let foundElement = false
+            const observer = new MutationObserver(() => {
+                const paypalGateway = iframeDoc.querySelector('.givewp-fields-gateways__gateway__fields div .paypal-buttons')
+
+                if (paypalGateway) {
+                    if (foundElement === false) {
+                        foundElement = true
+                        observer.disconnect()
+                        handlePaypalGateway(iframeDoc)
+                    }
+                }
+            });
+
+            // Configuração para observar mudanças nos nós filhos e na árvore do DOM
+            observer.observe(iframeDoc.body, {
+                childList: true,
+                subtree: true
+            });
         }
     }
 
@@ -114,6 +128,7 @@ function handlePaypalGateway(iframeDoc) {
                         const checkIframeLoaded = setInterval(() => {
                             if (paypalIframe.contentWindow) {
                                 clearInterval(checkIframeLoaded);
+                                observer.disconnect();
 
                                 if (!paypalIframe.dataset.fetchModified) {
                                     paypalIframe.dataset.fetchModified = "true";
@@ -127,8 +142,7 @@ function handlePaypalGateway(iframeDoc) {
                                         let currencyValue = 1
 
                                         if (options.body.get('amount') || options.body.get('give-amount')) {
-                                            const currency = iframeDoc.querySelector?.('input[name="currency"]') || iframeDoc.getElementById('give-mc-select')
-
+                                            const currency = iframeDoc.querySelector('input[name="currency"]') || iframeDoc.getElementById('give-mc-select')
                                             const amount = iframeDoc.querySelector('input[name="amount"]') || iframeDoc.querySelector('.give-final-total-amount');
 
                                             const amountValue = amount.value || amount.getAttribute('data-total')
@@ -137,9 +151,6 @@ function handlePaypalGateway(iframeDoc) {
                                             currencyValue = varsPhp.rates[currency.value];
 
                                             currencyConverted = (amountValue / currencyValue).toFixed(0);
-
-                                            // Force update
-                                            console.log()
                                         }
 
                                         if (url.includes('givewp-route=validate') && paymentGatewayValidade === 'paypal-commerce') {
@@ -156,9 +167,11 @@ function handlePaypalGateway(iframeDoc) {
                                         } else if (url.includes('givewp-route=donate') && paymentGatewayValidade === 'paypal-commerce') {
                                             options.body.set('amount', currencyConverted);
                                             options.body.set('currency', varsPhp.moedaPadrao);
-                                        } else if (url.includes('wp-admin/admin-ajax.php') && options.body.get('give-amount')) {
-                                            const inputtest = iframeDoc.querySelector('input[name="give-price-id"]')
-                                            inputtest.value = "custom"
+                                        } else if (url.includes('wp-admin/admin-ajax.php') && options.body.get('give-amount') && paymentGatewayCreateOrder === 'paypal-commerce') {
+                                            const customValue = iframeDoc.querySelector('input[name="give-price-id"]')
+                                            if (customValue) {
+                                                customValue.value = "custom"
+                                            }
                                             const legacyAmount = iframeDoc.getElementById('give-amount')
                                             if (legacyAmount) {
                                                 legacyAmount.value = currencyConverted
