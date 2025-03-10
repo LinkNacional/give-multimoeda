@@ -109,12 +109,17 @@ final class GiveMultiCurrencyActions
      */
     public static function lkn_give_multi_currency_get_active_currency()
     {
-        $currency = give_get_option('multi_currency_active_currency');
+        $currencies = give_get_option('multi_currency_active_currency');
+        $defaultCurrency = strtolower(give_get_option('multi_currency_default_currency'));
 
-        if (! empty($currency)) {
+        $currencies = array_values(array_filter($currencies, function ($item) use ($defaultCurrency) {
+            return $item !== $defaultCurrency;
+        }));
+
+        if (! empty($currencies)) {
             // Conversion to uppercase
-            for ($c = 0; $c < count($currency); $c++) {
-                $currency[$c] = strtoupper($currency[$c]);
+            for ($c = 0; $c < count($currencies); $c++) {
+                $currency[$c] = strtoupper($currencies[$c]);
             }
         } else {
             return false;
