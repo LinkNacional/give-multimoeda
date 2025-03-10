@@ -83,20 +83,20 @@ function initializeGiveWP(iframeDocument = null) {
             const iframeDoc = iframeFormBuilder.contentDocument || iframeFormBuilder.contentWindow.document
 
             let foundElement = false
-            const observer = new MutationObserver(() => {
+            const MultiMoedaSelectObserver = new MutationObserver(() => {
                 const paypalGateway = iframeDoc.querySelector('.givewp-fields-gateways__gateway__fields div .paypal-buttons')
 
                 if (paypalGateway) {
                     if (foundElement === false) {
                         foundElement = true
-                        observer.disconnect()
+                        MultiMoedaSelectObserver.disconnect()
                         handlePaypalGateway(iframeDoc)
                     }
                 }
             });
 
             // Configuração para observar mudanças nos nós filhos e na árvore do DOM
-            observer.observe(iframeDoc.body, {
+            MultiMoedaSelectObserver.observe(iframeDoc.body, {
                 childList: true,
                 subtree: true
             });
@@ -115,7 +115,7 @@ function initializeGiveWP(iframeDocument = null) {
 }
 
 function handlePaypalGateway(iframeDoc) {
-    observer = new MutationObserver(mutations => {
+    const multiMoedaObserver = new MutationObserver(mutations => {
         mutations.forEach(mutation => {
             mutation.addedNodes.forEach(node => {
                 if (node.nodeType === 1) { // Garante que o node é um elemento
@@ -128,7 +128,7 @@ function handlePaypalGateway(iframeDoc) {
                         const checkIframeLoaded = setInterval(() => {
                             if (paypalIframe.contentWindow) {
                                 clearInterval(checkIframeLoaded);
-                                observer.disconnect();
+                                multiMoedaObserver.disconnect();
 
                                 if (!paypalIframe.dataset.fetchModified) {
                                     paypalIframe.dataset.fetchModified = "true";
@@ -136,12 +136,36 @@ function handlePaypalGateway(iframeDoc) {
                                     const originalFetch = paypalIframe.contentWindow.parent.fetch;
 
                                     paypalIframe.contentWindow.parent.fetch = function (url, options = {}) {
-                                        const paymentGatewayValidade = options.body.get('gatewayId');
-                                        const paymentGatewayCreateOrder = options.body.get('give_payment_mode') || options.body.get('payment-mode');
+                                        let paymentGatewayValidade;
+                                        if (options.body instanceof FormData || options.body instanceof URLSearchParams || typeof options.body === 'object') {
+                                            paymentGatewayValidade = options.body.get('gatewayId');
+                                        } else {
+                                            paymentGatewayValidade = null;
+                                        }
+
+                                        let paymentGatewayCreateOrder;
+                                        if (options.body instanceof FormData || options.body instanceof URLSearchParams || typeof options.body === 'object') {
+                                            paymentGatewayCreateOrder = options.body.get('give_payment_mode') || options.body.get('payment-mode');
+                                        } else {
+                                            paymentGatewayCreateOrder = null;
+                                        }
+
+                                        if (!paymentGatewayCreateOrder && !paymentGatewayValidade) {
+                                            return originalFetch(url, options)
+                                        }
+
                                         let currencyConverted = 0;
                                         let currencyValue = 1
 
-                                        if (options.body.get('amount') || options.body.get('give-amount')) {
+                                        const amount = options.body.get('amount') || options.body?.['amount']
+
+                                        let giveAmount = options.body.get('give-amount') || options.body?.['give-amount']
+
+                                        if (!giveAmount) {
+                                            giveAmount = false
+                                        }
+
+                                        if (amount || giveAmount) {
                                             const currency = iframeDoc.querySelector('input[name="currency"]') || iframeDoc.getElementById('give-mc-select')
                                             const amount = iframeDoc.querySelector('input[name="amount"]') || iframeDoc.querySelector('.give-final-total-amount');
 
@@ -167,7 +191,7 @@ function handlePaypalGateway(iframeDoc) {
                                         } else if (url.includes('givewp-route=donate') && paymentGatewayValidade === 'paypal-commerce') {
                                             options.body.set('amount', currencyConverted);
                                             options.body.set('currency', varsPhp.moedaPadrao);
-                                        } else if (url.includes('wp-admin/admin-ajax.php') && options.body.get('give-amount') && paymentGatewayCreateOrder === 'paypal-commerce') {
+                                        } else if (url.includes('wp-admin/admin-ajax.php') && giveAmount && paymentGatewayCreateOrder === 'paypal-commerce') {
                                             const customValue = iframeDoc.querySelector('input[name="give-price-id"]')
                                             if (customValue) {
                                                 customValue.value = "custom"
@@ -196,7 +220,7 @@ function handlePaypalGateway(iframeDoc) {
     });
 
     // Inicia o observer no body
-    observer.observe(iframeDoc.body, { childList: true, subtree: true });
+    multiMoedaObserver.observe(iframeDoc.body, { childList: true, subtree: true });
 }
 
 function handleSelectChange(select, inputSelect, iframeDocument) {
