@@ -4,10 +4,12 @@ namespace Lkn\GiveMultimoedas\Includes;
 
 use Lkn\GiveMultimoedas\Admin\GiveMultiCurrencyAdmin;
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyLoader;
+use Give\Helpers\Language;
 use Lkn_Puc_Plugin_UpdateChecker;
 use Give\Helpers\Hooks;
 
-final class GiveMultiCurrency {
+final class GiveMultiCurrency
+{
     /**
      * @since
      * @access private
@@ -41,7 +43,8 @@ final class GiveMultiCurrency {
      * @since
      * @access private
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->load_dependency();
         $this->setup_hooks();
     }
@@ -52,9 +55,10 @@ final class GiveMultiCurrency {
      * @since
      * @access public
      */
-    public function install(): void {
+    public function install(): void
+    {
         // Bailout.
-        if ( ! $this->check_environment()) {
+        if (! $this->check_environment()) {
             return;
         }
     }
@@ -67,11 +71,12 @@ final class GiveMultiCurrency {
      * @access public
      *
      */
-    public function check_environment() {
+    public function check_environment()
+    {
         // Is not admin
 
         // Load plugin helper functions.
-        if ( ! function_exists('deactivate_plugins') || ! function_exists('is_plugin_active')) {
+        if (! function_exists('deactivate_plugins') || ! function_exists('is_plugin_active')) {
             require_once ABSPATH . '/wp-admin/includes/plugin.php';
         }
 
@@ -102,7 +107,7 @@ final class GiveMultiCurrency {
                 // Check for if give plugin activate or not.
                 $is_give_active = defined('GIVE_PLUGIN_BASENAME') ? is_plugin_active(GIVE_PLUGIN_BASENAME) : false;
 
-                if ( ! $is_give_active) {
+                if (! $is_give_active) {
                     add_action('admin_notices', array('Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lkn_give_multi_currency_inactive_notice'));
 
                     $is_deactivate_plugin = true;
@@ -131,7 +136,8 @@ final class GiveMultiCurrency {
      * @since
      * @access private
      */
-    private function load_dependency(): void {
+    private function load_dependency(): void
+    {
         $this->loader = new GiveMultiCurrencyLoader();
     }
 
@@ -141,13 +147,15 @@ final class GiveMultiCurrency {
      * @since
      * @access private
      */
-    private function setup_hooks(): void {
+    private function setup_hooks(): void
+    {
         $this->admin_hooks();
         $this->public_hooks();
         $this->loader->run();
     }
 
-    private function admin_hooks(): void {
+    private function admin_hooks(): void
+    {
         register_activation_hook(GIVE_MULTI_CURRENCY_FILE, array($this, 'install'));
         $plugin_admin = new GiveMultiCurrencyAdmin();
         $this->loader->add_filter('give_get_settings_general', $plugin_admin, 'lkn_give_multi_currency_add_setting_into_existing_tab');
@@ -155,7 +163,8 @@ final class GiveMultiCurrency {
         $this->loader->add_action("give_init", $this, "lkn_give_multi_currency_updater");
     }
 
-    private function public_hooks(): void {
+    private function public_hooks(): void
+    {
         // Verificiação de dependencia
         $this->loader->add_action('plugins_loaded', $this, 'check_environment', 999);
         $this->loader->add_filter('plugin_action_links_' . GIVE_MULTI_CURRENCY_BASENAME, 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lkn_give_multi_currency_plugin_row_meta', 10, 2);
@@ -167,10 +176,10 @@ final class GiveMultiCurrency {
 
         // FrontEnd Multimoedas Legado
         $this->loader->add_action('give_before_donation_levels', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_selector', 10, 3);
-        $this->loader->add_action( 'wp_enqueue_scripts', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'give_import_script_method', 11, 1 );
+        $this->loader->add_action('wp_enqueue_scripts', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'give_import_script_method', 11, 1);
         // Front End Multimoedas 3.0.1
 
-        add_action("give_init", function(): void {
+        add_action("give_init", function (): void {
             Hooks::addAction(
                 'givewp_donation_form_schema',
                 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions',
@@ -183,7 +192,8 @@ final class GiveMultiCurrency {
         $this->loader->add_action("init", 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', "give_multi_currency_check_cielo");
     }
 
-    public function lkn_give_multi_currency_updater() {
+    public function lkn_give_multi_currency_updater()
+    {
         return new Lkn_Puc_Plugin_UpdateChecker(
             'https://api.linknacional.com/v2/u/?slug=give-multimoeda',
             GIVE_MULTI_CURRENCY_FILE,//(caso o plugin não precise de compatibilidade com ioncube utilize: __FILE__), //Full path to the main plugin file or functions.php.
@@ -191,4 +201,3 @@ final class GiveMultiCurrency {
         );
     }
 }
-?>

@@ -11,7 +11,8 @@ use Give_Admin_Settings;
  * @copyright   Copyright (c) 2020, Impress.org
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
-final class GiveMultiCurrencyAdmin {
+final class GiveMultiCurrencyAdmin
+{
     /**
      * Admin ID
      *
@@ -29,12 +30,14 @@ final class GiveMultiCurrencyAdmin {
     /**
      * Give_Metabox_Setting_Fields constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->id = 'lkn_multi_currency_fields';
         $this->prefix = '_lkn_multi_currency_';
     }
 
-    public function setup_setting($settings) {
+    public function setup_setting($settings)
+    {
         // Custom metabox settings.
         $settings["{$this->id}_tab"] = array(
             'id' => "{$this->id}_tab",
@@ -76,6 +79,7 @@ final class GiveMultiCurrencyAdmin {
                     'desc' => __('Selecione as moedas que seu formulário irá aceitar.', 'give-multi-currency'),
                     'default' => '1',
                     'options' => array(
+                        'BRL' => __('Real Brasileiro (R$)', 'give'),
                         'USD' => __('Dólar Americano ($)', 'give'),
                         'EUR' => __('Euro (€)', 'give'),
                         'JPY' => __('Iene (¥)', 'give'),
@@ -91,8 +95,9 @@ final class GiveMultiCurrencyAdmin {
         return $settings;
     }
 
-    public function lkn_give_multi_currency_add_setting_into_existing_tab($settings) {
-        if ( ! Give_Admin_Settings::is_setting_page('general', 'currency-settings')) {
+    public function lkn_give_multi_currency_add_setting_into_existing_tab($settings)
+    {
+        if (! Give_Admin_Settings::is_setting_page('general', 'currency-settings')) {
             return $settings;
         }
 
@@ -120,6 +125,7 @@ final class GiveMultiCurrencyAdmin {
                         'type' => 'multicheck',
                         'default' => 1,
                         'options' => array(
+                            'brl' => __('Real Brasileiro (R$)', 'give'),
                             'usd' => __('Dólar Americano ($)', 'give'),
                             'eur' => __('Euro (€)', 'give'),
                             'jpy' => __('Iene (¥)', 'give'),
@@ -170,7 +176,8 @@ final class GiveMultiCurrencyAdmin {
      * @return string $html
      *
      */
-    public function disabled_for_non_legacy_templates_html() {
+    public function disabled_for_non_legacy_templates_html()
+    {
         ob_start(); ?>
 <p class="ffconfs-disabled">
     <?php esc_attr('O formulário customizado não é relevante para o formulário Multi-Step do giveWP. Caso você deseje utilizar o Free Form Plugin é necessário mudar o Template do formulário para opção "Legado".', 'give-multi-currency-notices'); ?>

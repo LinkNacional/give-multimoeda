@@ -1,3 +1,6 @@
+# 3.1.0 - 12/03/2025
+* Conversão de moeda durante o processamento de pagamento Paypal.
+
 # 3.0.3 - 29/11/2024
 * Add new currency Swiss Franc(CHF)
 

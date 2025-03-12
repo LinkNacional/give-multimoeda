@@ -3,7 +3,7 @@
  * Plugin Name: Give - Multi-Moedas
  * Plugin URI:  https://www.linknacional.com.br/wordpress/givewp/multimoeda/
  * Description: Adiciona opções de escolha de moedas aos formulários do GiveWP.
- * Version:     3.0.3
+ * Version:     3.1.0
  * Author:      Link Nacional
  * Requires Plugins: give
  * Author URI:  https://www.linknacional.com.br
@@ -22,7 +22,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrency;
 
 if ( ! defined('GIVE_MULTI_CURRENCY_VERSION')) {
-    define('GIVE_MULTI_CURRENCY_VERSION', '3.0.3');
+    define('GIVE_MULTI_CURRENCY_VERSION', '3.1.0');
 }
 
 // Set it to latest.
