@@ -4,7 +4,7 @@ namespace Lkn\GiveMultimoedas\Includes;
 
 use Lkn\GiveMultimoedas\Admin\GiveMultiCurrencyAdmin;
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyLoader;
-use Give\Helpers\Language;
+use Give\Framework\PaymentGateways\PaymentGatewayRegister;
 use Lkn_Puc_Plugin_UpdateChecker;
 use Give\Helpers\Hooks;
 
@@ -161,6 +161,7 @@ final class GiveMultiCurrency
         $this->loader->add_filter('give_get_settings_general', $plugin_admin, 'lkn_give_multi_currency_add_setting_into_existing_tab');
         $this->loader->add_filter('give_metabox_form_data_settings', $plugin_admin, 'setup_setting', 999);
         $this->loader->add_action("give_init", $this, "lkn_give_multi_currency_updater");
+        $this->loader->add_action('givewp_register_payment_gateway', $this, 'register_gateways_paypal', 999);
     }
 
     private function public_hooks(): void
@@ -190,6 +191,14 @@ final class GiveMultiCurrency
         });
         // Aviso de falta do Cielo
         $this->loader->add_action("init", 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', "give_multi_currency_check_cielo");
+    }
+
+    public function register_gateways_paypal(PaymentGatewayRegister $registrar)
+    {
+        if ($registrar->hasPaymentGateway('paypal-commerce')) {
+            $registrar->unregisterGateway('paypal-commerce');
+            $registrar->registerGateway(GiveMultiCurrencyPaypalGateway::class);
+        }
     }
 
     public function lkn_give_multi_currency_updater()
