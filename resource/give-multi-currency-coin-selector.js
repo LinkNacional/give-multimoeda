@@ -123,7 +123,8 @@ function handlePaypalGateway(iframeDoc) {
 
                     if (paypalIframe) {
                         let retries = 0;
-                        const maxRetries = 20;
+                        const maxRetries = 30;
+
 
                         const checkIframeLoaded = setInterval(() => {
                             if (paypalIframe.contentWindow) {
@@ -134,6 +135,7 @@ function handlePaypalGateway(iframeDoc) {
                                     paypalIframe.dataset.fetchModified = "true";
 
                                     const originalFetch = paypalIframe.contentWindow.parent.fetch;
+
 
                                     paypalIframe.contentWindow.parent.fetch = function (url, options = {}) {
                                         let paymentGatewayValidade;
@@ -212,7 +214,7 @@ function handlePaypalGateway(iframeDoc) {
                                     clearInterval(checkIframeLoaded);
                                 }
                             }
-                        }, 500);
+                        }, 250);
                     }
                 }
             });
