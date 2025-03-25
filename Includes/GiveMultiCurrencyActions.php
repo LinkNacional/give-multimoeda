@@ -104,7 +104,7 @@ final class GiveMultiCurrencyActions
      */
     public static function lkn_give_multi_currency_get_active_currency()
     {
-        $currencies = give_get_option('multi_currency_active_currency');
+        $currencies = give_get_option('multi_currency_active_currency', []);
         $defaultCurrency = strtolower(give_get_option('multi_currency_default_currency'));
 
         $currencies = array_values(array_filter($currencies, function ($item) use ($defaultCurrency) {
