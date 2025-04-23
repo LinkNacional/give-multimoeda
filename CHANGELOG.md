@@ -1,3 +1,6 @@
+# 3.1.1 - 23/04/2025
+* Atualização do script Paypal.
+
 # 3.1.0 - 12/03/2025
 * Conversão de moeda durante o processamento de pagamento Paypal.
 

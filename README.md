@@ -57,6 +57,35 @@ Pronto! Você realizou sua primeira doação via plugin do multimoedas.
 
 ## Changelog
 
+### 3.1.1 - 23/04/2025
+* Atualização do script Paypal.
+
+### 3.1.0 - 12/03/2025
+* Conversão de moeda durante o processamento de pagamento Paypal.
+
+### 3.0.3 - 29/11/2024
+* Add new currency Swiss Franc(CHF)
+
+### 3.0.2 - 26/09/2024
+* Adição de tratamento para valores com decimal.
+
+### 3.0.1 - 27/08/2024
+* Correção e melhoria visual na exibição do plugin
+
+### 3.0.0 - 16/08/2024
+* Adição de suporte ao formulario GiveWP 3.0.0
+* Correção de bugs
+* Limpeza no código
+
+### 2.7.0 - 13/06/2024
+* Adição de suporte a peso mexicano;
+* Adição de notificação para plugins instalados e inativos da Link Nacional.
+
+### 2.6.0 - 23/12/2023
+* Adição de changelogs;
+* Adição de suporte a moeda Rial Saudito;
+* Atualização de API de consulta de cotações.
+
 ### v2.5.2
 - Atualização de endpoint de atualizações;
 - Correção de notices de ativação do plugin;
