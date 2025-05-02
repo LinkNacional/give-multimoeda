@@ -1,3 +1,6 @@
+# 3.1.2 - 02/05/2025
+* Correção no action.
+
 # 3.1.1 - 23/04/2025
 * Atualização do script Paypal.
 
