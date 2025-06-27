@@ -32,9 +32,9 @@ final class GiveMultiCurrencyActions
         $currencyCodes = ['USD', 'EUR', 'BRL', 'JPY', 'GBP', 'SAR', 'MXN', 'CHF'];
         $jsonFilePath = GIVE_MULTI_CURRENCY_DIR . 'Includes/json/fallback_rates.json';
 
-        if (is_wp_error($data) || wp_remote_retrieve_response_code($data) === 200) {
+        if (is_wp_error($data) || wp_remote_retrieve_response_code($data) !== 200) {
             $fallbackData = wp_remote_get('https://api.frankfurter.app/latest?from=' . $defaultCurrency . '&to=' . implode(',', $currencyCodes));
-            if (!is_wp_error($fallbackData) && wp_remote_retrieve_response_code($fallbackData) !== 200) {
+            if (!is_wp_error($fallbackData) && wp_remote_retrieve_response_code($fallbackData) === 200) {
                 $response = json_decode(wp_remote_retrieve_body($fallbackData), true);
                 $response['rates'][$defaultCurrency] = 1;
             } else {

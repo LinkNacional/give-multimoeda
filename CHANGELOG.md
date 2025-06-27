@@ -1,3 +1,6 @@
+# 3.1.3 - 27/06/2025
+* Adição de rotas de fallback em caso de erro na API.
+
 # 3.1.2 - 02/05/2025
 * Correção no action.
 
