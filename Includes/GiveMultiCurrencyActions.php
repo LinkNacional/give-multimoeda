@@ -28,8 +28,20 @@ final class GiveMultiCurrencyActions
 
         $defaultCurrency = give_get_option('currency');
         $data = wp_remote_get('https://api.linknacional.com/cotacao/cotacao-' . $defaultCurrency . '.json');
+        // TODO - Solve this problem with the API
 
-        $response = json_decode($data['body'], true);
+        $currencyCodes = ['USD', 'EUR', 'BRL', 'JPY', 'GBP', 'SAR', 'MXN', 'CHF'];
+
+        if (is_wp_error($data) || wp_remote_retrieve_response_code($data) !== 200) {
+            $fallbackData = wp_remote_get('https://api.frankfurter.app/latest?from=' . $defaultCurrency . '&to=' . implode(',', $currencyCodes));
+            if (!is_wp_error($fallbackData) && wp_remote_retrieve_response_code($fallbackData) === 200) {
+                $response = json_decode(wp_remote_retrieve_body($fallbackData), true);
+                $response['rates'][$defaultCurrency] = 1;
+            }
+
+        } else {
+            $response = json_decode($data['body'], true);
+        }
 
         wp_localize_script(
             "lkn-multi-currency-coin",
