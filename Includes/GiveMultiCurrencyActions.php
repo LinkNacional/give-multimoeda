@@ -38,7 +38,7 @@ final class GiveMultiCurrencyActions
         $defaultCurrency = give_get_option('currency');
         $data = wp_remote_get('https://api.linknacional.com/cotacao/cotacao-' . $defaultCurrency . '.json');
 
-        $currencyCodes = ['USD', 'EUR', 'BRL', 'JPY', 'GBP', 'SAR', 'MXN', 'CHF'];
+        $currencyCodes = GIVE_MULTI_CURRENCY_CURRENCIES;
         $jsonFilePath = GIVE_MULTI_CURRENCY_DIR . 'Includes/json/fallback_rates.json';
 
         if (is_wp_error($data) || wp_remote_retrieve_response_code($data) !== 200) {
@@ -51,11 +51,13 @@ final class GiveMultiCurrencyActions
             }
         } else {
             $response = json_decode($data['body'], true);
-            $wp_filesystem->put_contents(
-                $jsonFilePath,
-                json_encode(['rates' => $response['rates']]),
-                FS_CHMOD_FILE // Define permissões apropriadas
-            );
+            if (WP_Filesystem()) {
+                $wp_filesystem->put_contents(
+                    $jsonFilePath,
+                    json_encode(['rates' => $response['rates']]),
+                    FS_CHMOD_FILE // Define permissões apropriadas
+                );
+            }
         }
 
         wp_localize_script(

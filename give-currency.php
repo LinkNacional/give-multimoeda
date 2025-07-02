@@ -51,6 +51,13 @@ if (! defined('GIVE_MULTI_CURRENCY_BASENAME')) {
     define('GIVE_MULTI_CURRENCY_BASENAME', plugin_basename(GIVE_MULTI_CURRENCY_FILE));
 }
 
+if (! defined('GIVE_MULTI_CURRENCY_CURRENCIES')) {
+    define(
+        'GIVE_MULTI_CURRENCY_CURRENCIES',
+        ['USD', 'EUR', 'BRL', 'JPY', 'GBP', 'SAR', 'MXN', 'CHF']
+    )   ;
+}
+
 function Give_Multi_Currency()
 {
     return new GiveMultiCurrency();
