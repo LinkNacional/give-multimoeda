@@ -23,6 +23,15 @@ final class GiveMultiCurrencyActions
             GIVE_MULTI_CURRENCY_VERSION,
             false
         );
+        global $wp_filesystem;
+
+        // Inicializa o WP_Filesystem
+        if (!function_exists('WP_Filesystem')) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+        }
+        WP_Filesystem();
+
+
         $configs = self::lkn_give_multi_currency_get_configs();
         $currency = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_symbols($configs["activeCurrency"]);
 
@@ -38,11 +47,15 @@ final class GiveMultiCurrencyActions
                 $response = json_decode(wp_remote_retrieve_body($fallbackData), true);
                 $response['rates'][$defaultCurrency] = 1;
             } else {
-                $response = json_decode(file_get_contents($jsonFilePath), true);
+                $response = json_decode($wp_filesystem->get_contents($jsonFilePath), true);
             }
         } else {
             $response = json_decode($data['body'], true);
-            file_put_contents($jsonFilePath, json_encode(['rates' => $response['rates']]));
+            $wp_filesystem->put_contents(
+                $jsonFilePath,
+                json_encode(['rates' => $response['rates']]),
+                FS_CHMOD_FILE // Define permissões apropriadas
+            );
         }
 
         wp_localize_script(
