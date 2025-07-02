@@ -51,7 +51,7 @@ final class GiveMultiCurrencyActions
             }
         } else {
             $response = json_decode($data['body'], true);
-            if (WP_Filesystem()) {
+            if ($wp_filesystem) {
                 $wp_filesystem->put_contents(
                     $jsonFilePath,
                     json_encode(['rates' => $response['rates']]),
