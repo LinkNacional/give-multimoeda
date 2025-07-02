@@ -23,13 +23,42 @@ final class GiveMultiCurrencyActions
             GIVE_MULTI_CURRENCY_VERSION,
             false
         );
+        global $wp_filesystem;
+
+        // Inicializa o WP_Filesystem
+        if (!function_exists('WP_Filesystem')) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+        }
+        WP_Filesystem();
+
+
         $configs = self::lkn_give_multi_currency_get_configs();
         $currency = GiveMultiCurrencyHelper::lkn_give_multi_currency_get_symbols($configs["activeCurrency"]);
 
         $defaultCurrency = give_get_option('currency');
         $data = wp_remote_get('https://api.linknacional.com/cotacao/cotacao-' . $defaultCurrency . '.json');
 
-        $response = json_decode($data['body'], true);
+        $currencyCodes = GIVE_MULTI_CURRENCY_CURRENCIES;
+        $jsonFilePath = GIVE_MULTI_CURRENCY_DIR . 'Includes/json/fallback_rates.json';
+
+        if (is_wp_error($data) || wp_remote_retrieve_response_code($data) !== 200) {
+            $fallbackData = wp_remote_get('https://api.frankfurter.app/latest?from=' . $defaultCurrency . '&to=' . implode(',', $currencyCodes));
+            if (!is_wp_error($fallbackData) && wp_remote_retrieve_response_code($fallbackData) === 200) {
+                $response = json_decode(wp_remote_retrieve_body($fallbackData), true);
+                $response['rates'][$defaultCurrency] = 1;
+            } else {
+                $response = json_decode($wp_filesystem->get_contents($jsonFilePath), true);
+            }
+        } else {
+            $response = json_decode($data['body'], true);
+            if ($wp_filesystem) {
+                $wp_filesystem->put_contents(
+                    $jsonFilePath,
+                    json_encode(['rates' => $response['rates']]),
+                    FS_CHMOD_FILE // Define permissões apropriadas
+                );
+            }
+        }
 
         wp_localize_script(
             "lkn-multi-currency-coin",
