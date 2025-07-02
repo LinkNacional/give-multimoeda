@@ -55,7 +55,7 @@ if (! defined('GIVE_MULTI_CURRENCY_CURRENCIES')) {
     define(
         'GIVE_MULTI_CURRENCY_CURRENCIES',
         ['USD', 'EUR', 'BRL', 'JPY', 'GBP', 'SAR', 'MXN', 'CHF']
-    )   ;
+    );
 }
 
 function Give_Multi_Currency()
