@@ -160,7 +160,6 @@ final class GiveMultiCurrency
         $plugin_admin = new GiveMultiCurrencyAdmin();
         $this->loader->add_filter('give_get_settings_general', $plugin_admin, 'lkn_give_multi_currency_add_setting_into_existing_tab');
         $this->loader->add_filter('give_metabox_form_data_settings', $plugin_admin, 'setup_setting', 999);
-        $this->loader->add_action("give_init", $this, "lkn_give_multi_currency_updater");
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'register_gateways_paypal', 999);
     }
 
@@ -199,14 +198,5 @@ final class GiveMultiCurrency
             $registrar->unregisterGateway('paypal-commerce');
             $registrar->registerGateway(GiveMultiCurrencyPaypalGateway::class);
         }
-    }
-
-    public function lkn_give_multi_currency_updater()
-    {
-        return new Lkn_Puc_Plugin_UpdateChecker(
-            'https://api.linknacional.com/v2/u/?slug=give-multimoeda',
-            GIVE_MULTI_CURRENCY_FILE,//(caso o plugin não precise de compatibilidade com ioncube utilize: __FILE__), //Full path to the main plugin file or functions.php.
-            'give-multimoeda'
-        );
     }
 }

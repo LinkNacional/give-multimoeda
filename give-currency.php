@@ -17,7 +17,6 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/Includes/plugin-updater/plugin-update-checker.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrency;
