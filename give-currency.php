@@ -1,15 +1,17 @@
 <?php
 
 /**
- * Plugin Name: Give - Multi-Moedas
+ * Plugin Name: Give - Multi Currency
  * Plugin URI:  https://www.linknacional.com.br/wordpress/givewp/multimoeda/
- * Description: Adiciona opções de escolha de moedas aos formulários do GiveWP.
- * Version:     3.1.3
+ * Description: Adds currency selection options to GiveWP forms.
+ * Version:     3.1.4
  * Author:      Link Nacional
  * Requires Plugins: give
  * Author URI:  https://www.linknacional.com.br
  * License:     GNU General Public License v3 or later
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain: give-multi-currency
+ * Domain Path: /languages
  */
 
 // Exit if accessed directly. ABSPATH is attribute in wp-admin - plugin.php
@@ -17,13 +19,12 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/Includes/plugin-updater/plugin-update-checker.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Lkn\GiveMultimoedas\Includes\GiveMultiCurrency;
 
 if (! defined('GIVE_MULTI_CURRENCY_VERSION')) {
-    define('GIVE_MULTI_CURRENCY_VERSION', '3.1.3');
+    define('GIVE_MULTI_CURRENCY_VERSION', '3.1.4');
 }
 
 // Set it to latest.

@@ -12,13 +12,13 @@ final class GiveMultiCurrencyHelper {
         // Admin notice.
         $message = sprintf(
             '<strong>%1$s</strong> %2$s <a href="%3$s" target="_blank">%4$s</a>  %5$s %6$s+ %7$s.',
-            __('Activation Error:', 'give'),
-            __('You must have', 'give'),
+            __('Activation Error:', 'give-multi-currency'),
+            __('You must have', 'give-multi-currency'),
             'https://givewp.com',
-            __('Give', 'give'),
-            __('version', 'give'),
+            __('Give', 'give-multi-currency'),
+            __('version', 'give-multi-currency'),
             GIVE_MULTI_CURRENCY_MIN_GIVE_VERSION,
-            __('for the Give Multi Currency add-on to activate', 'give')
+            __('for the Give Multi Currency add-on to activate', 'give-multi-currency')
         );
         $message = wp_kses_post( $message );
         Give()->notices->register_notice(array(
@@ -38,11 +38,11 @@ final class GiveMultiCurrencyHelper {
         // Admin notice.
         $message = sprintf(
             '<div class="notice notice-error"><p><strong>%1$s</strong> %2$s <a href="%3$s" target="_blank">%4$s</a> %5$s.</p></div>',
-            __('Activation Error:', 'give'),
-            __('You must have', 'give'),
+            __('Activation Error:', 'give-multi-currency'),
+            __('You must have', 'give-multi-currency'),
             'https://givewp.com',
-            __('Give', 'give'),
-            __(' plugin installed and activated for the Give Multi Currency to activate', 'give')
+            __('Give', 'give-multi-currency'),
+            __(' plugin installed and activated for the Give Multi Currency to activate', 'give-multi-currency')
         );
 
         echo wp_kses_post($message);
@@ -62,7 +62,7 @@ final class GiveMultiCurrencyHelper {
         $new_meta_links['setting'] = sprintf(
             '<a href="%1$s">%2$s</a>',
             admin_url('edit.php?post_type=give_forms&page=give-settings&tab=general&section=currency-settings'),
-            __('Settings', 'give')
+            __('Settings', 'give-multi-currency')
         );
 
         return array_merge($plugin_meta, $new_meta_links);
@@ -80,7 +80,7 @@ final class GiveMultiCurrencyHelper {
             // Only runs on admin.
             $args = array(
                 'file' => GIVE_MULTI_CURRENCY_FILE,
-                'name' => __('Multi Currency', 'give'),
+                'name' => __('Multi Currency', 'give-multi-currency'),
                 'version' => GIVE_MULTI_CURRENCY_VERSION,
                 'settings_url' => admin_url('edit.php?post_type=give_forms&page=give-settings&tab=general&section=currency-settings'),
                 'documentation_url' => 'https://www.linknacional.com.br/wordpress/givewp/',
@@ -101,7 +101,7 @@ final class GiveMultiCurrencyHelper {
             $exRate[$currency] = $result->rates->BRL;
         }
 
-        // retorna um array com o rate das moedas ativas
+        // returns an array with the exchange rates of active currencies
         return wp_json_encode($exRate);
     }
 
@@ -140,7 +140,12 @@ final class GiveMultiCurrencyHelper {
     }
 
     public static function __lkn_multicurrency_linkn_inactive_notice(): void {
-        $message = '<div id="message" class="error"><p><b>Atenção: </b>O plugin Give Multimoedas detectou que o plugin Cielo API 3.0 encontra-se inativo. <a href="plugins.php">Ativar na área de plugins</a>.</div>';
+        $message = sprintf(
+            '<div id="message" class="error"><p><b>%1$s</b> %2$s <a href="plugins.php">%3$s</a>.</div>',
+            __('Attention:', 'give-multi-currency'),
+            __('The Give Multi Currency plugin detected that the Cielo API 3.0 plugin is inactive.', 'give-multi-currency'),
+            __('Activate in plugins area', 'give-multi-currency')
+        );
         echo wp_kses_post($message);
     }
 

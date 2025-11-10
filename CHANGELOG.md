@@ -1,3 +1,6 @@
+# 3.1.4 - 10/11/2025
+* Remoção do plugin updater.
+
 # 3.1.3 - 27/06/2025
 * Adição de rotas de fallback em caso de erro na API.
 

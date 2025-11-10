@@ -41,52 +41,52 @@ final class GiveMultiCurrencyAdmin
         // Custom metabox settings.
         $settings["{$this->id}_tab"] = array(
             'id' => "{$this->id}_tab",
-            'title' => __('Opções de moedas', 'give-multi-currency'),
+            'title' => __('Currency Options', 'give-multi-currency'),
             'icon-html' => '<span class="dashicons dashicons-money-alt"></span>',
             'fields' => array(
                 array(
                     'id' => "{$this->id}_status",
-                    'name' => __('Opções globais', 'give-multi-currency'),
+                    'name' => __('Global Options', 'give-multi-currency'),
                     'type' => 'radio_inline',
-                    'desc' => __('Habilitar opções globais para o formulário ou desabilitar para usar as opções definidas no formulário.', 'give-multi-currency'),
+                    'desc' => __('Enable global options for the form or disable to use form-specific options.', 'give-multi-currency'),
                     'options' => array(
-                        'enabled' => __('Habilitado', 'give-multi-currency'),
-                        'disabled' => __('Desabilitado', 'give-multi-currency'),
+                        'enabled' => __('Enabled', 'give-multi-currency'),
+                        'disabled' => __('Disabled', 'give-multi-currency'),
                     ),
                     'default' => 'enabled',
                 ),
                 array(
                     'id' => "{$this->id}_default_currency",
-                    'name' => __('Moeda padrão', 'give-multi-currency'),
+                    'name' => __('Default Currency', 'give-multi-currency'),
                     'type' => 'radio',
-                    'desc' => __('Selecione a moeda padrão.', 'give-multi-currency'),
+                    'desc' => __('Select the default currency.', 'give-multi-currency'),
                     'options' => array(
-                        'BRL' => __('Real Brasileiro (R$)', 'give'),
-                        'USD' => __('Dólar Americano ($)', 'give'),
-                        'EUR' => __('Euro (€)', 'give'),
-                        'JPY' => __('Iene (¥)', 'give'),
-                        'GBP' => __('Libra esterlina (£)', 'give'),
-                        'SAR' => __('Rial Saudita (ر.س)', 'give'),
-                        'MXN' => __('Peso mexicano ($)', 'give'),
-                        'CHF' => __('Franco Suíço (CHF)', 'give')
+                        'BRL' => __('Brazilian Real (R$)', 'give-multi-currency'),
+                        'USD' => __('US Dollar ($)', 'give-multi-currency'),
+                        'EUR' => __('Euro (€)', 'give-multi-currency'),
+                        'JPY' => __('Japanese Yen (¥)', 'give-multi-currency'),
+                        'GBP' => __('British Pound (£)', 'give-multi-currency'),
+                        'SAR' => __('Saudi Riyal (ر.س)', 'give-multi-currency'),
+                        'MXN' => __('Mexican Peso ($)', 'give-multi-currency'),
+                        'CHF' => __('Swiss Franc (CHF)', 'give-multi-currency')
                     ),
                     'default' => 'BRL',
                 ),
                 array(
                     'id' => "{$this->id}_active_currency",
-                    'name' => __('Moedas Habilitadas', 'give-multi-currency'),
+                    'name' => __('Enabled Currencies', 'give-multi-currency'),
                     'type' => 'multicheck',
-                    'desc' => __('Selecione as moedas que seu formulário irá aceitar.', 'give-multi-currency'),
+                    'desc' => __('Select the currencies your form will accept.', 'give-multi-currency'),
                     'default' => '1',
                     'options' => array(
-                        'BRL' => __('Real Brasileiro (R$)', 'give'),
-                        'USD' => __('Dólar Americano ($)', 'give'),
-                        'EUR' => __('Euro (€)', 'give'),
-                        'JPY' => __('Iene (¥)', 'give'),
-                        'GBP' => __('Libra esterlina (£)', 'give'),
-                        'SAR' => __('Rial Saudita (ر.س)', 'give'),
-                        'MXN' => __('Peso mexicano ($)', 'give'),
-                        'CHF' => __('Franco Suíço (CHF)', 'give')
+                        'BRL' => __('Brazilian Real (R$)', 'give-multi-currency'),
+                        'USD' => __('US Dollar ($)', 'give-multi-currency'),
+                        'EUR' => __('Euro (€)', 'give-multi-currency'),
+                        'JPY' => __('Japanese Yen (¥)', 'give-multi-currency'),
+                        'GBP' => __('British Pound (£)', 'give-multi-currency'),
+                        'SAR' => __('Saudi Riyal (ر.س)', 'give-multi-currency'),
+                        'MXN' => __('Mexican Peso ($)', 'give-multi-currency'),
+                        'CHF' => __('Swiss Franc (CHF)', 'give-multi-currency')
                     ),
                 ),
             ),
@@ -106,33 +106,33 @@ final class GiveMultiCurrencyAdmin
         foreach ($settings as $key => $setting) {
             if ('give_docs_link' === $setting['type']) { // You can use id to compare or create own sub section to add new setting.
                 $new_setting[] = array(
-                    'name' => __('Habilitar Multi Moedas', 'give'),
+                    'name' => __('Enable Multi Currency', 'give-multi-currency'),
                     'id' => 'multi_currency_enabled_setting_field',
-                    'desc' => __('Ative ou desative o plugin Multi Moedas, esse plugin só funcionará com a moeda real (BRL - R$)'),
+                    'desc' => __('Enable or disable the Multi Currency plugin. This plugin only works with Brazilian Real (BRL - R$)', 'give-multi-currency'),
                     'type' => 'radio',
                     'default' => 'disabled',
                     'options' => array(
-                        'enabled' => __('Habilitado', 'give'),
-                        'disabled' => __('Desabilitado', 'give'),
+                        'enabled' => __('Enabled', 'give-multi-currency'),
+                        'disabled' => __('Disabled', 'give-multi-currency'),
                     ),
                 );
                 // Only apears if 'multi_currency_enabled_setting_field' is 'enabled'
                 if (give_get_option('multi_currency_enabled_setting_field') == 'enabled' && give_get_option('currency') == 'BRL') {
                     $new_setting[] = array(
-                        'name' => __('Moedas Habilitadas', 'give'),
+                        'name' => __('Enabled Currencies', 'give-multi-currency'),
                         'id' => 'multi_currency_active_currency',
-                        'desc' => __('Selecione as moedas que seu formulário irá aceitar') . '<br><a href="https://www.linknacional.com.br/wordpress/givewp/multimoeda/#nova-moeda" target="_blank">Adicionar nova moeda</a>',
+                        'desc' => __('Select the currencies your form will accept', 'give-multi-currency') . '<br><a href="https://www.linknacional.com.br/wordpress/givewp/multimoeda/#nova-moeda" target="_blank">' . __('Add new currency', 'give-multi-currency') . '</a>',
                         'type' => 'multicheck',
                         'default' => 1,
                         'options' => array(
-                            'brl' => __('Real Brasileiro (R$)', 'give'),
-                            'usd' => __('Dólar Americano ($)', 'give'),
-                            'eur' => __('Euro (€)', 'give'),
-                            'jpy' => __('Iene (¥)', 'give'),
-                            'gbp' => __('Libra esterlina (£)', 'give'),
-                            'sar' => __('Rial Saudita (ر.س)', 'give'),
-                            'mxn' => __('Peso mexicano ($)', 'give'),
-                            'chf' => __('Franco Suíço (CHF)', 'give')
+                            'brl' => __('Brazilian Real (R$)', 'give-multi-currency'),
+                            'usd' => __('US Dollar ($)', 'give-multi-currency'),
+                            'eur' => __('Euro (€)', 'give-multi-currency'),
+                            'jpy' => __('Japanese Yen (¥)', 'give-multi-currency'),
+                            'gbp' => __('British Pound (£)', 'give-multi-currency'),
+                            'sar' => __('Saudi Riyal (ر.س)', 'give-multi-currency'),
+                            'mxn' => __('Mexican Peso ($)', 'give-multi-currency'),
+                            'chf' => __('Swiss Franc (CHF)', 'give-multi-currency')
                         ),
                     );
                 }
@@ -140,20 +140,20 @@ final class GiveMultiCurrencyAdmin
                 // Default currency option
                 if (give_get_option('multi_currency_enabled_setting_field') == 'enabled' && give_get_option('currency') == 'BRL') {
                     $new_setting[] = array(
-                        'name' => __('Moeda padrão', 'give'),
+                        'name' => __('Default Currency', 'give-multi-currency'),
                         'id' => 'multi_currency_default_currency',
-                        'desc' => __('Selecione a moeda padrão'),
+                        'desc' => __('Select the default currency', 'give-multi-currency'),
                         'type' => 'radio',
                         'default' => 'BRL',
                         'options' => array(
-                            'BRL' => __('Real Brasileiro (R$)', 'give'),
-                            'USD' => __('Dólar Americano ($)', 'give'),
-                            'EUR' => __('Euro (€)', 'give'),
-                            'JPY' => __('Iene (¥)', 'give'),
-                            'GBP' => __('Libra esterlina (£)', 'give'),
-                            'SAR' => __('Rial Saudita (ر.س)', 'give'),
-                            'MXN' => __('Peso mexicano ($)', 'give'),
-                            'CHF' => __('Franco Suíço (CHF)', 'give')
+                            'BRL' => __('Brazilian Real (R$)', 'give-multi-currency'),
+                            'USD' => __('US Dollar ($)', 'give-multi-currency'),
+                            'EUR' => __('Euro (€)', 'give-multi-currency'),
+                            'JPY' => __('Japanese Yen (¥)', 'give-multi-currency'),
+                            'GBP' => __('British Pound (£)', 'give-multi-currency'),
+                            'SAR' => __('Saudi Riyal (ر.س)', 'give-multi-currency'),
+                            'MXN' => __('Mexican Peso ($)', 'give-multi-currency'),
+                            'CHF' => __('Swiss Franc (CHF)', 'give-multi-currency')
                         ),
                     );
                 }
@@ -180,11 +180,12 @@ final class GiveMultiCurrencyAdmin
     {
         ob_start(); ?>
 <p class="ffconfs-disabled">
-    <?php esc_attr('O formulário customizado não é relevante para o formulário Multi-Step do giveWP. Caso você deseje utilizar o Free Form Plugin é necessário mudar o Template do formulário para opção "Legado".', 'give-multi-currency-notices'); ?>
+    <?php esc_html_e('Custom form is not relevant for GiveWP Multi-Step forms. If you want to use the Free Form Plugin, you need to change the form template to "Legacy" option.', 'give-multi-currency'); ?>
 </p>
 <?php
 
         $html = ob_get_contents();
+        ob_end_clean();
 
         return $html;
     }
