@@ -189,7 +189,7 @@ Yes! Visit our [support page](https://www.linknacional.com.br/suporte/) or creat
 * Updated exchange rate API endpoints
 * Added comprehensive changelog system
 
-[View complete changelog](https://github.com/LinkNacional/give-multimoeda/blob/main/CHANGELOG.md)
+[View complete changelog](https://github.com/LinkNacional/give-multi-currency/blob/main/CHANGELOG.md)
 
 == Upgrade Notice ==
 = 3.1.4 =
@@ -210,7 +210,7 @@ For technical support, feature requests, or bug reports:
 
 * **Support Portal**: [Link Nacional Support](https://www.linknacional.com.br/suporte/)
 * **Documentation**: [Plugin Documentation](https://www.linknacional.com.br/wordpress/givewp/multimoeda/)
-* **GitHub**: Report issues on our [GitHub repository](https://github.com/LinkNacional/give-multimoeda)
+* **GitHub**: Report issues on our [GitHub repository](https://github.com/LinkNacional/give-multi-currency)
 
 **Professional WordPress Development**: Need custom modifications or have a special project? [Contact our development team](https://www.linknacional.com.br/wordpress/)
 
