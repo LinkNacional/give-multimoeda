@@ -4,7 +4,7 @@ Donate link: https://www.linknacional.com.br/wordpress/plugins/
 Tags: givewp, donations, multi-currency, currency converter, international payments
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 Requires PHP: 7.4
 Requires Plugins: give
 License: GPLv3 or later
@@ -140,6 +140,8 @@ Yes! Visit our [support page](https://www.linknacional.com.br/suporte/) or creat
 6. **Multi-language support** - Interface in multiple languages
 
 == Changelog ==
+= 3.1.4 - 2025/11/10 =
+* Remove plugin updater.
 
 = 3.1.3 - 2025/06/27 =
 * Added fallback routes for API error handling
@@ -190,6 +192,8 @@ Yes! Visit our [support page](https://www.linknacional.com.br/suporte/) or creat
 [View complete changelog](https://github.com/LinkNacional/give-multimoeda/blob/main/CHANGELOG.md)
 
 == Upgrade Notice ==
+= 3.1.4 =
+* Remove plugin updater.
 
 = 3.1.3 =
 Important update with improved API reliability and fallback systems. Recommended for all users.
