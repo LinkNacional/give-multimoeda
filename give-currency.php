@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: Give - Multi Currency
+ * Plugin Name: LinkNacional Multi Currency for GiveWP
  * Plugin URI:  https://www.linknacional.com.br/wordpress/givewp/multimoeda/
  * Description: Adds currency selection options to GiveWP forms.
  * Version:     3.1.4
@@ -10,7 +10,7 @@
  * Author URI:  https://www.linknacional.com.br
  * License:     GNU General Public License v3 or later
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain: give-multi-currency
+ * Text Domain: multi-currency-for-give
  * Domain Path: /languages
  */
 
@@ -37,7 +37,7 @@ if (! defined('GIVE_MULTI_CURRENCY_FILE')) {
 }
 
 if (! defined('GIVE_MULTI_CURRENCY_SLUG')) {
-    define('GIVE_MULTI_CURRENCY_SLUG', 'give-multi-currency');
+    define('GIVE_MULTI_CURRENCY_SLUG', 'multi-currency-for-give');
 }
 
 if (! defined('GIVE_MULTI_CURRENCY_DIR')) {

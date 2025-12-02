@@ -18,7 +18,7 @@ final class GiveMultiCurrency
     private $loader;
 
     /**
-     * Give - Multi Currency Admin Object.
+     * LinkNacional Multi Currency for GiveWP Admin Object.
      *
      * @since  1.0.0
      * @access public
@@ -28,7 +28,7 @@ final class GiveMultiCurrency
     public $plugin_admin;
 
     /**
-     * Give - Multi Currency Frontend Object.
+     * LinkNacional Multi Currency for GiveWP Frontend Object.
      *
      * @since  1.0.0
      * @access public

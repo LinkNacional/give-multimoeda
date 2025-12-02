@@ -1,4 +1,4 @@
-=== Give Multi Currency ===
+=== LinkNacional Multi Currency for GiveWP ===
 Contributors: linknacional, MarcosAlexandre
 Donate link: https://www.linknacional.com.br/wordpress/plugins/
 Tags: givewp, donations, multi-currency, currency converter, international payments
@@ -14,9 +14,9 @@ Transform your GiveWP donation forms with seamless multi-currency support and re
 
 == Description ==
 
-**Give Multi Currency** is the ultimate solution for enabling international donations in your GiveWP-powered fundraising campaigns. This powerful plugin automatically converts foreign currencies to Brazilian Real (BRL) for payment processing while displaying donation amounts in the donor's preferred currency, creating a seamless and familiar donation experience for supporters worldwide.
+**LinkNacional Multi Currency for GiveWP** is the ultimate solution for enabling international donations in your GiveWP-powered fundraising campaigns. This powerful plugin automatically converts foreign currencies to Brazilian Real (BRL) for payment processing while displaying donation amounts in the donor's preferred currency, creating a seamless and familiar donation experience for supporters worldwide.
 
-### Why Choose Give Multi Currency?
+### Why Choose LinkNacional Multi Currency for GiveWP?
 
 * **Real-Time Exchange Rates**: Automatic currency conversion using live exchange rates from reliable APIs
 * **Multiple Currency Support**: Accept donations in USD, EUR, JPY, GBP, SAR, MXN, CHF, and BRL
@@ -77,7 +77,7 @@ Transform your GiveWP donation forms with seamless multi-currency support and re
 
 ### 3. WP-CLI Installation
 ```bash
-wp plugin activate give-multi-currency
+wp plugin activate multi-currency-for-give
 ```
 
 == Configuration ==
@@ -189,7 +189,7 @@ Yes! Visit our [support page](https://www.linknacional.com.br/suporte/) or creat
 * Updated exchange rate API endpoints
 * Added comprehensive changelog system
 
-[View complete changelog](https://github.com/LinkNacional/give-multi-currency/blob/main/CHANGELOG.md)
+[View complete changelog](https://github.com/LinkNacional/multi-currency-for-give/blob/main/CHANGELOG.md)
 
 == Upgrade Notice ==
 = 3.1.4 =
@@ -210,7 +210,7 @@ For technical support, feature requests, or bug reports:
 
 * **Support Portal**: [Link Nacional Support](https://www.linknacional.com.br/suporte/)
 * **Documentation**: [Plugin Documentation](https://www.linknacional.com.br/wordpress/givewp/multimoeda/)
-* **GitHub**: Report issues on our [GitHub repository](https://github.com/LinkNacional/give-multi-currency)
+* **GitHub**: Report issues on our [GitHub repository](https://github.com/LinkNacional/multi-currency-for-give)
 
 **Professional WordPress Development**: Need custom modifications or have a special project? [Contact our development team](https://www.linknacional.com.br/wordpress/)
 
@@ -223,4 +223,4 @@ For technical support, feature requests, or bug reports:
 
 ---
 
-**Transform your donation forms into a global fundraising platform with Give Multi Currency today!**
+**Transform your donation forms into a global fundraising platform with LinkNacional Multi Currency for GiveWP today!**

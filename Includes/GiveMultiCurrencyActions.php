@@ -18,7 +18,7 @@ final class GiveMultiCurrencyActions
     {
         wp_enqueue_script(
             "lkn-multi-currency-coin",
-            GIVE_MULTI_CURRENCY_URL . "resource/give-multi-currency-coin-selector.js",
+            GIVE_MULTI_CURRENCY_URL . "resource/multi-currency-for-give-coin-selector.js",
             array(),
             GIVE_MULTI_CURRENCY_VERSION,
             false
@@ -157,7 +157,7 @@ final class GiveMultiCurrencyActions
         $configs = self::lkn_give_multi_currency_get_configs();
 
         if ("enabled" == $configs["mcEnabled"]) {
-            if (! empty($_POST['give-mc-selected-currency']) && isset($_POST['lkn-give-multi-nonce']) && isset($_POST['payment-mode']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['lkn-give-multi-nonce'])), 'lkn-give-multi-currency-nonce') && 'paypal-commerce' !== sanitize_text_field(wp_unslash($_POST['payment-mode']))) {
+            if (! empty($_POST['give-mc-selected-currency']) && isset($_POST['lkn-give-multi-nonce']) && isset($_POST['payment-mode']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['lkn-give-multi-nonce'])), 'lkn-multi-currency-for-give-nonce') && 'paypal-commerce' !== sanitize_text_field(wp_unslash($_POST['payment-mode']))) {
                 $currency = sanitize_text_field(wp_unslash($_POST['give-mc-selected-currency']));
             } elseif (isset($_POST["currency"])) {
                 $currency = sanitize_text_field(wp_unslash($_POST['currency']));
@@ -321,7 +321,7 @@ final class GiveMultiCurrencyActions
 
     <?php endforeach; ?>
 </select>
-<?php wp_nonce_field('lkn-give-multi-currency-nonce', 'lkn-give-multi-nonce'); ?>
+<?php wp_nonce_field('lkn-multi-currency-for-give-nonce', 'lkn-give-multi-nonce'); ?>
 <a
     id="link-multi-currency"
     href="https://www.linknacional.com.br/wordpress/givewp/multimoeda"
