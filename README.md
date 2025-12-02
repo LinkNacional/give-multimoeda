@@ -18,7 +18,7 @@ Lembre-se de salvar as alterações.
 
 2) Em plugins instalados procure pela opção 'adicionar novo' no cabeçalho;
 
-3) Clique na opção de 'enviar plugin' no título da página e faça o upload do plugin give-multi-currency.zip;
+3) Clique na opção de 'enviar plugin' no título da página e faça o upload do plugin multi-currency-for-give.zip;
 
 4) Clique no botão 'instalar agora' e depois ative o plugin instalado;
 
