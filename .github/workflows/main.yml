@@ -32,7 +32,7 @@ jobs:
       run: |
         mkdir -p dist
         mkdir -p build/${{ env.PLUGIN_NAME }}
-        mv ./Admin ./Includes ./resource *.php *.txt ./build/${{ env.PLUGIN_NAME }}
+        mv ./Admin ./Includes ./resource *.php *.txt composer.json ./build/${{ env.PLUGIN_NAME }}
         cp -r vendor ./build/${{ env.PLUGIN_NAME }}/vendor
         find ./build -type f -exec chmod 0644 {} +
         find ./build -type d -exec chmod 0755 {} +
