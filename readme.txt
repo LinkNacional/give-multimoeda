@@ -3,7 +3,7 @@ Contributors: linknacional, MarcosAlexandre
 Donate link: https://www.linknacional.com.br/wordpress/plugins/
 Tags: givewp, donations, multi-currency, currency converter, international payments
 Requires at least: 5.0
-Tested up to: 6.8
+Tested up to: 6.9
 Stable tag: 3.1.4
 Requires PHP: 7.4
 Requires Plugins: give

@@ -11,7 +11,7 @@
  * License:     GNU General Public License v3 or later
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: multi-currency-for-give
- * Domain Path: /languages
+ * Domain Path: /languages/
  */
 
 // Exit if accessed directly. ABSPATH is attribute in wp-admin - plugin.php
