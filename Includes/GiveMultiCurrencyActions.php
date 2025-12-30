@@ -23,6 +23,26 @@ final class GiveMultiCurrencyActions
             GIVE_MULTI_CURRENCY_VERSION,
             false
         );
+        
+        wp_enqueue_style(
+            "mcfg-frontend-styles",
+            GIVE_MULTI_CURRENCY_URL . "resource/multi-currency-styles.css",
+            array(),
+            GIVE_MULTI_CURRENCY_VERSION
+        );
+
+        // Add inline script for backwards compatibility
+        $compatibility_script = "
+        // Backwards compatibility for variable names
+        if (typeof varsPhp !== 'undefined' && typeof mcfgVars === 'undefined') {
+            window.mcfgVars = window.varsPhp;
+        }
+        if (typeof giveMulti !== 'undefined' && typeof mcfgPayPal === 'undefined') {
+            window.mcfgPayPal = window.giveMulti;
+        }";
+        
+        wp_add_inline_script('lkn-multi-currency-coin', $compatibility_script, 'before');
+
         global $wp_filesystem;
 
         // Inicializa o WP_Filesystem
@@ -39,30 +59,13 @@ final class GiveMultiCurrencyActions
         $data = wp_remote_get('https://api.linknacional.com/cotacao/cotacao-' . $defaultCurrency . '.json');
 
         $currencyCodes = GIVE_MULTI_CURRENCY_CURRENCIES;
-        $jsonFilePath = GIVE_MULTI_CURRENCY_DIR . 'Includes/json/fallback_rates.json';
-
-        if (is_wp_error($data) || wp_remote_retrieve_response_code($data) !== 200) {
-            $fallbackData = wp_remote_get('https://api.frankfurter.app/latest?from=' . $defaultCurrency . '&to=' . implode(',', $currencyCodes));
-            if (!is_wp_error($fallbackData) && wp_remote_retrieve_response_code($fallbackData) === 200) {
-                $response = json_decode(wp_remote_retrieve_body($fallbackData), true);
-                $response['rates'][$defaultCurrency] = 1;
-            } else {
-                $response = json_decode($wp_filesystem->get_contents($jsonFilePath), true);
-            }
-        } else {
-            $response = json_decode($data['body'], true);
-            if ($wp_filesystem) {
-                $wp_filesystem->put_contents(
-                    $jsonFilePath,
-                    json_encode(['rates' => $response['rates']]),
-                    FS_CHMOD_FILE // Define permissões apropriadas
-                );
-            }
-        }
+        
+        // Get rates from cache or API
+        $response = self::lknaci_mcfg_get_cached_rates($defaultCurrency, $currencyCodes);
 
         wp_localize_script(
             "lkn-multi-currency-coin",
-            "varsPhp",
+            "mcfgVars",
             array(
                 "moedas" => $currency,
                 "moedaPadrao" => $defaultCurrency,
@@ -72,7 +75,57 @@ final class GiveMultiCurrencyActions
     }
 
     /**
-     * This function centralizes the data in one spot for ease mannagment
+     * Get exchange rates with caching mechanism using WordPress transients
+     */
+    public static function lknaci_mcfg_get_cached_rates($defaultCurrency, $currencyCodes)
+    {
+        // Try to get cached rates first
+        $cached_rates = get_transient('lknaci_mcfg_exchange_rates_' . $defaultCurrency);
+        
+        if (false !== $cached_rates) {
+            return $cached_rates;
+        }
+
+        // If no cache, fetch from primary API
+        $data = wp_remote_get('https://api.linknacional.com/cotacao/cotacao-' . $defaultCurrency . '.json');
+
+        if (is_wp_error($data) || wp_remote_retrieve_response_code($data) !== 200) {
+            // Try fallback API
+            $fallbackData = wp_remote_get('https://api.frankfurter.app/latest?from=' . $defaultCurrency . '&to=' . implode(',', $currencyCodes));
+            if (!is_wp_error($fallbackData) && wp_remote_retrieve_response_code($fallbackData) === 200) {
+                $response = json_decode(wp_remote_retrieve_body($fallbackData), true);
+                $response['rates'][$defaultCurrency] = 1;
+            } else {
+                // Use hardcoded fallback rates as last resort
+                $response = self::lknaci_mcfg_get_fallback_rates($defaultCurrency);
+            }
+        } else {
+            $response = json_decode($data['body'], true);
+        }
+
+        // Cache the rates for 1 hour
+        set_transient('lknaci_mcfg_exchange_rates_' . $defaultCurrency, $response, HOUR_IN_SECONDS);
+
+        return $response;
+    }
+
+    /**
+     * Get fallback exchange rates when APIs are unavailable
+     */
+    public static function lknaci_mcfg_get_fallback_rates($defaultCurrency)
+    {
+        // Hardcoded fallback rates - these should be updated periodically
+        $fallback_rates = array(
+            'USD' => array('rates' => array('USD' => 1, 'EUR' => 0.85, 'BRL' => 5.5, 'JPY' => 110, 'GBP' => 0.75, 'SAR' => 3.75, 'MXN' => 20, 'CHF' => 0.92)),
+            'EUR' => array('rates' => array('EUR' => 1, 'USD' => 1.18, 'BRL' => 6.5, 'JPY' => 130, 'GBP' => 0.88, 'SAR' => 4.42, 'MXN' => 23.6, 'CHF' => 1.08)),
+            'BRL' => array('rates' => array('BRL' => 1, 'USD' => 0.18, 'EUR' => 0.15, 'JPY' => 20, 'GBP' => 0.14, 'SAR' => 0.68, 'MXN' => 3.6, 'CHF' => 0.17)),
+        );
+
+        return isset($fallback_rates[$defaultCurrency]) ? $fallback_rates[$defaultCurrency] : $fallback_rates['USD'];
+    }
+
+    /**
+     * This function centralizes the data in one spot for ease mannagement
      *
      * @return array
      */
@@ -235,67 +288,6 @@ final class GiveMultiCurrencyActions
         $mainCurrencyName = give_get_currency_name($mainCurrency);
         if ("enabled" == $pluginEnabled) {
             ?>
-
-<style>
-    .lkn-mc-select-classic {
-        padding: 20px;
-        text-align: center;
-        margin: 0 auto;
-    }
-
-    #give-mc-select {
-        font-size: 18px;
-        display: block;
-        margin: 0 auto;
-        max-width: 300px;
-        padding: 10px;
-    }
-
-    #link-multi-currency {
-        display: block;
-        text-align: center;
-        font-size: 17px;
-        font-weight: 600;
-        padding: 5px 10px;
-        margin: 5px 0px 15px 0px;
-        color: #0073e6;
-        text-decoration: none;
-        position: relative;
-        transition: color 0.3s, transform 0.3s;
-    }
-
-    #link-multi-currency::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        width: 0;
-        height: 2px;
-        background-color: #0073e6;
-        transition: width 0.3s, background-color 0.3s;
-        transform: translateX(-50%);
-    }
-
-    #link-multi-currency:hover::after,
-    #link-multi-currency:focus::after {
-        width: 35%;
-        background-color: #005bb5;
-    }
-
-    #link-multi-currency:hover,
-    #link-multi-currency:focus {
-        color: #005bb5;
-        transform: translateY(-2px);
-    }
-
-    .hidden-lkn {
-        display: none;
-    }
-
-    .show-lkn {
-        display: block;
-    }
-</style>
 
 <input
     type="hidden"

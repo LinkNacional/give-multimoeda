@@ -2,6 +2,41 @@
 
 O [GiveWP Multi-Moeda](https://www.linknacional.com.br/wordpress/givewp/multimoeda/) é um plugin para a plataforma de doação GiveWP que tem o objetivo de fazer a conversão da moeda estrangeira para a moeda nacional (BRL) a fim de realizar um determinado pagamento internacional e o mesmo ser reconhecido pelos processadores de pagamento do Brasil.
 
+## Serviços Externos
+
+Este plugin utiliza serviços externos para obter taxas de câmbio em tempo real:
+
+### API Link Nacional
+- **Serviço**: API de cotação da Link Nacional (https://api.linknacional.com/cotacao/)
+- **Uso**: Obtenção principal das taxas de câmbio atualizadas
+- **Dados enviados**: Código da moeda base (ex: USD, EUR, BRL)
+- **Quando**: A cada exibição de formulário de doação quando multi-moeda está habilitado
+
+### API Frankfurter (Fallback)
+- **Serviço**: API Frankfurter (https://api.frankfurter.app/)
+- **Uso**: Fonte alternativa de taxas de câmbio quando a API principal não está disponível
+- **Dados enviados**: Códigos das moedas para conversão
+- **Quando**: Apenas quando a API principal falha
+- **Política de Privacidade**: [Frankfurter - GitHub](https://github.com/hakanensari/frankfurter)
+- **Termos de Uso**: Serviço gratuito e open-source
+
+**Importante**: As taxas de câmbio são armazenadas em cache por 1 hora no WordPress para melhorar a performance e reduzir o número de requisições aos serviços externos.
+
+## Código Fonte
+
+O código JavaScript compilado está disponível nos seguintes arquivos:
+- `/resource/payPalCommerceGateway.js` - Script compilado para integração com PayPal Commerce
+- `/resource/give-multi-currency-coin-selector.js` - Script para seleção de moedas
+
+O código fonte não compilado está disponível no repositório do GitHub:
+- **Repositório**: https://github.com/LinkNacional/give-multimoeda
+- **Branch de desenvolvimento**: https://github.com/LinkNacional/give-multimoeda/tree/dev
+
+Para recompilar os arquivos JavaScript (apenas para desenvolvedores):
+1. Clone o repositório
+2. Execute `npm install` para instalar as dependências
+3. Execute `npm run build` para compilar os arquivos
+
 ## Dependências
 
 O plugin Give-Multi-Moedas é dependente do plugin GiveWP, por favor certifique-se que o GiveWP esteja instalado e devidamente configurado antes de iniciar a instalação do Give-Multi-Moedas.

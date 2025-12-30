@@ -92,13 +92,36 @@ final class GiveMultiCurrencyHelper {
         }
     }
 
+    /**
+     * Get exchange rates using WordPress HTTP API with caching
+     */
     public static function lkn_give_multi_currency_get_exchange_rates($currenciesCode) {
         $exRate = array();
 
         foreach ($currenciesCode as $key => $currency) {
-            $result = self::lkn_multi_currency_curl_get_contents('https://api.linknacional.com/cotacao/cotacao-' . $currency . '.json');
-            $result = wp_json_file_decode($result);
-            $exRate[$currency] = $result->rates->BRL;
+            // Try to get cached rate first
+            $cached_rate = get_transient('lknaci_mcfg_rate_' . $currency);
+            
+            if (false !== $cached_rate) {
+                $exRate[$currency] = $cached_rate;
+                continue;
+            }
+
+            // Fetch from API using WordPress HTTP functions
+            $response = wp_remote_get('https://api.linknacional.com/cotacao/cotacao-' . $currency . '.json');
+            
+            if (!is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
+                $body = wp_remote_retrieve_body($response);
+                $result = json_decode($body, true);
+                
+                if (isset($result['rates']['BRL'])) {
+                    $rate = $result['rates']['BRL'];
+                    $exRate[$currency] = $rate;
+                    
+                    // Cache the rate for 1 hour
+                    set_transient('lknaci_mcfg_rate_' . $currency, $rate, HOUR_IN_SECONDS);
+                }
+            }
         }
 
         // returns an array with the exchange rates of active currencies
