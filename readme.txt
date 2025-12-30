@@ -101,6 +101,41 @@ wp plugin activate multi-currency-for-give
 * **Currency Setting**: Base currency must be Brazilian Real (BRL)
 * **Decimal Places**: Set to 0 in GiveWP currency settings for optimal performance
 
+== External Services ==
+
+This plugin connects to external services to obtain real-time exchange rates:
+
+= Link Nacional Exchange Rate API =
+* **Service**: Link Nacional Exchange API (https://api.linknacional.com/cotacao/)
+* **Purpose**: Primary source for real-time currency exchange rates
+* **Data sent**: Base currency code (e.g., USD, EUR, BRL)
+* **When**: Every time a donation form loads with multi-currency enabled
+
+= Frankfurter API (Fallback) =
+* **Service**: Frankfurter Exchange API (https://api.frankfurter.app/)
+* **Purpose**: Alternative exchange rate source when primary API is unavailable
+* **Data sent**: Currency codes for conversion
+* **When**: Only when the primary API fails
+* **Privacy Policy**: [Frankfurter GitHub](https://github.com/hakanensari/frankfurter)
+* **Terms of Service**: Free and open-source service
+
+**Important**: Exchange rates are cached for 1 hour in WordPress to improve performance and reduce external service requests.
+
+== Source Code ==
+
+The compiled JavaScript files are available in the plugin:
+* `/resource/payPalCommerceGateway.js` - Compiled PayPal Commerce integration
+* `/resource/give-multi-currency-coin-selector.js` - Compiled currency selector
+
+The uncompiled source code is available on GitHub:
+* **Repository**: https://github.com/LinkNacional/give-multimoeda
+* **Development Branch**: https://github.com/LinkNacional/give-multimoeda/tree/dev
+
+To rebuild the JavaScript files (for developers):
+1. Clone the repository
+2. Run `npm install` to install dependencies
+3. Run `npm run build` to compile files
+
 == Frequently Asked Questions ==
 
 = What currencies are supported? =

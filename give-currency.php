@@ -59,8 +59,8 @@ if (! defined('GIVE_MULTI_CURRENCY_CURRENCIES')) {
     );
 }
 
-function Give_Multi_Currency()
+function lknaci_mcfg_give_multi_currency()
 {
     return new GiveMultiCurrency();
 }
-Give_Multi_Currency();
+lknaci_mcfg_give_multi_currency();
