@@ -82,8 +82,8 @@ function initializeGiveWP(doc = document) {
         selector.addEventListener('change', handleCurrencyChange);
         
         // Initialize with default currency
-        if (typeof mcfgVars !== 'undefined') {
-            updateCurrencyDisplay(mcfgVars.moedaPadrao);
+        if (typeof lknaciMcfgVars !== 'undefined') {
+            updateCurrencyDisplay(lknaciMcfgVars.moedaPadrao);
         }
     }
 }
@@ -108,12 +108,12 @@ function handleCurrencyChange(event) {
  * Update currency display throughout the form
  */
 function updateCurrencyDisplay(currency, symbol) {
-    if (typeof mcfgVars === 'undefined') {
+    if (typeof lknaciMcfgVars === 'undefined') {
         return;
     }
     
     // Update amount calculations based on exchange rates
-    const rates = mcfgVars.rates;
+    const rates = lknaciMcfgVars.rates;
     if (rates && rates[currency]) {
         const rate = rates[currency];
         // Update amount fields with converted values
