@@ -2,186 +2,190 @@
 # This file is distributed under the GNU General Public License v3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: LinkNacional Multi Currency for GiveWP 3.1.4\n"
+"Project-Id-Version: LinkNacional Multi Currency for GiveWP 3.1.5\n"
 "Report-Msgid-Bugs-To: https://www.linknacional.com.br/suporte/\n"
-"POT-Creation-Date: 2025-11-07 12:00+0000\n"
-"PO-Revision-Date: 2025-11-07 12:00+0000\n"
-"Last-Translator: Link Nacional <contato@linknacional.com>\n"
-"Language-Team: Portuguese (Brazil)\n"
-"Language: pt_BR\n"
+"POT-Creation-Date: 2025-12-30 12:00+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0\n"
-"X-Poedit-Basepath: ..\n"
+"PO-Revision-Date: 2025-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c;_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: .\n"
+"X-Poedit-Bookmarks: \n"
+"X-Textdomain-Support: yes\n"
+"X-Generator: grunt-wp-i18n 1.0.3\n"
 
 #: Admin/GiveMultiCurrencyAdmin.php:43
 msgid "Currency Options"
-msgstr "Opções de Moedas"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:48
 msgid "Global Options"
-msgstr "Opções Globais"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:50
 msgid "Enable global options for the form or disable to use form-specific options."
-msgstr "Habilitar opções globais para o formulário ou desabilitar para usar as opções definidas no formulário."
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:52
 #: Admin/GiveMultiCurrencyAdmin.php:114
 msgid "Enabled"
-msgstr "Habilitado"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:53
 #: Admin/GiveMultiCurrencyAdmin.php:115
 msgid "Disabled"
-msgstr "Desabilitado"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:59
 #: Admin/GiveMultiCurrencyAdmin.php:142
 msgid "Default Currency"
-msgstr "Moeda Padrão"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:61
 #: Admin/GiveMultiCurrencyAdmin.php:144
 msgid "Select the default currency."
-msgstr "Selecione a moeda padrão."
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:63
 #: Admin/GiveMultiCurrencyAdmin.php:79
 #: Admin/GiveMultiCurrencyAdmin.php:128
 #: Admin/GiveMultiCurrencyAdmin.php:146
 msgid "Brazilian Real (R$)"
-msgstr "Real Brasileiro (R$)"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:64
 #: Admin/GiveMultiCurrencyAdmin.php:80
 #: Admin/GiveMultiCurrencyAdmin.php:129
 #: Admin/GiveMultiCurrencyAdmin.php:147
 msgid "US Dollar ($)"
-msgstr "Dólar Americano ($)"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:65
 #: Admin/GiveMultiCurrencyAdmin.php:81
 #: Admin/GiveMultiCurrencyAdmin.php:130
 #: Admin/GiveMultiCurrencyAdmin.php:148
 msgid "Euro (€)"
-msgstr "Euro (€)"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:66
 #: Admin/GiveMultiCurrencyAdmin.php:82
 #: Admin/GiveMultiCurrencyAdmin.php:131
 #: Admin/GiveMultiCurrencyAdmin.php:149
 msgid "Japanese Yen (¥)"
-msgstr "Iene (¥)"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:67
 #: Admin/GiveMultiCurrencyAdmin.php:83
 #: Admin/GiveMultiCurrencyAdmin.php:132
 #: Admin/GiveMultiCurrencyAdmin.php:150
 msgid "British Pound (£)"
-msgstr "Libra Esterlina (£)"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:68
 #: Admin/GiveMultiCurrencyAdmin.php:84
 #: Admin/GiveMultiCurrencyAdmin.php:133
 #: Admin/GiveMultiCurrencyAdmin.php:151
 msgid "Saudi Riyal (ر.س)"
-msgstr "Rial Saudita (ر.س)"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:69
 #: Admin/GiveMultiCurrencyAdmin.php:85
 #: Admin/GiveMultiCurrencyAdmin.php:134
 #: Admin/GiveMultiCurrencyAdmin.php:152
 msgid "Mexican Peso ($)"
-msgstr "Peso Mexicano ($)"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:70
 #: Admin/GiveMultiCurrencyAdmin.php:86
 #: Admin/GiveMultiCurrencyAdmin.php:135
 #: Admin/GiveMultiCurrencyAdmin.php:153
 msgid "Swiss Franc (CHF)"
-msgstr "Franco Suíço (CHF)"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:75
 #: Admin/GiveMultiCurrencyAdmin.php:122
 msgid "Enabled Currencies"
-msgstr "Moedas Habilitadas"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:77
 msgid "Select the currencies your form will accept."
-msgstr "Selecione as moedas que seu formulário irá aceitar."
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:109
 msgid "Enable Multi Currency"
-msgstr "Habilitar Multi Moedas"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:111
 msgid "Enable or disable the Multi Currency plugin. This plugin only works with Brazilian Real (BRL - R$)"
-msgstr "Ative ou desative o plugin Multi Moedas. Este plugin só funciona com a moeda Real Brasileiro (BRL - R$)"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:124
 msgid "Select the currencies your form will accept"
-msgstr "Selecione as moedas que seu formulário irá aceitar"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:124
 msgid "Add new currency"
-msgstr "Adicionar nova moeda"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:144
 msgid "Select the default currency"
-msgstr "Selecione a moeda padrão"
+msgstr ""
 
 #: Admin/GiveMultiCurrencyAdmin.php:183
 msgid "Custom form is not relevant for GiveWP Multi-Step forms. If you want to use the Free Form Plugin, you need to change the form template to \"Legacy\" option."
-msgstr "O formulário customizado não é relevante para o formulário Multi-Step do GiveWP. Caso você deseje utilizar o Free Form Plugin é necessário mudar o Template do formulário para opção \"Legado\"."
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:15
 #: Includes/GiveMultiCurrencyHelper.php:34
 msgid "Activation Error:"
-msgstr "Erro de Ativação:"
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:16
 #: Includes/GiveMultiCurrencyHelper.php:35
 msgid "You must have"
-msgstr "Você deve ter"
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:18
 #: Includes/GiveMultiCurrencyHelper.php:37
 msgid "Give"
-msgstr "Give"
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:19
 msgid "version"
-msgstr "versão"
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:21
 msgid "for the Give Multi Currency add-on to activate"
-msgstr "para o add-on Give Multi Currency ativar"
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:38
 msgid " plugin installed and activated for the Give Multi Currency to activate"
-msgstr " plugin instalado e ativado para o Give Multi Currency ativar"
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:52
 msgid "Settings"
-msgstr "Configurações"
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:66
 msgid "Multi Currency"
-msgstr "Multi Moedas"
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:145
 msgid "Attention:"
-msgstr "Atenção:"
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:146
 msgid "The Give Multi Currency plugin detected that the Cielo API 3.0 plugin is inactive."
-msgstr "O plugin Give Multi Currency detectou que o plugin Cielo API 3.0 encontra-se inativo."
+msgstr ""
 
 #: Includes/GiveMultiCurrencyHelper.php:147
 msgid "Activate in plugins area"
-msgstr "Ativar na área de plugins"
+msgstr ""

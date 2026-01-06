@@ -93,7 +93,7 @@ final class GiveMultiCurrency
                     /* Min. Give. plugin version. */
 
                     // Show admin notice.
-                    add_action('admin_notices', array('Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lkn_give_multi_currency_dependency_notice'));
+                    add_action('admin_notices', array('Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lknaci_mcfg__dependency_notice'));
 
                     $is_deactivate_plugin = true;
                 }
@@ -108,7 +108,7 @@ final class GiveMultiCurrency
                 $is_give_active = defined('GIVE_PLUGIN_BASENAME') ? is_plugin_active(GIVE_PLUGIN_BASENAME) : false;
 
                 if (! $is_give_active) {
-                    add_action('admin_notices', array('Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lkn_give_multi_currency_inactive_notice'));
+                    add_action('admin_notices', array('Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lknaci_mcfg__inactive_notice'));
 
                     $is_deactivate_plugin = true;
                 }
@@ -158,7 +158,7 @@ final class GiveMultiCurrency
     {
         register_activation_hook(GIVE_MULTI_CURRENCY_FILE, array($this, 'install'));
         $plugin_admin = new GiveMultiCurrencyAdmin();
-        $this->loader->add_filter('give_get_settings_general', $plugin_admin, 'lkn_give_multi_currency_add_setting_into_existing_tab');
+        $this->loader->add_filter('give_get_settings_general', $plugin_admin, 'lknaci_mcfg__add_setting_into_existing_tab');
         $this->loader->add_filter('give_metabox_form_data_settings', $plugin_admin, 'setup_setting', 999);
         $this->loader->add_action('givewp_register_payment_gateway', $this, 'register_gateways_paypal', 999);
     }
@@ -167,15 +167,15 @@ final class GiveMultiCurrency
     {
         // Verificiação de dependencia
         $this->loader->add_action('plugins_loaded', $this, 'check_environment', 999);
-        $this->loader->add_filter('plugin_action_links_' . GIVE_MULTI_CURRENCY_BASENAME, 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lkn_give_multi_currency_plugin_row_meta', 10, 2);
+        $this->loader->add_filter('plugin_action_links_' . GIVE_MULTI_CURRENCY_BASENAME, 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyHelper', 'lknaci_mcfg__plugin_row_meta', 10, 2);
         // Funcionalidades Multimoedas
         $this->loader->add_filter('give_currency', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_change_multi_currency');
-        $this->loader->add_filter('give_get_price_thousand_separator', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_thousand_separator');
-        $this->loader->add_filter('give_get_price_decimal_separator', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_decimal_separator');
-        $this->loader->add_filter('give_sanitize_amount_decimals', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_decimal_count');
+        $this->loader->add_filter('give_get_price_thousand_separator', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lknaci_mcfg__thousand_separator');
+        $this->loader->add_filter('give_get_price_decimal_separator', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lknaci_mcfg__decimal_separator');
+        $this->loader->add_filter('give_sanitize_amount_decimals', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lknaci_mcfg__decimal_count');
 
         // FrontEnd Multimoedas Legado
-        $this->loader->add_action('give_before_donation_levels', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lkn_give_multi_currency_selector', 10, 3);
+        $this->loader->add_action('give_before_donation_levels', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'lknaci_mcfg__selector', 10, 3);
         $this->loader->add_action('wp_enqueue_scripts', 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions', 'give_import_script_method', 11, 1);
         // Front End Multimoedas 3.0.1
 
@@ -183,7 +183,7 @@ final class GiveMultiCurrency
             Hooks::addAction(
                 'givewp_donation_form_schema',
                 'Lkn\GiveMultimoedas\Includes\GiveMultiCurrencyActions',
-                'lkn_add_currency_selector_to_give_form',
+                'lknaci_mcfg_add_currency_selector_to_give_form',
                 10,
                 2
             );

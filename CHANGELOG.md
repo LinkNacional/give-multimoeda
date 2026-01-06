@@ -1,3 +1,6 @@
+# 3.1.5 - 06/01/2026
+* Correção em erros do Wordpress.
+
 # 3.1.4 - 10/11/2025
 * Remoção do plugin updater.
 

@@ -60,8 +60,8 @@ class MultiCurrencyPayPalGateway {
      * Convert amount based on exchange rates
      */
     convertAmount(amount, targetCurrency) {
-        if (typeof mcfgPayPal !== 'undefined' && mcfgPayPal.rates) {
-            const rate = mcfgPayPal.rates[targetCurrency];
+        if (typeof lknaciMcfgPayPal !== 'undefined' && lknaciMcfgPayPal.rates) {
+            const rate = lknaciMcfgPayPal.rates[targetCurrency];
             if (rate) {
                 return Math.round(amount * rate);
             }
@@ -102,8 +102,8 @@ const PayPalFieldsComponent = ({ formData, gateway }) => {
                 setSelectedCurrency(newCurrency);
                 
                 // Update exchange rate
-                if (typeof mcfgPayPal !== 'undefined' && mcfgPayPal.rates) {
-                    const rate = mcfgPayPal.rates[newCurrency] || 1;
+                if (typeof lknaciMcfgPayPal !== 'undefined' && lknaciMcfgPayPal.rates) {
+                    const rate = lknaciMcfgPayPal.rates[newCurrency] || 1;
                     setExchangeRate(rate);
                 }
             };
