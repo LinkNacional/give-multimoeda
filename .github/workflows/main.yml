@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  PLUGIN_NAME: multi-currency-for-give
+  PLUGIN_NAME: lknaci-multi-currency-for-givewp
   PHP_VERSION: "7.4"
 
 jobs:
