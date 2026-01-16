@@ -37,7 +37,7 @@ if (! defined('GIVE_MULTI_CURRENCY_FILE')) {
 }
 
 if (! defined('GIVE_MULTI_CURRENCY_SLUG')) {
-    define('GIVE_MULTI_CURRENCY_SLUG', 'multi-currency-for-give');
+    define('GIVE_MULTI_CURRENCY_SLUG', 'lknaci-multi-currency-for-givewp');
 }
 
 if (! defined('GIVE_MULTI_CURRENCY_DIR')) {
