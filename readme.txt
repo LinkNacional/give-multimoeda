@@ -103,23 +103,25 @@ wp plugin activate multi-currency-for-give
 
 == External Services ==
 
-This plugin connects to external services to obtain real-time exchange rates:
+This plugin connects to external services to obtain real-time exchange rates for currency conversion. These services are essential for providing accurate and up-to-date currency exchange information to display donation amounts in different currencies.
 
 = Link Nacional Exchange Rate API =
-* **Service**: Link Nacional Exchange API (https://api.linknacional.com/cotacao/)
-* **Purpose**: Primary source for real-time currency exchange rates
-* **Data sent**: Base currency code (e.g., USD, EUR, BRL)
-* **When**: Every time a donation form loads with multi-currency enabled
+* **What the service is**: Link Nacional Exchange Rate API (https://api.linknacional.com/cotacao/) - A currency exchange rate service provided by Link Nacional
+* **What it is used for**: Primary source for real-time currency exchange rates to convert donation amounts between different currencies
+* **What data is sent**: Currency code (e.g., USD, EUR, BRL) to retrieve exchange rates for that specific currency
+* **When data is sent**: Every time a donation form with multi-currency enabled is loaded or when currency rates need to be refreshed (cached for 1 hour)
 
-= Frankfurter API (Fallback) =
-* **Service**: Frankfurter Exchange API (https://api.frankfurter.app/)
-* **Purpose**: Alternative exchange rate source when primary API is unavailable
-* **Data sent**: Currency codes for conversion
-* **When**: Only when the primary API fails
-* **Privacy Policy**: [Frankfurter GitHub](https://github.com/hakanensari/frankfurter)
-* **Terms of Service**: Free and open-source service
+= Frankfurter API (Fallback Service) =
+* **What the service is**: Frankfurter Exchange Rate API (https://api.frankfurter.app/) - A free, open-source currency exchange rate service
+* **What it is used for**: Alternative/fallback exchange rate source when the primary Link Nacional API is unavailable or fails to respond
+* **What data is sent**: Currency codes for base and target currencies (e.g., "from=USD&to=EUR,BRL") to retrieve exchange rates
+* **When data is sent**: Only when the primary Link Nacional API fails to provide exchange rates or returns an error
 
-**Important**: Exchange rates are cached for 1 hour in WordPress to improve performance and reduce external service requests.
+**Important Notes**: 
+- Exchange rates are cached for 1 hour in WordPress to improve performance and reduce external service requests
+- No personal or sensitive data is transmitted to these services, only currency codes
+- These external connections are essential for the plugin's core functionality of multi-currency support
+- If both services are unavailable, the plugin falls back to cached rates stored locally
 
 == Source Code ==
 
