@@ -1,3 +1,6 @@
+# 3.1.6 - 30/01/2026
+* Correção em action.
+
 # 3.1.5 - 06/01/2026
 * Correção em erros do Wordpress.
 
