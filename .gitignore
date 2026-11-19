@@ -2,5 +2,6 @@ vendor
 node_modules
 composer.lock
 package-lock.json
+.phpunit.cache
 .vscode/settings.json
 .devcontainer/devcontainer.json

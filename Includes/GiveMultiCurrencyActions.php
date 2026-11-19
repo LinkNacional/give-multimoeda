@@ -43,25 +43,15 @@ final class GiveMultiCurrencyActions
         
         wp_add_inline_script('lkn-multi-currency-coin', $compatibility_script, 'before');
 
-        global $wp_filesystem;
-
-        // Inicializa o WP_Filesystem
-        if (!function_exists('WP_Filesystem')) {
-            require_once ABSPATH . 'wp-admin/includes/file.php';
-        }
-        WP_Filesystem();
-
-
         $configs = self::lknaci_mcfg__get_configs();
         $currency = GiveMultiCurrencyHelper::lknaci_mcfg__get_symbols($configs["activeCurrency"]);
 
         $defaultCurrency = give_get_option('currency');
-        $data = wp_remote_get('https://api.linknacional.com/cotacao/cotacao-' . $defaultCurrency . '.json');
-
         $currencyCodes = GIVE_MULTI_CURRENCY_CURRENCIES;
-        
+
         // Get rates from cache or API
         $response = self::lknaci_mcfg_get_cached_rates($defaultCurrency, $currencyCodes);
+        $rates = GiveMultiCurrencyRates::normalize_rates((array) $response, $defaultCurrency);
 
         wp_localize_script(
             "lkn-multi-currency-coin",
@@ -69,7 +59,10 @@ final class GiveMultiCurrencyActions
             array(
                 "moedas" => $currency,
                 "moedaPadrao" => $defaultCurrency,
-                "rates" => $response['rates']
+                "rates" => $rates,
+                "decimalSeparator" => give_get_price_decimal_separator(),
+                "thousandSeparator" => give_get_price_thousand_separator(),
+                "currencyPosition" => give_get_option('currency_position', 'before'),
             )
         );
     }
@@ -187,6 +180,10 @@ final class GiveMultiCurrencyActions
     public static function lknaci_mcfg__get_active_currency()
     {
         $currencies = give_get_option('multi_currency_active_currency', []);
+        if (! is_array($currencies)) {
+            return array();
+        }
+
         $defaultCurrency = strtolower(give_get_option('multi_currency_default_currency'));
 
         $currencies = array_values(array_filter($currencies, function ($item) use ($defaultCurrency) {
@@ -195,11 +192,12 @@ final class GiveMultiCurrencyActions
 
         if (! empty($currencies)) {
             // Conversion to uppercase
+            $currency = array();
             for ($c = 0; $c < count($currencies); $c++) {
                 $currency[$c] = strtoupper($currencies[$c]);
             }
         } else {
-            return false;
+            return array();
         }
 
         return $currency;
@@ -301,14 +299,18 @@ final class GiveMultiCurrencyActions
 
 <select
     id="give-mc-select"
-    class="give-donation-amount"
+    class="give-mc-select-classic"
 >
-    <option value=<?php echo esc_html($mainCurrency) ?>
-        simbol=<?php echo esc_attr(give_currency_symbol($mainCurrency)) ?>><?php echo esc_html($mainCurrencyName) ?>
+    <option
+        value="<?php echo esc_attr($mainCurrency) ?>"
+        simbol="<?php echo esc_attr(give_currency_symbol($mainCurrency)) ?>"
+    ><?php echo esc_html($mainCurrencyName) ?>
     </option>
     <?php foreach ($configs['activeCurrency'] as $currency) : ?>
-    <option value=<?php echo esc_attr($currency) ?>
-        simbol=<?php echo esc_attr(give_currency_symbol($currency)) ?>><?php echo esc_html(give_get_currency_name($currency)) ?>
+    <option
+        value="<?php echo esc_attr($currency) ?>"
+        simbol="<?php echo esc_attr(give_currency_symbol($currency)) ?>"
+    ><?php echo esc_html(give_get_currency_name($currency)) ?>
     </option>
 
     <?php endforeach; ?>
@@ -335,18 +337,55 @@ final class GiveMultiCurrencyActions
             //Moedas Habilitadas
             $adminCurrency = self::lknaci_mcfg__get_active_currency();
             // Moeda Padrão
-            $standardCurrency = give_get_option("multi_currency_default_currency");
+            $standardCurrency = strtoupper((string) give_get_option("multi_currency_default_currency"));
+            $defaultCurrency = give_get_option('currency');
             $currencySettings = array();
 
+            // Taxas reais: a moeda base precisa ficar com 0, o GiveWP usa esse valor
+            // para identificar a moeda base em calculateCurrencyAmount().
+            $rates = self::lknaci_mcfg_get_switcher_rates($defaultCurrency, $adminCurrency);
+
             //Adicionando as moedas Habilitadas no formulário
-            $currencySettings[] = new CurrencySwitcherSetting(strtoupper($standardCurrency), 1, $gateways, 0);
+            $currencySettings[] = new CurrencySwitcherSetting(
+                $standardCurrency,
+                $rates[$standardCurrency] ?? 0.0,
+                $gateways,
+                0
+            );
 
             foreach ($adminCurrency as $currency) {
-                $currencySettings[] = new CurrencySwitcherSetting($currency, 1, $gateways, 0);
+                $currency = strtoupper((string) $currency);
+
+                $currencySettings[] = new CurrencySwitcherSetting(
+                    $currency,
+                    $rates[$currency] ?? 1.0,
+                    $gateways,
+                    0
+                );
             }
 
             $form->currencySwitcherSettings(...$currencySettings);
         }
+    }
+
+    /**
+     * Build the currency => rate map used by the GiveWP currency switcher.
+     *
+     * @since 3.1.7
+     *
+     * @param string $baseCurrency
+     * @param array  $currencies
+     *
+     * @return array<string, float>
+     */
+    public static function lknaci_mcfg_get_switcher_rates(string $baseCurrency, array $currencies): array
+    {
+        $baseCurrency = strtoupper($baseCurrency);
+        $currencies = array_merge(array($baseCurrency), array_map('strtoupper', (array) $currencies));
+
+        $response = self::lknaci_mcfg_get_cached_rates($baseCurrency, GIVE_MULTI_CURRENCY_CURRENCIES);
+
+        return GiveMultiCurrencyRates::build_switcher_rates((array) $response, $baseCurrency, $currencies);
     }
 
     //Pegar os gateways no formato desejado
