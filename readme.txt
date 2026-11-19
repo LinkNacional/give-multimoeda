@@ -4,7 +4,7 @@ Donate link: https://www.linknacional.com.br/wordpress/plugins/
 Tags: givewp, donations, multi-currency, currency converter, international payments
 Requires at least: 5.0
 Tested up to: 6.9
-Stable tag: 3.1.6
+Stable tag: 3.1.7
 Requires PHP: 7.4
 Requires Plugins: give
 License: GPLv3 or later
@@ -177,6 +177,9 @@ Yes! Visit our [support page](https://www.linknacional.com.br/suporte/) or creat
 6. **Multi-language support** - Interface in multiple languages
 
 == Changelog ==
+= 3.1.7 - 2026/11/19 =
+* Correção da conversão de valores e do símbolo no select de moedas do formulário.
+
 = 3.1.6 - 2026/01/30 =
 * Fix wordpress issues.
 
