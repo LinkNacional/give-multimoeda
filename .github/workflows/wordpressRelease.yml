@@ -5,7 +5,7 @@ on:
 
 env:
   PLUGIN_NAME: lknaci-multi-currency-for-givewp
-  PHP_VERSION: "7.4"
+  PHP_VERSION: "8.1"
   DEPLOY_TAG: "3.1.7"
 
 jobs:
@@ -30,7 +30,9 @@ jobs:
         run: |
           mkdir -p dist
           mkdir -p build/${{ env.PLUGIN_NAME }}
-          mv ./Admin ./wordpressAssets ./Includes ./resource *.php *.txt composer.json ./build/${{ env.PLUGIN_NAME }}
+          mv ./Admin ./wordpressAssets ./Includes ./languages ./resource *.php *.txt composer.json ./build/${{ env.PLUGIN_NAME }}
+          # O pacote leva apenas o .pot: .po/.mo vêm no pacote de idioma do wp.org
+          rm -f ./build/${{ env.PLUGIN_NAME }}/languages/*.po ./build/${{ env.PLUGIN_NAME }}/languages/*.mo
           cp -r vendor ./build/${{ env.PLUGIN_NAME }}/vendor
           find ./build -type f -exec chmod 0644 {} +
           find ./build -type d -exec chmod 0755 {} +

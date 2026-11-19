@@ -7,6 +7,7 @@
  * Version:     3.1.7
  * Author:      Link Nacional
  * Requires Plugins: give
+ * Requires PHP: 8.1
  * Author URI:  https://www.linknacional.com.br
  * License:     GNU General Public License v3 or later
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html

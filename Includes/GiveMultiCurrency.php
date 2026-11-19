@@ -120,6 +120,7 @@ final class GiveMultiCurrency
         if ($is_deactivate_plugin) {
             // Deactivate plugin.
             deactivate_plugins(GIVE_MULTI_CURRENCY_BASENAME);
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only clears the core activation flag; no submitted data is read or stored.
             if (isset($_GET['activate'])) {
                 unset($_GET['activate']);
             }
