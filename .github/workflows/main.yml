@@ -7,7 +7,8 @@ on:
 
 env:
   PLUGIN_NAME: lknaci-multi-currency-for-givewp
-  PHP_VERSION: "7.4"
+  PHP_VERSION: "8.1"
+  DEPLOY_TAG: "3.1.7"
 
 jobs:
   release-build:
@@ -27,12 +28,21 @@ jobs:
         command: install
         dev: no
 
+    # Gera o body da release (metadados + resumo do changelog) — mesmo conteúdo do PR
+    - name: Generate release body
+      run: |
+        mkdir -p dist
+        bash .github/scripts/generate-release-body.sh > dist/release-body.md
+
     # Add plugin files to a root directory
     - name: Prepare plugin folder
       run: |
         mkdir -p dist
         mkdir -p build/${{ env.PLUGIN_NAME }}
-        mv ./Admin ./Includes ./resource *.php *.txt composer.json ./build/${{ env.PLUGIN_NAME }}
+        mv ./Admin ./Includes ./languages ./resource *.php *.txt composer.json ./build/${{ env.PLUGIN_NAME }}
+        # O zip sai sem as traduções prontas (.po/.mo): o wp.org entrega via pacote de idioma
+        # os arquivos continuam versionados no GitHub, só não vão no pacote
+        rm -f ./build/${{ env.PLUGIN_NAME }}/languages/*.po ./build/${{ env.PLUGIN_NAME }}/languages/*.mo
         cp -r vendor ./build/${{ env.PLUGIN_NAME }}/vendor
         find ./build -type f -exec chmod 0644 {} +
         find ./build -type d -exec chmod 0755 {} +
@@ -57,13 +67,14 @@ jobs:
       uses: mathieudutour/github-tag-action@v6.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        custom_tag: '3.1.6'
+        custom_tag: ${{ env.DEPLOY_TAG }}
 
     # Generate new release
     - name: Generate new Release
       uses: ncipollo/release-action@v1
       with:
         artifacts: "dist/${{ env.PLUGIN_NAME }}.zip"
+        bodyFile: "dist/release-body.md"
         token: ${{ secrets.GITHUB_TOKEN }}
         commit: "main"
         draft: true

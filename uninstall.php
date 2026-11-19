@@ -16,19 +16,18 @@ if ( ! defined('WP_UNINSTALL_PLUGIN')) {
 }
 
 // Picks array containing all give settings
-$lkn_array_mc_options = give_get_settings();
+$lknaci_mcfg_settings = give_get_settings();
 // Search the array for the keys corresponding to the plugin settings
 // And save their name
-$lkn_array_mc_options = array_filter($lkn_array_mc_options, function ($key) {
+$lknaci_mcfg_options = array_filter($lknaci_mcfg_settings, function ($key) {
     return strpos($key, 'multi_currency_') === 0;
 }, ARRAY_FILTER_USE_KEY);
-$lkn_array_mc_options = array_keys($lkn_array_mc_options);
 
 // Checks if keys exist
-if (count($lkn_array_mc_options) > 0) {
+if (count($lknaci_mcfg_options) > 0) {
     // If there are, scan the array selecting each option
-    for ($c = 0; $c < count($lkn_array_mc_options); $c++) {
+    foreach (array_keys($lknaci_mcfg_options) as $lknaci_mcfg_option) {
         // Uses the value, which is the name of the key, to delete the give option
-        give_delete_option($lkn_array_mc_options[$c]);
+        give_delete_option($lknaci_mcfg_option);
     }
 }

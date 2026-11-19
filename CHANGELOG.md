@@ -1,3 +1,6 @@
+# 3.1.7 - 19/11/2026
+* Correção da conversão de valores e do símbolo no select de moedas do formulário.
+
 # 3.1.6 - 30/01/2026
 * Correção em action.
 

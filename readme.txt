@@ -3,9 +3,9 @@ Contributors: linknacional, MarcosAlexandre
 Donate link: https://www.linknacional.com.br/wordpress/plugins/
 Tags: givewp, donations, multi-currency, currency converter, international payments
 Requires at least: 5.0
-Tested up to: 6.9
-Stable tag: 3.1.6
-Requires PHP: 7.4
+Tested up to: 7.1
+Stable tag: 3.1.7
+Requires PHP: 8.1
 Requires Plugins: give
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -58,13 +58,13 @@ Transform your GiveWP donation forms with seamless multi-currency support and re
 * **Smart Fallback**: Offline rates ensure continuous operation
 * **Performance Optimized**: Efficient currency switching and calculation
 * **Security First**: Secure API calls and data handling
-* **WordPress Standards**: Follows all WordPress coding and security standards
+* **[WordPress](https://www.linknacional.com.br/wordpress/) Standards**: Follows all [WordPress](https://www.linknacional.com.br/wordpress/) coding and security standards
 
 **Note**: This plugin requires GiveWP and is optimized for Brazilian Real (BRL) as the base processing currency.
 
 == Installation ==
 
-### 1. Using WordPress Admin Dashboard (Recommended)
+### 1. Using [WordPress](https://www.linknacional.com.br/wordpress/) Admin Dashboard (Recommended)
 1. Navigate to **Plugins → Add New**
 2. Click **Upload Plugin** and select the plugin ZIP file
 3. Click **Install Now** and then **Activate**
@@ -118,7 +118,7 @@ This plugin connects to external services to obtain real-time exchange rates for
 * **When data is sent**: Only when the primary Link Nacional API fails to provide exchange rates or returns an error
 
 **Important Notes**: 
-- Exchange rates are cached for 1 hour in WordPress to improve performance and reduce external service requests
+- Exchange rates are cached for 1 hour in [WordPress](https://www.linknacional.com.br/wordpress/) to improve performance and reduce external service requests
 - No personal or sensitive data is transmitted to these services, only currency codes
 - These external connections are essential for the plugin's core functionality of multi-currency support
 - If both services are unavailable, the plugin falls back to cached rates stored locally
@@ -177,6 +177,9 @@ Yes! Visit our [support page](https://www.linknacional.com.br/suporte/) or creat
 6. **Multi-language support** - Interface in multiple languages
 
 == Changelog ==
+= 3.1.7 - 2026/11/19 =
+* Correção da conversão de valores e do símbolo no select de moedas do formulário.
+
 = 3.1.6 - 2026/01/30 =
 * Fix wordpress issues.
 
@@ -255,11 +258,11 @@ For technical support, feature requests, or bug reports:
 * **Documentation**: [Plugin Documentation](https://www.linknacional.com.br/wordpress/givewp/multimoeda/)
 * **GitHub**: Report issues on our [GitHub repository](https://github.com/LinkNacional/multi-currency-for-give)
 
-**Professional WordPress Development**: Need custom modifications or have a special project? [Contact our development team](https://www.linknacional.com.br/wordpress/)
+**Professional [WordPress](https://www.linknacional.com.br/wordpress/) Development**: Need custom modifications or have a special project? [Contact our development team](https://www.linknacional.com.br/wordpress/)
 
 == Recommended Plugins ==
 
-* **[GiveWP](https://wordpress.org/plugins/give/)** - The #1 donation plugin for WordPress (Required)
+* **[GiveWP](https://wordpress.org/plugins/give/)** - The #1 donation plugin for [WordPress](https://www.linknacional.com.br/wordpress/) (Required)
 * **[Give - Recurring Donations](https://givewp.com/addons/recurring-donations/)** - Accept recurring donations
 * **[Give - Fee Recovery](https://givewp.com/addons/fee-recovery/)** - Let donors cover transaction fees
 * **[Give - Form Field Manager](https://givewp.com/addons/form-field-manager/)** - Customize donation forms

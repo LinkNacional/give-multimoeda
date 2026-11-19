@@ -9,7 +9,8 @@
     margin: 0 auto;
 }
 
-#give-mc-select {
+#give-mc-select,
+.give-mc-select-classic {
     font-size: 18px;
     display: block;
     margin: 0 auto;
