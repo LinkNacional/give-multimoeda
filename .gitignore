@@ -5,3 +5,4 @@ package-lock.json
 .phpunit.cache
 .vscode/settings.json
 .devcontainer/devcontainer.json
+languages/*.mo
